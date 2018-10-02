@@ -104,12 +104,12 @@ public class Map extends Application {
                 }
             }
             else if (e.getCode() == KeyCode.A) {
-                if(testChar.moveChar(-1,0)){ ;
-                    stkPnes[testChar.xMapVal+1][testChar.yMapVal].getChildren().remove(charImage);
+                if (testChar.moveChar(-1, 0)) {
+                    stkPnes[testChar.xMapVal + 1][testChar.yMapVal].getChildren().remove(charImage);
                     stkPnes[testChar.xMapVal][testChar.yMapVal].getChildren().add(charImage);
 
                     stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().remove(enemyImage);
-                    testEnemy.readInput(testEnemy.smartDirectionEnemy(testChar.xMapVal,testChar.yMapVal,9,randDoorRightHeight));
+                    testEnemy.readInput(testEnemy.smartDirectionEnemy(testChar.xMapVal, testChar.yMapVal, 9, randDoorRightHeight));
                     stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
                 }
             }
@@ -132,6 +132,10 @@ public class Map extends Application {
                     testEnemy.readInput(testEnemy.smartDirectionEnemy(testChar.xMapVal,testChar.yMapVal,9,randDoorRightHeight));
                     stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
                 }
+            }
+            else if(e.getCode() == KeyCode.SPACE) {
+                // attack
+
             }
         });
 

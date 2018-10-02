@@ -29,7 +29,7 @@ public class Enemy extends Tile {
 
         if (totalD_P == 1){
             System.out.println("ENEMY HIT");
-            return 'Q';
+            return 'H';
         }
         else if(totalDW < totalDS && totalDW < totalDA && totalDW < totalDD){
             return('W');
@@ -43,14 +43,16 @@ public class Enemy extends Tile {
         else if(totalDA < totalDS && totalDA < totalDW && totalDA < totalDD){
             return('A');
         }
-        else if(totalDA == totalDD){
-            return('A');
-        }
         else{
             return('A');
         }
     }
 
+    /**
+     * reads char input built for smartDirection enemy
+     * @param input W,S,A,D to move, other to return false
+     * @return truth if moves, false if doesnt move
+     */
     boolean readInput(char input){
         if(input == 'W'){
             moveEnemy(0,-1);
@@ -67,6 +69,8 @@ public class Enemy extends Tile {
         else if(input == 'D'){
             moveEnemy(1,0);
             return true;
+        } else if (input == 'H') {
+            //hit here
         }
         return false;
     }
@@ -79,7 +83,6 @@ public class Enemy extends Tile {
         } else {
             return false;
         }
-
     }
 
     double calculateD(int x1,int y1, int x2, int y2){
