@@ -31,9 +31,6 @@ public class Map extends Application {
         //Column is a vertical line and row is a horizontal line
         //Two FOR loops used for creating 2D array of StackPanes with values i,j
 
-        int randEnemyHeight = (int)(Math.random() * (NUM_GRIDS - 3) + 2);
-        int randEnemyWidth = (int) (Math.random() * (NUM_GRIDS - 5) + 4);
-
         int randDoorLeftHeight = (int)(Math.random() * (NUM_GRIDS - 2) + 1);
         int randDoorRightHeight = (int) (Math.random() * (NUM_GRIDS - 2) + 1);
 
@@ -74,16 +71,6 @@ public class Map extends Application {
         }
 
 
-        Character testChar = new Character(randDoorLeftHeight);
-        ImageView charImage = testChar.getImage();
-        stkPnes[testChar.xMapVal][testChar.yMapVal].getChildren().add(charImage);
-
-
-        Enemy testEnemy = new Enemy(randEnemyWidth,randEnemyHeight);
-        ImageView enemyImage = testEnemy.getImage();
-        stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
-
-
         primaryStage.setWidth(MAX_SIZE);
         primaryStage.setHeight(MAX_SIZE);
         //Adding GridPane to the scene
@@ -92,6 +79,7 @@ public class Map extends Application {
         primaryStage.show();
 
 
+/**
         scene.setOnKeyPressed(e -> {
             if (e.getCode() == KeyCode.D) {
                 if(testChar.moveChar(1,0)){
@@ -142,4 +130,8 @@ public class Map extends Application {
 
     }
 
+}
+**/
+
+    }
 }
