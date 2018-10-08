@@ -1,9 +1,11 @@
+package src;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class Character extends Tile {
     int xMapVal;
     int yMapVal;
+    int hp;
 
     public ImageView getImage() {
         Image wallG = new Image("myCharacterTrans.png");
@@ -30,7 +32,10 @@ public class Character extends Tile {
         }
 
     }
-
+    public void heal(int healthPoints)
+    {
+    	hp += healthPoints;
+    }
 
 }
 

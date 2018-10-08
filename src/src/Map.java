@@ -1,3 +1,5 @@
+package src;
+import mapObjects.*;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -72,8 +74,26 @@ public class Map extends Application {
             }
             }
         }
-
-
+///////////////////////////////////////////
+///			MapObject Test Aria			///
+///////////////////////////////////////////
+        MapObject[] mapObjects = new MapObject[4];
+       
+        mapObjects[0] = new Sword(1,0,new Coordinate(4,8));
+        mapObjects[1] = new Bow(0,0,new Coordinate(4,4));
+        mapObjects[2] = new HealthPotion(10,new Coordinate(3,5),10);
+        mapObjects[3] = new SpeedPotion(2,new Coordinate(2,5),10);
+        
+        
+        
+        for(int i = 0; i < mapObjects.length; i++)
+        {
+        	System.out.println(mapObjects[i].toString());
+        	System.out.println(mapObjects[i].description());
+        	stkPnes[mapObjects[i].getLocation().getX()][mapObjects[i].getLocation().getY()].getChildren().add(mapObjects[i].getImageView(75));
+        }
+//        System.out.println(x);(stkPnes[3][6].getChildren().toString());
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////        
         Character testChar = new Character(randDoorLeftHeight);
         ImageView charImage = testChar.getImage();
         stkPnes[testChar.xMapVal][testChar.yMapVal].getChildren().add(charImage);
