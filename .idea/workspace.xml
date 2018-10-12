@@ -12,11 +12,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="Map.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Map.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Map.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="263">
-              <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+            <state relative-caret-position="470">
+              <caret line="124" column="25" lean-forward="true" selection-start-line="124" selection-start-column="25" selection-end-line="124" selection-end-column="25" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -28,31 +28,7 @@
         <entry file="file://$PROJECT_DIR$/src/Tile.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="68">
-              <caret line="4" column="32" lean-forward="true" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Character.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/Character.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="544">
-              <caret line="32" selection-start-line="32" selection-end-line="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Enemy.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/Enemy.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <caret line="4" column="32" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -102,8 +78,8 @@
         <option value="$PROJECT_DIR$/src/Tile.java" />
         <option value="$PROJECT_DIR$/src/test.java" />
         <option value="$PROJECT_DIR$/src/Character.java" />
-        <option value="$PROJECT_DIR$/src/Enemy.java" />
         <option value="$PROJECT_DIR$/src/Hearts.java" />
+        <option value="$PROJECT_DIR$/src/Enemy.java" />
         <option value="$PROJECT_DIR$/src/Map.java" />
       </list>
     </option>
@@ -147,6 +123,7 @@
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -244,7 +221,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-6" y="-6" width="1381" height="885" extended-state="6" />
+    <frame x="-13" y="-13" width="1381" height="885" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
@@ -261,6 +238,8 @@
       <window_info id="Capture Tool" order="6" />
       <window_info id="Designer" order="3" />
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20043892" />
+      <window_info anchor="bottom" id="Inspection Results" weight="0.32988358" />
+      <window_info anchor="bottom" id="Find" order="1" weight="0.32988358" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info id="UI Designer" order="4" />
@@ -272,7 +251,6 @@
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32988358" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -562,10 +540,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Map.java">
+    <entry file="file://$PROJECT_DIR$/src/myEnemyTrans.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/myCharacterTrans.png">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/myFloor.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/myWall.jpg">
+      <provider selected="true" editor-type-id="images" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/Enemy.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="263">
-          <caret line="137" lean-forward="true" selection-start-line="137" selection-end-line="137" />
+        <state relative-caret-position="136">
+          <caret line="8" column="7" selection-start-line="8" selection-start-column="7" selection-end-line="8" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -575,14 +565,14 @@
     <entry file="file://$PROJECT_DIR$/src/Tile.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
-          <caret line="4" column="32" lean-forward="true" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
+          <caret line="4" column="32" selection-start-line="4" selection-start-column="32" selection-end-line="4" selection-end-column="32" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/Enemy.java">
+    <entry file="file://$PROJECT_DIR$/src/Map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="31" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
+        <state relative-caret-position="470">
+          <caret line="124" column="25" lean-forward="true" selection-start-line="124" selection-start-column="25" selection-end-line="124" selection-end-column="25" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>

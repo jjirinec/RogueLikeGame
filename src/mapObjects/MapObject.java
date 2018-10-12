@@ -6,32 +6,36 @@ import javafx.scene.image.ImageView;
 public class MapObject {
 	
 	private String objectName;
-	
+	private int imageSize;
 	private Image image;
 	private ImageView imageView;
 	private Coordinate location;
-	private boolean isPasable;
+	protected boolean isPasable;
+	
 	
 //////////////////////////////////////////////
 //            Constructors                  //
 //////////////////////////////////////////////
 	public MapObject() {};
-	public MapObject(String objectName, String imageFile, boolean isPasable)
+	public MapObject(String objectName, String imageFile, boolean isPasable,int imageSize)
 	{
 		this.objectName = objectName;
 		this.image = new Image(imageFile);
 		this.imageView = new ImageView(image);
 		this.isPasable = isPasable;
+		setImageSize(imageSize);
 	}
-	public MapObject(String objectName, String imageFile,Coordinate location, boolean isPasable)
+	public MapObject(String objectName, String imageFile,Coordinate location, boolean isPasable, int imageSize)
 	{
 		this.objectName = objectName;
+		this.imageSize = imageSize;
 		this.image = new Image(imageFile);
 		this.imageView = new ImageView(image);
 		
 //		imageView.prefWidth(3);
 		this.location = location;
 		this.isPasable = isPasable;
+		setImageSize(imageSize);
 	}
 	
 /////////////////////////////////////////////
@@ -50,10 +54,22 @@ public class MapObject {
 	{
 		this.objectName = name;
 	}
-	public ImageView getImageView(int gridSize)
+	
+		
+	public void setImageSize(int imageSize)
 	{
-		imageView.setFitHeight(gridSize);
-		imageView.setFitWidth(gridSize);
+		if(imageSize > 80)
+			imageSize = 80;		
+		imageView.setFitHeight(imageSize);
+		imageView.setFitWidth(imageSize);
+	}
+	protected void setImage(String imageFile)
+	{
+		image = new Image(imageFile);
+		imageView = new ImageView(image);
+	}
+	public ImageView getImageView()
+	{
 		return imageView;
 	}
 	public boolean isPasable()
