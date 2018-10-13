@@ -15,6 +15,7 @@ public class Map extends Application{
     static int MAX_SIZE = 800; // size of window
     static int NUM_GRIDS = 10; // number of grid boxes
     GridPane gridPane;
+    StackPane[][] stkPnes;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,7 +24,7 @@ public class Map extends Application{
 //    public Map()
 //    {
 //    	gridPane = new GridPane();
-//    	StackPane[][] stkPnes = new StackPane[NUM_GRIDS][NUM_GRIDS];
+//    	stkPnes = new StackPane[NUM_GRIDS][NUM_GRIDS];
 //        Button[][] optionButtons = new Button[NUM_GRIDS][NUM_GRIDS];
 //
 //        // 2D array of stkPnes with value of 5,5
@@ -74,17 +75,21 @@ public class Map extends Application{
 //        }
 //    }
 //    
-//    public GridPane getMap()
-//    {
-//    	return gridPane;
-//    }
+    public GridPane getMap()
+    {
+    	return gridPane;
+    }
+    public StackPane[][] getStackPane()
+    {
+    	return stkPnes;
+    }
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Our Map Title");
 
         gridPane = new GridPane();
 
 
-        StackPane[][] stkPnes = new StackPane[NUM_GRIDS][NUM_GRIDS];
+        stkPnes = new StackPane[NUM_GRIDS][NUM_GRIDS];
         Button[][] optionButtons = new Button[NUM_GRIDS][NUM_GRIDS];
 
         // 2D array of stkPnes with value of 5,5
@@ -140,15 +145,15 @@ public class Map extends Application{
         Obstacle[] obs = new Obstacle[4];
         
         obs[0] = new Bolder(5, new Coordinate(3,2));
-       
+        obs[1] = new Crate(3,new Coordinate(2,2));
+        
         loot[0] = new Sword(1,0,new Coordinate(4,8));
         loot[1] = new Bow(0,0,new Coordinate(4,4));
         loot[2] = new HealthPotion(10,new Coordinate(3,5),10);
         loot[3] = new SpeedPotion(2,new Coordinate(2,5),10);
         
         loot[4] = new Axe(1,0,new Coordinate(5,8));
-        loot[5] = new Dagger(1,0,new Coordinate(3,2
-        		));
+        loot[5] = new Dagger(1,0,new Coordinate(3,1));
         
         
         for(int i = 0; i < obs.length; i++)
@@ -215,6 +220,7 @@ public class Map extends Application{
                 }
             }
             else if (e.getCode() == KeyCode.W) {
+            	System.out.println("W hit");
                 if (testChar.moveChar(0, -1)) {
                     stkPnes[testChar.xMapVal][testChar.yMapVal + 1].getChildren().remove(charImage);
                     stkPnes[testChar.xMapVal][testChar.yMapVal].getChildren().add(charImage);
@@ -224,10 +230,20 @@ public class Map extends Application{
                     stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
                 }
             }
-            else if(e.getCode() == KeyCode.SPACE) {
+            else if(e.getCode() == KeyCode.X  ) {
                 // attack
+            	System.out.println("X hit");
+            	//stkPnes[obs[0].getLocation().getX()][obs[0].getLocation().getY()].getChildren().remove(obs[0].getImageView());
+            	
+            	obs[0].damage(5,this);
+            	obs[1].damage(5, this);
+            	
+            	//stkPnes[obs[0].getLocation().getX()][obs[0].getLocation().getY()].getChildren().add(obs[0].getImageView());
+            	System.out.println(obs[0].description());
+            	System.out.println(obs[1].description());
 
             }
+          
         });
 
 

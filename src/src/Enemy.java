@@ -8,9 +8,11 @@ public class Enemy extends Tile {
     int yMapVal;
 
     public ImageView getImage() {
-        Image wallG = new Image("myEnemyTrans.png");
+        Image wallG = new Image("TempChar.png");
         ImageView wallView = new ImageView();
         wallView.setImage(wallG);
+        wallView.setFitHeight(75);
+        wallView.setFitWidth(75);
         return wallView;
     }
 

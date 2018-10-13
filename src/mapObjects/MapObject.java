@@ -67,6 +67,7 @@ public class MapObject {
 	{
 		image = new Image(imageFile);
 		imageView = new ImageView(image);
+		setImageSize(imageSize);
 	}
 	public ImageView getImageView()
 	{

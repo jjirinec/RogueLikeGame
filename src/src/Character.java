@@ -8,9 +8,11 @@ public class Character extends Tile {
     int hp;
 
     public ImageView getImage() {
-        Image wallG = new Image("myCharacterTrans.png");
+        Image wallG = new Image("TempChar.png");
         ImageView wallView = new ImageView();
         wallView.setImage(wallG);
+        wallView.setFitHeight(75);
+        wallView.setFitWidth(75);
         return wallView;
     }
 

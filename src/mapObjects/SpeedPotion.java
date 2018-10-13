@@ -1,6 +1,6 @@
 package mapObjects;
 
-public class SpeedPotion extends Loot implements Consumable{
+public class SpeedPotion extends Consumable{
 	
 	private static String imageFile = "images/potions/SpeedPotion.png";
 	private static int imageSize = 30;

@@ -1,6 +1,6 @@
 package mapObjects;
 
-public class HealthPotion extends Loot implements Consumable{
+public class HealthPotion extends Consumable{
 
 	private static String imageFile = "images/potions/HealthPotion.png";
 	private static int imageSize = 30;
