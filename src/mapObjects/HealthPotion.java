@@ -8,9 +8,9 @@ public class HealthPotion extends Consumable{
 	private static String name = "Health Potion";
 	
 	
-	public HealthPotion(int bounusValue, Coordinate location, int value) {
+	public HealthPotion(int bounusHealth, Coordinate location, int value) {
 		super(name, imageFile, location, value,imageSize);
-		healthValue += bounusValue;
+		healthValue += bounusHealth;
 	}
 	public HealthPotion(int bounusValue, int value) {
 		super(name, imageFile, value,imageSize);
@@ -26,7 +26,7 @@ public class HealthPotion extends Consumable{
 	
 	public String description()
 	{
-		return super.description() + "Healing value: +" + healthValue + " Hp"; 
+		return super.description() + super.toString() + "\n\tHealing value: +" + healthValue + " Hp"; 
 	}
 
 }

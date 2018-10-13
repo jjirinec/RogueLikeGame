@@ -66,7 +66,7 @@ public abstract class Obstacle extends MapObject{
 	
 	public String description()
 	{
-		return super.description() + "Obstackle: " + super.toString() + "\n\tStatus: " + status + "\nxhp; " + this.hp;
+		return super.description() + "Obstackle: " + super.toString() + "\n\tStatus: " + status;
 	}
 
 }

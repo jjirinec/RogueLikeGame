@@ -43,8 +43,13 @@ public class MapObject {
 /////////////////////////////////////////////
 	public void setLocation(int x, int y)
 	{
-		this.location.setX(x);
-		this.location.setY(y);
+		if(this.location == null)
+			this.location = new Coordinate(x,y);
+		else
+		{
+			this.location.setX(x);
+			this.location.setY(y);
+		}
 	}
 	public Coordinate getLocation()
 	{

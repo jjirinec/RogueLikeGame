@@ -8,6 +8,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Map extends Application{
@@ -141,32 +143,45 @@ public class Map extends Application{
 ///////////////////////////////////////////
 ///			MapObject Test Aria			///
 ///////////////////////////////////////////
-        Loot[] loot = new Loot[6];
+        LootGenerator lootGen = new LootGenerator(); 
+        ArrayList<Loot> loot = new ArrayList<Loot>();
         Obstacle[] obs = new Obstacle[4];
         
-        obs[0] = new Bolder(5, new Coordinate(3,2));
-        obs[1] = new Crate(3,new Coordinate(2,2));
-        
-        loot[0] = new Sword(1,0,new Coordinate(4,8));
-        loot[1] = new Bow(0,0,new Coordinate(4,4));
-        loot[2] = new HealthPotion(10,new Coordinate(3,5),10);
-        loot[3] = new SpeedPotion(2,new Coordinate(2,5),10);
-        
-        loot[4] = new Axe(1,0,new Coordinate(5,8));
-        loot[5] = new Dagger(1,0,new Coordinate(3,1));
-        
+//        obs[0] = new Bolder(5, new Coordinate(3,2));
+//        obs[1] = new Crate(3,new Coordinate(2,2),5);
+//        
+//        loot[0] = new Sword(1,0,new Coordinate(4,8));
+//        loot[1] = new Bow(0,0,new Coordinate(4,4));
+//        loot[2] = new HealthPotion(10,new Coordinate(3,5),10);
+//        loot[3] = new SpeedPotion(2,new Coordinate(2,5),10);
+//        
+//        loot[4] = new Axe(1,0,new Coordinate(5,8));
+//        loot[5] = new Dagger(1,0,new Coordinate(3,1));
+        Random rand = new Random();
+        for(int i = 0; i < 10; i++)
+        {
+        	int x = 1 + rand.nextInt(NUM_GRIDS-2);
+        	int y = 1 + rand.nextInt(NUM_GRIDS-2);
+        	Coordinate location = new Coordinate(x,y);
+        	Loot item = lootGen.generate(3);
+        	item.setLocation(x, y);
+        	loot.add(item);
+        }
         
         for(int i = 0; i < obs.length; i++)
         {
         	if(obs[i] != null)
         		stkPnes[obs[i].getLocation().getX()][obs[i].getLocation().getY()].getChildren().add(obs[i].getImageView());
         }
-        for(int i = 0; i < loot.length; i++)
+        for(int i = 0; i < loot.size(); i++)
         {
-        	System.out.println(loot[i].toString());
-        	System.out.println(loot[i].description());
+        	if(loot.get(i) != null && loot.get(i).getLocation() != null)
+        	{
+        		//System.out.println(loot.get(i).toString());
+        		System.out.println(loot.get(i).description());
         	//System.out.println("Worth" +loot[i].getValue());
-        	stkPnes[loot[i].getLocation().getX()][loot[i].getLocation().getY()].getChildren().add(loot[i].getImageView());
+        		stkPnes[loot.get(i).getLocation().getX()][loot.get(i).getLocation().getY()].getChildren().add(loot.get(i).getImageView());
+        	}
         }
 //        System.out.println(x);(stkPnes[3][6].getChildren().toString());
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////        
@@ -230,15 +245,18 @@ public class Map extends Application{
                     stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
                 }
             }
+            else if(e.getCode() == KeyCode.SPACE ) {
+                // attack
+            	System.out.println("Attack");
+
+            }
             else if(e.getCode() == KeyCode.X  ) {
                 // attack
-            	System.out.println("X hit");
-            	//stkPnes[obs[0].getLocation().getX()][obs[0].getLocation().getY()].getChildren().remove(obs[0].getImageView());
+
             	
             	obs[0].damage(5,this);
             	obs[1].damage(5, this);
-            	
-            	//stkPnes[obs[0].getLocation().getX()][obs[0].getLocation().getY()].getChildren().add(obs[0].getImageView());
+
             	System.out.println(obs[0].description());
             	System.out.println(obs[1].description());
 

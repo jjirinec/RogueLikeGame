@@ -3,6 +3,6 @@ package mapObjects;
 public interface Container {
 	
 	public abstract MapObject[] getContents();
-	public abstract MapObject[] generateContents();
+	public abstract void generateContents();
 
 }
