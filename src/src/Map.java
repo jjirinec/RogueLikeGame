@@ -143,9 +143,10 @@ public class Map extends Application{
 ///////////////////////////////////////////
 ///			MapObject Test Aria			///
 ///////////////////////////////////////////
-        LootGenerator lootGen = new LootGenerator(); 
+        LootGenerator lootGen = new LootGenerator();
+        ObstacleGenerrator obsGen = new ObstacleGenerrator();
         ArrayList<Loot> loot = new ArrayList<Loot>();
-        Obstacle[] obs = new Obstacle[4];
+        Obstacle[] obs = new Obstacle[10];
         
 //        obs[0] = new Bolder(5, new Coordinate(3,2));
 //        obs[1] = new Crate(3,new Coordinate(2,2),5);
@@ -167,22 +168,39 @@ public class Map extends Application{
         	item.setLocation(x, y);
         	loot.add(item);
         }
+        for(int i = 0; i < obs.length; i++)
+        {
+        	int x = 1 + rand.nextInt(NUM_GRIDS-2);
+    		int y = 1 + rand.nextInt(NUM_GRIDS-2);
+    		Coordinate location = new Coordinate(x,y);
+    		obs[i] = obsGen.generate(0,location);
+        }
         
         for(int i = 0; i < obs.length; i++)
         {
         	if(obs[i] != null)
-        		stkPnes[obs[i].getLocation().getX()][obs[i].getLocation().getY()].getChildren().add(obs[i].getImageView());
-        }
-        for(int i = 0; i < loot.size(); i++)
-        {
-        	if(loot.get(i) != null && loot.get(i).getLocation() != null)
         	{
-        		//System.out.println(loot.get(i).toString());
-        		System.out.println(loot.get(i).description());
-        	//System.out.println("Worth" +loot[i].getValue());
-        		stkPnes[loot.get(i).getLocation().getX()][loot.get(i).getLocation().getY()].getChildren().add(loot.get(i).getImageView());
+        		stkPnes[obs[i].getLocation().getX()][obs[i].getLocation().getY()].getChildren().add(obs[i].getImageView());
+        		System.out.println(obs[i].description());
+        		if(obs[i].toString().equals("Crate"))
+        		{
+        			Crate c = (Crate)obs[i];
+        			c.printContents();
+        			
+        		}
         	}
+        	
         }
+//        for(int i = 0; i < loot.size(); i++)
+//        {
+//        	if(loot.get(i) != null && loot.get(i).getLocation() != null)
+//        	{
+//        		//System.out.println(loot.get(i).toString());
+//        		System.out.println(loot.get(i).description());
+//        	//System.out.println("Worth" +loot[i].getValue());
+//        		stkPnes[loot.get(i).getLocation().getX()][loot.get(i).getLocation().getY()].getChildren().add(loot.get(i).getImageView());
+//        	}
+//        }
 //        System.out.println(x);(stkPnes[3][6].getChildren().toString());
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////        
         Character testChar = new Character(randDoorLeftHeight);

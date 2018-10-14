@@ -6,12 +6,16 @@ public class Crate extends Obstacle implements Container{
 	private static String name = "Crate";
 	private static int imageSize = 60;
 	private static int baseHp = 30;
-	private Loot[] items;
+	private Loot[] items = null;
 	
 	
-	public Crate(int containerSize, Coordinate location, int numberOfItems) {
+	public Crate(int numberOfItems, Coordinate location, int itemRating) {
 		super(name, baseHp, location, imageFiles, imageSize);
-		this.items = new Loot[numberOfItems];
+		if(numberOfItems > 0)
+		{
+			this.items = new Loot[numberOfItems];
+			generateContents(itemRating);
+		}
 		// TODO Auto-generated constructor stub
 	}
 //	public Crate(String objectName, int hp,String startImageFile, int imageSize) {
@@ -20,29 +24,38 @@ public class Crate extends Obstacle implements Container{
 //	}
 
 	@Override
-	public MapObject[] getContents() {
-		// TODO Auto-generated method stub
-		return null;
+	public Loot[] getContents() {
+		return items;
+	}
+	
+	public void printContents() {
+		System.out.println("This container holds: ");
+		if(items != null)
+		for(int i = 0; i < items.length; i++)
+			System.out.println("\t" + items[i].toString());
+		else
+			System.out.println("Nothing");
+		System.out.println("\n");
 	}
 
 	@Override
-	public void generateContents() {
+	public void generateContents(int itemRating) {
 		LootGenerator lootGen = new LootGenerator();
 		for(int item = 0; item < items.length; item++)
-			items[item] = lootGen.generate(1);
+			items[item] = lootGen.generate(itemRating);
 		
 	}
 
-	@Override
+//	@Override
 //	public void updateImage(int imageNumber) {
 //		// TODO Auto-generated method stub
 //		
 //	}
 	
 	
-	public String description()
-	{
-		return super.description() + "\n\tContains: " + "ADD Loot Contents Here";//TODO UpDate Loot Contents
-	}
+//	public String description()
+//	{
+//		return super.description() + "\n\tContains: " + "ADD Loot Contents Here";//TODO UpDate Loot Contents
+//	}
 
 }
