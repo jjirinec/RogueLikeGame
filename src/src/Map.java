@@ -148,16 +148,7 @@ public class Map extends Application{
         ArrayList<Loot> loot = new ArrayList<Loot>();
         Obstacle[] obs = new Obstacle[10];
         
-//        obs[0] = new Bolder(5, new Coordinate(3,2));
-//        obs[1] = new Crate(3,new Coordinate(2,2),5);
-//        
-//        loot[0] = new Sword(1,0,new Coordinate(4,8));
-//        loot[1] = new Bow(0,0,new Coordinate(4,4));
-//        loot[2] = new HealthPotion(10,new Coordinate(3,5),10);
-//        loot[3] = new SpeedPotion(2,new Coordinate(2,5),10);
-//        
-//        loot[4] = new Axe(1,0,new Coordinate(5,8));
-//        loot[5] = new Dagger(1,0,new Coordinate(3,1));
+
         Random rand = new Random();
         for(int i = 0; i < 10; i++)
         {
@@ -191,16 +182,16 @@ public class Map extends Application{
         	}
         	
         }
-//        for(int i = 0; i < loot.size(); i++)
-//        {
-//        	if(loot.get(i) != null && loot.get(i).getLocation() != null)
-//        	{
-//        		//System.out.println(loot.get(i).toString());
-//        		System.out.println(loot.get(i).description());
-//        	//System.out.println("Worth" +loot[i].getValue());
-//        		stkPnes[loot.get(i).getLocation().getX()][loot.get(i).getLocation().getY()].getChildren().add(loot.get(i).getImageView());
-//        	}
-//        }
+        for(int i = 0; i < loot.size(); i++)
+        {
+        	if(loot.get(i) != null && loot.get(i).getLocation() != null)
+        	{
+        		//System.out.println(loot.get(i).toString());
+        		System.out.println(loot.get(i).description());
+        	//System.out.println("Worth" +loot[i].getValue());
+        		stkPnes[loot.get(i).getLocation().getX()][loot.get(i).getLocation().getY()].getChildren().add(loot.get(i).getImageView());
+        	}
+        }
 //        System.out.println(x);(stkPnes[3][6].getChildren().toString());
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////        
         Character testChar = new Character(randDoorLeftHeight);

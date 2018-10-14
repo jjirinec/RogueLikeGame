@@ -26,7 +26,7 @@ public class LootGenerator {
 	private Loot genItem(int itemBonus)
 	{
 		Loot item = null;
-		int itemNumber = rand.nextInt(2);
+		int itemNumber = rand.nextInt(3);
 		switch(itemNumber)
 		{
 			case 0:
@@ -36,7 +36,7 @@ public class LootGenerator {
 				item = genPotion(itemBonus);
 				break;
 			case 2:
-				//item = genArmor(itemBonus);
+				item = genArmor(itemBonus);
 				break;
 
 		}
@@ -83,6 +83,26 @@ public class LootGenerator {
 				wepon = new Axe(itemBonus, extraValue);
 		}
 		return wepon;
+	}
+	
+	private Armor genArmor(int itemBonus)
+	{
+		Armor armor = null;
+		int armorNumber = rand.nextInt(3);
+		int extraValue = itemBonus * 10;
+		switch(armorNumber)
+		{
+			case 0:
+				armor = new LeatherArmor(itemBonus,extraValue);
+				break;
+			case 1:
+				armor = new ChainMail(itemBonus,extraValue);
+				break;
+			case 2:
+				armor = new PlateArmor(itemBonus,extraValue);
+				break;
+		}
+		return armor;
 	}
 
 }
