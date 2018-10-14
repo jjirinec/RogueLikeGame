@@ -8,13 +8,20 @@ public class Floor extends Tile {
     Image floorG = new Image("myFloor.jpg");
     ImageView floorView = new ImageView();
     floorView.setImage(floorG);
+    floorView.setFitHeight(this.tileSize);
+    floorView.setFitWidth(this.tileSize);
     return floorView;
     }
 
-    public Floor(){
+    public Floor(int tileSize){
+    	super(tileSize);
         this.background = getImage();
         this.isMovable = true;
 
+    }
+    public Floor(Floor floor)
+    {
+    	super(floor);
     }
 
 

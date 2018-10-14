@@ -16,7 +16,8 @@ public class Enemy extends Tile {
         return wallView;
     }
 
-    public Enemy(int xVal, int yVal) {
+    public Enemy(int xVal, int yVal,int tileSize) {
+    	super(tileSize);
         this.background = getImage();
         this.isMovable = true;
         this.xMapVal =xVal;

@@ -8,12 +8,19 @@ public class Wall extends Tile {
         Image wallG = new Image("myWall.jpg");
         ImageView wallView = new ImageView();
         wallView.setImage(wallG);
+        wallView.setFitHeight(this.tileSize);
+        wallView.setFitWidth(this.tileSize);
         return wallView;
     }
 
-    public Wall() {
+    public Wall(int tileSize) {
+    	super(tileSize);
         this.background = getImage();
         this.isMovable = true;
 
+    }
+    public Wall(Wall wall)
+    {
+    	super(wall);
     }
 }

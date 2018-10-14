@@ -15,7 +15,8 @@ import java.util.Random;
 public class Map extends Application{
 
     static int MAX_SIZE = 800; // size of window
-    static int NUM_GRIDS = 10; // number of grid boxes
+    static int NUM_GRIDS = 10; // number of grid boxesc
+    static int gridSize = 80;
     GridPane gridPane;
     StackPane[][] stkPnes;
 
@@ -118,19 +119,19 @@ public class Map extends Application{
                 optionButtons[i][j].setMaxWidth(79);
                 //Add test Floor to all tiles
 
-                Floor testFloor = new Floor();
+                Floor testFloor = new Floor(80);
 
                 stkPnes[i][j].getChildren().add(optionButtons[i][j]);
                 stkPnes[i][j].getChildren().add(testFloor.getImage());
 
-                stkPnes[i][j].setPrefSize(85, 85);
+//                stkPnes[i][j].setPrefSize(85, 85);
                 gridPane.add(stkPnes[i][j], i, j);
             }
         }
         for(int i=0; i<stkPnes.length; i++) {
             for (int j = 0; j < stkPnes.length; j++) {
 
-            Wall testWall = new Wall();
+            Wall testWall = new Wall(80);
 
             if(i==0 && j != randDoorLeftHeight || i == NUM_GRIDS - 1 && j != randDoorRightHeight){
                 stkPnes[i][j].getChildren().add(testWall.getImage());
@@ -150,7 +151,7 @@ public class Map extends Application{
         
 
         Random rand = new Random();
-        for(int i = 0; i < 10; i++)
+        for(int i = 0; i < 10; i++)/// Fills Loot Array
         {
         	int x = 1 + rand.nextInt(NUM_GRIDS-2);
         	int y = 1 + rand.nextInt(NUM_GRIDS-2);
@@ -159,7 +160,7 @@ public class Map extends Application{
         	item.setLocation(x, y);
         	loot.add(item);
         }
-        for(int i = 0; i < obs.length; i++)
+        for(int i = 0; i < obs.length; i++)///Fills Obstical Array
         {
         	int x = 1 + rand.nextInt(NUM_GRIDS-2);
     		int y = 1 + rand.nextInt(NUM_GRIDS-2);
@@ -167,7 +168,7 @@ public class Map extends Application{
     		obs[i] = obsGen.generate(0,location);
         }
         
-        for(int i = 0; i < obs.length; i++)
+        for(int i = 0; i < obs.length; i++)///Adss Obsicals to map
         {
         	if(obs[i] != null)
         	{
@@ -182,7 +183,7 @@ public class Map extends Application{
         	}
         	
         }
-        for(int i = 0; i < loot.size(); i++)
+        for(int i = 0; i < loot.size(); i++)///Adds Loot to map
         {
         	if(loot.get(i) != null && loot.get(i).getLocation() != null)
         	{
@@ -194,12 +195,13 @@ public class Map extends Application{
         }
 //        System.out.println(x);(stkPnes[3][6].getChildren().toString());
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////        
-        Character testChar = new Character(randDoorLeftHeight);
+        Character testChar = new Character(75);
+        testChar.setLocation(0, randDoorLeftHeight);
         ImageView charImage = testChar.getImage();
         stkPnes[testChar.xMapVal][testChar.yMapVal].getChildren().add(charImage);
 
 
-        Enemy testEnemy = new Enemy(randEnemyWidth,randEnemyHeight);
+        Enemy testEnemy = new Enemy(randEnemyWidth,randEnemyHeight,75);
         ImageView enemyImage = testEnemy.getImage();
         stkPnes[testEnemy.xMapVal][testEnemy.yMapVal].getChildren().add(enemyImage);
 
@@ -259,6 +261,10 @@ public class Map extends Application{
             	System.out.println("Attack");
 
             }
+            
+            ////////////////////////////////////////////////////////
+            ///		Use this to test Obstical Damaging System 	///
+            ///////////////////////////////////////////////////////
             else if(e.getCode() == KeyCode.X  ) {
                 // attack
 

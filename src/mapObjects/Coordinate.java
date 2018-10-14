@@ -21,5 +21,18 @@ public class Coordinate {
 	{
 		this.y = y;
 	}
+	
+	public boolean equals(Object obj)
+	{
+		boolean result = false;
+		if(obj != null)
+			if(obj instanceof Coordinate)
+			{
+				Coordinate newObj = (Coordinate)obj;
+				if(this.x == newObj.x && this.y == newObj.y)
+					result = true;
+			}
+		return result;
+	}
 
 }

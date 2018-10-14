@@ -1,6 +1,7 @@
 package src;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import mapObjects.Coordinate;
 
 public class Character extends Tile {
     int xMapVal;
@@ -13,14 +14,16 @@ public class Character extends Tile {
         wallView.setImage(wallG);
         wallView.setFitHeight(75);
         wallView.setFitWidth(75);
+        wallView.setFitHeight(tileSize);
+        wallView.setFitWidth(tileSize);
         return wallView;
     }
 
-    public Character(int yVal) {
+    public Character(int tileSize) {
+    	super(tileSize);
         this.background = getImage();
         this.isMovable = true;
-        this.xMapVal =0;
-        this.yMapVal = yVal;
+        
     }
 
     boolean moveChar(int x, int y){
@@ -39,5 +42,10 @@ public class Character extends Tile {
     	hp += healthPoints;
     }
 
+    public void setLocation(int x, int y)
+    {
+    	this.xMapVal = x;
+    	this.yMapVal = y;
+    }
 }
 
