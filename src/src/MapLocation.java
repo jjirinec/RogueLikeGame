@@ -13,6 +13,7 @@ public class MapLocation {
 	public MapLocation(Tile tile)
 	{
 		this.tile = tile;
+		mapObjects = new Stack<MapObject>();
 	}
 	
 	

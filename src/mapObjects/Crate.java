@@ -9,13 +9,16 @@ public class Crate extends Obstacle implements Container{
 	private Loot[] items = null;
 	
 	
-	public Crate(int numberOfItems, Coordinate location, int itemRating) {
+	public Crate(int numberOfItems, Coordinate location, int itemRating,int imageSize) {
 		super(name, baseHp, location, imageFiles, imageSize);
+		this.imageSize = imageSize;
 		if(numberOfItems > 0)
 		{
 			this.items = new Loot[numberOfItems];
 			generateContents(itemRating);
 		}
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 		// TODO Auto-generated constructor stub
 	}
 //	public Crate(String objectName, int hp,String startImageFile, int imageSize) {
@@ -40,7 +43,7 @@ public class Crate extends Obstacle implements Container{
 
 	@Override
 	public void generateContents(int itemRating) {
-		LootGenerator lootGen = new LootGenerator();
+		LootGenerator lootGen = new LootGenerator(imageSize);
 		for(int item = 0; item < items.length; item++)
 			items[item] = lootGen.generate(itemRating);
 		

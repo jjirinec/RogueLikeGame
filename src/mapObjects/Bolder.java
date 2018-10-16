@@ -7,10 +7,12 @@ public class Bolder extends Obstacle{
 	private static int baseHp = 30;
 	private String condition = "Week";
 	
-	public Bolder(int extraHp, Coordinate location)
+	public Bolder(int extraHp, Coordinate location,int imageSize)
 	{
 		super(name,(baseHp + extraHp),location,imageFiles,imageSize);
 		setCondition();
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
 	
 	private void setCondition()

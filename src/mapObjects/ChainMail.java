@@ -9,15 +9,19 @@ public class ChainMail extends Armor{
 	private static int baseValue = 30;
 	private static int imageSize = 50;
 	
-	public ChainMail(int bonusDefence, Coordinate location, int bonusValue) {
+	public ChainMail(int bonusDefence, Coordinate location, int bonusValue,int imageSize) {
 		super(name, (baseDefence + bonusDefence), type, imageFile, location, (baseValue+bonusValue), imageSize);
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 		
 		// TODO Auto-generated constructor stub
 	}
-	public ChainMail(int bonusDefence, int bonusValue) {
+	public ChainMail(int bonusDefence, int bonusValue,int imageSize) {
 		super(name, (baseDefence + bonusDefence), type, imageFile, (baseValue+bonusValue), imageSize);
 		if(bonusDefence > 0)
 			super.setName("+" + bonusDefence + " " +name);
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 		// TODO Auto-generated constructor stub
 	}
 	

@@ -5,11 +5,12 @@ import java.util.Random;
 public class LootGenerator {
 	
 	private Random rand;
+	private int gridSize;
 	
-	
-	public LootGenerator()
+	public LootGenerator(int gridSize)
 	{
 		this.rand = new Random();
+		this.gridSize = gridSize;
 	}
 	
 	public Loot generate(int itemRating)
@@ -51,11 +52,11 @@ public class LootGenerator {
 		{
 			case 0:
 				int bonusHealth = 10*itemBonus;
-				potion = new HealthPotion(bonusHealth,bonusValue);
+				potion = new HealthPotion(bonusHealth,bonusValue,gridSize);
 				break;
 			case 1:
 				double bonusSpeed = .5 * itemBonus;
-				potion = new SpeedPotion(bonusSpeed, bonusValue);
+				potion = new SpeedPotion(bonusSpeed, bonusValue,gridSize);
 				break;
 		}
 		
@@ -71,16 +72,16 @@ public class LootGenerator {
 		switch(weaponNumber)
 		{
 			case 0:
-				wepon = new Sword(itemBonus, extraValue);
+				wepon = new Sword(itemBonus, extraValue,gridSize);
 				break;
 			case 1:
-				wepon = new Dagger(itemBonus, extraValue);
+				wepon = new Dagger(itemBonus, extraValue,gridSize);
 				break;
 			case 2:
-				wepon = new Bow(itemBonus, extraValue);
+				wepon = new Bow(itemBonus, extraValue,gridSize);
 				break;
 			case 3:
-				wepon = new Axe(itemBonus, extraValue);
+				wepon = new Axe(itemBonus, extraValue,gridSize);
 		}
 		return wepon;
 	}
@@ -93,13 +94,13 @@ public class LootGenerator {
 		switch(armorNumber)
 		{
 			case 0:
-				armor = new LeatherArmor(itemBonus,extraValue);
+				armor = new LeatherArmor(itemBonus,extraValue,gridSize);
 				break;
 			case 1:
-				armor = new ChainMail(itemBonus,extraValue);
+				armor = new ChainMail(itemBonus,extraValue,gridSize);
 				break;
 			case 2:
-				armor = new PlateArmor(itemBonus,extraValue);
+				armor = new PlateArmor(itemBonus,extraValue,gridSize);
 				break;
 		}
 		return armor;

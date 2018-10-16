@@ -9,15 +9,19 @@ public class Bow extends Wepon{
 	private static int baseValue = 5;
 	private static double weponSpeed = 1;
 	
-	public Bow(int extraDmg,int bonusValue) {
+	public Bow(int extraDmg,int bonusValue,int imageSize) {
 		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
-	public Bow(int extraDmg, int bonusValue, Coordinate location) {
+	public Bow(int extraDmg, int bonusValue, Coordinate location,int imageSize) {
 		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 
 	}
 	

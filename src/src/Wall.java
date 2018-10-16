@@ -16,7 +16,7 @@ public class Wall extends Tile {
     public Wall(int tileSize) {
     	super(tileSize);
         this.background = getImage();
-        this.isMovable = true;
+        this.isMovable = false;
 
     }
     public Wall(Wall wall)

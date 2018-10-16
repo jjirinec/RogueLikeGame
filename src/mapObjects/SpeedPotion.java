@@ -8,13 +8,17 @@ public class SpeedPotion extends Consumable{
 	private static String name = "Speed Potion";
 	
 	
-	public SpeedPotion(double bounusSpeed, Coordinate location, int value) {
+	public SpeedPotion(double bounusSpeed, Coordinate location, int value,int imageSize) {
 		super(name, imageFile, location, value,imageSize);
 		speedBonus += bounusSpeed;
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
-	public SpeedPotion(double bounusEffect, int value) {
+	public SpeedPotion(double bounusEffect, int value,int imageSize) {
 		super(name, imageFile, value,imageSize);
 		speedBonus += bounusEffect;
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
 
 	

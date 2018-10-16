@@ -3,17 +3,17 @@ package mapObjects;
 public class Sword extends Wepon{
 	private static String baseName = "Sword";
 	private static String imageFile = "images/wepons/sword.png";
-	private static int imageSize = 75;
+	private static int imageSize = 65;
 	private static int baseDmg = 3;
 	private static int baseValue = 5;
 	private static double weponSpeed = 1;
 	
-	public Sword(int extraDmg,int bonusValue) {
+	public Sword(int extraDmg,int bonusValue,int imageSize) {
 		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 	}
-	public Sword(int extraDmg, int bonusValue, Coordinate location) {
+	public Sword(int extraDmg, int bonusValue, Coordinate location,int imageSize) {
 		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);

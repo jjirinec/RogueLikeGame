@@ -8,13 +8,17 @@ public class HealthPotion extends Consumable{
 	private static String name = "Health Potion";
 	
 	
-	public HealthPotion(int bounusHealth, Coordinate location, int value) {
+	public HealthPotion(int bounusHealth, Coordinate location, int value,int imageSize) {
 		super(name, imageFile, location, value,imageSize);
 		healthValue += bounusHealth;
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
-	public HealthPotion(int bounusValue, int value) {
+	public HealthPotion(int bounusValue, int value,int imageSize) {
 		super(name, imageFile, value,imageSize);
 		healthValue += bounusValue;
+		if(imageSize > this.imageSize)
+			this.setImageSize(this.imageSize);
 	}
 
 	

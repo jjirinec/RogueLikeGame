@@ -7,6 +7,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 
 public class Map {
+	private int roomRating;
 	private GridPane map;
 	private StackPane[][] stacks;
 	private MapLocation[][] location;
@@ -25,15 +26,17 @@ public class Map {
 	private Coordinate exit;
 	private Random rand = new Random();
 	
-	public Map(int hight, int width, int gridSize, int mapRating,Character player)
+	public Map(int hight, int width, int gridSize, int mapRating,Character player,int roomRating)
 	{
 		this.mapHight = hight;
 		this.mapWidth = width;
 		this.gridSize = gridSize;
 		this.mapRating = mapRating;
 		this.player = player;
+		this.roomRating = roomRating;
 		setDoorLocations();
 		initializeGrid();
+		populateMap();
 	}
 	public MapLocation[][] getMapLocation()
 	{
@@ -62,7 +65,24 @@ public class Map {
 	
 	private void populateMap()
 	{
-		for(int row  = 0;row < location[].length();row++)
+		LootGenerator lootGen = new LootGenerator(gridSize);
+		ObstacleGenerrator objGen = new ObstacleGenerrator(gridSize);
+		for(int row  = 0;row < location.length; row++)
+			for(int colum = 0; colum < location[row].length; colum++)
+			{
+				int lNumber = rand.nextInt(100);
+				int oNumber = rand.nextInt(100);
+				if(lNumber <= 5 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
+				{
+					location[row][colum].addObject(lootGen.generate(roomRating));
+					stacks[row][colum].getChildren().add(location[row][colum].seeTopObject().getImageView());
+				}
+				if(oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
+				{
+					location[row][colum].addObject(objGen.generate(roomRating, new Coordinate(colum,row)));
+					stacks[row][colum].getChildren().add(location[row][colum].seeTopObject().getImageView());
+				}
+			}
 	}
 	
 	public GridPane getMap()

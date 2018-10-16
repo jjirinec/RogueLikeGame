@@ -5,9 +5,12 @@ import java.util.Random;
 public class ObstacleGenerrator {
 	
 	private Random rand;
-	public ObstacleGenerrator()
+	private int gridSize;
+	
+	public ObstacleGenerrator(int gridSize)
 	{
 		rand = new Random();
+		this.gridSize = gridSize;
 	}
 	
 	public Obstacle generate(int obsRating, Coordinate location)
@@ -21,11 +24,11 @@ public class ObstacleGenerrator {
 		{
 			case 0:
 				int extraHp = rand.nextInt(20)*rand.nextInt(2 + obsBonus);
-				obstacle = new Bolder(extraHp,location);
+				obstacle = new Bolder(extraHp,location,gridSize);
 				break;
 			case 1:
 				int numberOfItems = rand.nextInt(4+obsBonus);
-				obstacle = new Crate(numberOfItems,location,obsRating);
+				obstacle = new Crate(numberOfItems,location,obsRating,gridSize);
 				break;
 		}
 		
