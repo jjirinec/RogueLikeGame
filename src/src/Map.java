@@ -35,7 +35,10 @@ public class Map {
 		setDoorLocations();
 		initializeGrid();
 	}
-	
+	public MapLocation[][] getMapLocation()
+	{
+		return location;
+	}
 	private void initializeGrid()
 	{
 		map = new GridPane();
@@ -57,10 +60,18 @@ public class Map {
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(player.getImage());
 	}
 	
+	private void populateMap()
+	{
+		for(int row  = 0;row < location[].length();row++)
+	}
 	
 	public GridPane getMap()
 	{
 		return map;
+	}
+	public StackPane[][] getStackPane()
+	{
+		return stacks;
 	}
 	private Tile newTile(int row, int colum)
 	{
