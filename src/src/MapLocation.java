@@ -8,6 +8,7 @@ import mapObjects.MapObject;
 public class MapLocation {
 	private Tile tile;
 	private Stack<MapObject> mapObjects;
+	private Character character;
 
 	public MapLocation(Tile tile)
 	{
@@ -18,6 +19,21 @@ public class MapLocation {
 	public Tile getTile()
 	{
 		return tile;
+	}
+	public Character getCharacter()
+	{
+		return character;
+	}
+	
+	public void setCacharacter(Character x)
+	{
+		this.character = x;
+	}
+	public Character removeCharacter()
+	{
+		Character temp = this.character;
+		this.character = null;
+		return temp;
 	}
 //	public Stack<MapObject> getObjects()
 //	{
