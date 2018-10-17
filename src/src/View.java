@@ -41,7 +41,7 @@ public class View extends Application implements Observer{
 	Controler ctr;
 	StackPane forANDback;
 	BorderPane layout;
-	TempMap map;
+	Map map;
 	Character player;
 	Text hudMsg;
 	ScrollPane hud;
@@ -55,7 +55,7 @@ public class View extends Application implements Observer{
 		
 		ctr = new Controler(this);
 		forANDback = new StackPane();
-		map = new TempMap(mapRows,mapColums,gridSize,2,ctr.player);
+		map = new Map(mapRows,mapColums,gridSize,2,ctr.player,2);
 		
 		
 		
@@ -64,9 +64,10 @@ public class View extends Application implements Observer{
 		
 		///Background///
 		Rectangle bgImage = new Rectangle(screenSize.getWidth(),screenSize.getHeight());
-		bgImage.setFill(Color.DARKSEAGREEN);
+		bgImage.setFill(Color.DARKCYAN);
 		Pane background = new Pane();
 
+		
 		//background.setPrefSize(screenSize.getWidth(),screenSize.getHeight());
 		//background.autosize();
 		background.getChildren().add(bgImage);
@@ -116,8 +117,10 @@ public class View extends Application implements Observer{
 		hudMsg.setFill(Color.GREEN);
 		
 		hud.setContent(hudMsg);
+		
 		BackgroundFill[] bfill = {new BackgroundFill(Color.BLACK,new CornerRadii(20),new Insets(5))};
 		Background hudBackground = new Background(bfill);
+		
 		//hudBackground.setFill(Color.BLACK);
 		hud.setBackground(hudBackground);
 		

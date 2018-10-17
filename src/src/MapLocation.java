@@ -1,19 +1,23 @@
 package src;
 
+import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Stack;
 
+import mapObjects.Loot;
 import mapObjects.MapObject;
+import mapObjects.Obstacle;
 
 public class MapLocation {
 	private Tile tile;
-	private Stack<MapObject> mapObjects;
+	private ArrayList<Loot> loot;
+	private Obstacle obstacle;
 	private Character character;
 
 	public MapLocation(Tile tile)
 	{
 		this.tile = tile;
-		mapObjects = new Stack<MapObject>();
+		loot = new ArrayList<Loot>();
 	}
 	
 	
@@ -36,22 +40,37 @@ public class MapLocation {
 		this.character = null;
 		return temp;
 	}
+	public Obstacle getObstacle()
+	{
+		return obstacle;
+	}
+	public void setObstacle(Obstacle obstacle)
+	{
+		this.obstacle = obstacle;
+	}
 //	public Stack<MapObject> getObjects()
 //	{
 //		return mapObjects;
 //	}
-	public void addObject(MapObject object)
+	public void addObject(Loot object)
 	{
-		mapObjects.push(object);
+		loot.add(object);
+	}
+	public void removeObstacle()
+	{
+		this.obstacle = null;
+	}
+	public Loot topLoot()
+	{
+		return loot.get(loot.size()-1);
+	}
+	public boolean isPasable()
+	{
+		boolean result = false;
+		if(obstacle == null && character == null)
+			result = true;
+		return result;
 	}
 	
-	public MapObject seeTopObject()
-	{
-		return mapObjects.peek();
-	}
 	
-	public MapObject tackTopObject()
-	{
-		return mapObjects.pop();
-	}
 }

@@ -6,6 +6,8 @@ import javafx.event.EventHandler;
 //import javafx.event.ActionEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
+import mapObjects.Obstacle;
 
 public class Controler extends Observable implements EventHandler<KeyEvent>{
 	
@@ -66,11 +68,13 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			case LEFT:
 			case RIGHT:
 				setChanged();
+				view.hudMsg.setFill(Color.GREEN);
 				notifyObservers("Curser Moving" + eCode);
 				System.out.println("Moving Target Curser: " + eCode);
 				break;
 			case SPACE:
 				this.setChanged();
+				
 				this.notifyObservers("InterActing or Attacking");
 				System.out.println("InterAct/Attack");
 				break;
@@ -81,9 +85,21 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				break;
 			case G:
 				this.setChanged();
+				view.hudMsg.setFill(Color.BLUE);
 				this.notifyObservers("Getting Info from Curser Location");
 				System.out.println("Getting Info from Curser Location");
 				break;
+			case X:
+				for(int i = 0; i < view.map.getMapLocation().length; i++)
+					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
+					{
+						
+						if(view.map.getMapLocation()[i][j].getObstacle() != null)
+						{
+							view.map.getMapLocation()[i][j].getObstacle().damage(5, view.map);
+						}
+					}
+						
 		}
 		
 	}

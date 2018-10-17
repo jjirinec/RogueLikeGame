@@ -75,12 +75,12 @@ public class Map {
 				if(lNumber <= 5 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
 				{
 					location[row][colum].addObject(lootGen.generate(roomRating));
-					stacks[row][colum].getChildren().add(location[row][colum].seeTopObject().getImageView());
+					stacks[row][colum].getChildren().add(location[row][colum].topLoot().getImageView());
 				}
 				if(oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
 				{
-					location[row][colum].addObject(objGen.generate(roomRating, new Coordinate(colum,row)));
-					stacks[row][colum].getChildren().add(location[row][colum].seeTopObject().getImageView());
+					location[row][colum].setObstacle(objGen.generate(roomRating, new Coordinate(row,colum)));
+					stacks[row][colum].getChildren().add(location[row][colum].getObstacle().getImageView());
 				}
 			}
 	}
