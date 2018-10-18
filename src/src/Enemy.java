@@ -1,37 +1,30 @@
 package src;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+
+import mapObjects.*;
 
 
-public class Enemy extends Tile {
-    int xMapVal;
-    int yMapVal;
-
-    public ImageView getImage() {
-        Image wallG = new Image("TempChar.png");
-        ImageView wallView = new ImageView();
-        wallView.setImage(wallG);
-        wallView.setFitHeight(75);
-        wallView.setFitWidth(75);
-        return wallView;
+public class Enemy extends Entity {
+    public Enemy(Coordinate location,int maxHP, int speed) {
+        super("Enemy", "TempChar.png", location, false, 60);
+        this.maxHp = maxHP;
+        this.hp = maxHP;
+        this.speed = speed;
     }
-
-    public Enemy(int xVal, int yVal,int tileSize) {
-    	super(tileSize);
-        this.background = getImage();
-        this.isMovable = true;
-        this.xMapVal =xVal;
-        this.yMapVal = yVal;
+    public Enemy(int imageSize){
+        super("Enemy","TempChar.png",new Coordinate(0,0),false,imageSize );
+        this.maxHp = 10;
+        this.hp = 10;
+        this.speed = 2;
     }
 
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd){
-        double totalD_P =calculateD(xMapVal,yMapVal,Xp,Yp);
-        double totalDW = calculateD(xMapVal,yMapVal -1,Xd,Yd) + calculateD(xMapVal,yMapVal-1,Xp,Yp);
-        double totalDS = calculateD(xMapVal,yMapVal +1,Xd,Yd) + calculateD(xMapVal,yMapVal+1,Xp,Yp);
-        double totalDA = calculateD(xMapVal-1,yMapVal,Xd,Yd) + calculateD(xMapVal-1,yMapVal,Xp,Yp);
-        double totalDD = calculateD(xMapVal+1,yMapVal,Xd,Yd) + calculateD(xMapVal+1,yMapVal,Xp,Yp);
-
-        if (totalD_P == 1){
+        Coordinate pos = getLocation();
+        double totalD_P =calculateD(pos.getX(),pos.getY(),Xp,Yp);
+        double totalDW = calculateD(pos.getX(),pos.getY() -1,Xd,Yd) + calculateD(pos.getX(),pos.getY()-1,Xp,Yp);
+        double totalDS = calculateD(pos.getX(),pos.getY() +1,Xd,Yd) + calculateD(pos.getX(),pos.getY()+1,Xp,Yp);
+        double totalDA = calculateD(pos.getX()-1,pos.getY(),Xd,Yd) + calculateD(pos.getX()-1,pos.getY(),Xp,Yp);
+        double totalDD = calculateD(pos.getX()+1,pos.getY(),Xd,Yd) + calculateD(pos.getX()+1,pos.getY(),Xp,Yp);
+        if (totalD_P <= 1){
             System.out.println("ENEMY HIT");
             return 'H';
         }
@@ -57,21 +50,21 @@ public class Enemy extends Tile {
      * @param input W,S,A,D to move, other to return false
      * @return truth if moves, false if doesnt move
      */
-    boolean readInput(char input){
+    boolean readInput(char input,Map map){
         if(input == 'W'){
-            moveEnemy(0,-1);
+            move(0,-1,map);
             return true;
         }
         else if(input == 'S'){
-            moveEnemy(0,1);
+            move(0,1,map);
             return true;
         }
         else if(input == 'A'){
-            moveEnemy(-1,0);
+            move(-1,0,map);
             return true;
         }
         else if(input == 'D'){
-            moveEnemy(1,0);
+            move(1,0,map);
             return true;
         } else if (input == 'H') {
             //hit here
@@ -79,15 +72,8 @@ public class Enemy extends Tile {
         return false;
     }
 
-    boolean moveEnemy(int x, int y) {
-        if ((x + xMapVal < Map.NUM_GRIDS - 1 && x + xMapVal > 0) && (y + yMapVal < Map.NUM_GRIDS - 1 && y + yMapVal > 0)) {
-            xMapVal += x;
-            yMapVal += y;
-            return true;
-        } else {
-            return false;
-        }
-    }
+    /// For enemy action
+    /// CALL readInput(smartEnemyDirection(player.getX(),player.getY(),exit.getX(),exit.getY() ///
 
     double calculateD(int x1,int y1, int x2, int y2){
         return Math.sqrt(Math.pow((x1-x2),2)+Math.pow((y1-y2),2));

@@ -60,31 +60,36 @@ public class Map {
 				map.add(stacks[row][colum],row,colum);
 			}
 		}
-		stacks[entrance.getY()][entrance.getX()].getChildren().add(player.getImage());
 	}
 	
 	private void populateMap()
 	{
 		LootGenerator lootGen = new LootGenerator(gridSize);
 		ObstacleGenerrator objGen = new ObstacleGenerrator(gridSize);
-		for(int row  = 0;row < location.length; row++)
-			for(int colum = 0; colum < location[row].length; colum++)
-			{
+		for(int row  = 0;row < location.length; row++) {
+			for (int colum = 0; colum < location[row].length; colum++) {
 				int lNumber = rand.nextInt(100);
 				int oNumber = rand.nextInt(100);
-				if(lNumber <= 5 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
-				{
+				if (lNumber <= 5 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
 					location[row][colum].addObject(lootGen.generate(roomRating));
 					stacks[row][colum].getChildren().add(location[row][colum].topLoot().getImageView());
 				}
-				if(oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
-				{
-					location[row][colum].setObstacle(objGen.generate(roomRating, new Coordinate(row,colum)));
+				if (oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
+					location[row][colum].setObstacle(objGen.generate(roomRating, new Coordinate(row, colum)));
 					stacks[row][colum].getChildren().add(location[row][colum].getObstacle().getImageView());
 				}
 			}
+		}
+		spawnPlayer(player);
 	}
-	
+
+	public void spawnPlayer(Character player){
+		player.setLocation(entrance.getY(),entrance.getX());
+		stacks[entrance.getY()][entrance.getX()].getChildren().add(player.getImageView());
+		location[entrance.getY()][entrance.getX()].setEntity(player);
+	}
+
+
 	public GridPane getMap()
 	{
 		return map;
