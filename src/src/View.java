@@ -7,7 +7,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.plaf.basic.BasicBorders.RolloverButtonBorder;
-
 import com.sun.javafx.tk.Toolkit;
 
 import javafx.application.Application;

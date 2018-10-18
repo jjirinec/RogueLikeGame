@@ -69,7 +69,7 @@ public class MapLocation {
 	public boolean isPasable()
 	{
 		boolean result = false;
-		if(obstacle == null && entity == null && tile.isMovable)
+		if((obstacle == null || obstacle.isPasable()) && entity == null && tile.isMovable)
 			result = true;
 		return result;
 	}

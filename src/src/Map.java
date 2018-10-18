@@ -37,15 +37,16 @@ public class Map {
 		setDoorLocations();
 		initializeGrid();
 		populateMap();
-		printLoot();
-		printObs();
+		//printLoot();
+		//printObs();
 	}
 	public void printLoot()
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
-				System.out.println(location[row][colum].topLoot().description());							//TODO Remove
-				//System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
+				//System.out.println(location[row][colum].topLoot().description());							//TODO Remove
+				//System.out.println(location[row][colum].getObstacle().description());
+			{}
 	}
 	public void printObs()
 	{
@@ -67,7 +68,7 @@ public class Map {
 			for(int colum = 0; colum < mapWidth; colum++)
 			{
 				stacks[row][colum] = new StackPane();
-				Tile tile = new Tile();
+				Tile tile = newTile(row,colum);
 				stacks[row][colum].getChildren().add(tile.getImage());
 				stacks[row][colum].setPickOnBounds(true);
 				stacks[row][colum].setPrefSize(gridSize, gridSize);
