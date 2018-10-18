@@ -37,6 +37,21 @@ public class Map {
 		setDoorLocations();
 		initializeGrid();
 		populateMap();
+		printLoot();
+		printObs();
+	}
+	public void printLoot()
+	{
+		for( int row = 0; row < location.length; row++)
+			for(int colum = 0; colum < location[row].length; colum++)
+				System.out.println(location[row][colum].topLoot().description());							//TODO Remove
+				//System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
+	}
+	public void printObs()
+	{
+		for( int row = 0; row < location.length; row++)
+			for(int colum = 0; colum < location[row].length; colum++)
+				System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
 	}
 	public MapLocation[][] getMapLocation()
 	{
@@ -76,11 +91,14 @@ public class Map {
 				{
 					location[row][colum].addObject(lootGen.generate(roomRating));
 					stacks[row][colum].getChildren().add(location[row][colum].topLoot().getImageView());
+		//			System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				}
 				if(oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum,row)))
 				{
 					location[row][colum].setObstacle(objGen.generate(roomRating, new Coordinate(row,colum)));
 					stacks[row][colum].getChildren().add(location[row][colum].getObstacle().getImageView());
+			//		System.out.println(location[row][colum].topLoot().description());							//TODO Remove
+				//	System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
 				}
 			}
 	}
