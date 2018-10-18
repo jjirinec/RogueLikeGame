@@ -12,7 +12,7 @@ public class MapLocation {
 	private Tile tile;
 	private ArrayList<Loot> loot;
 	private Obstacle obstacle;
-	private Character character;
+	private Entity entity;
 
 	public MapLocation(Tile tile)
 	{
@@ -25,19 +25,19 @@ public class MapLocation {
 	{
 		return tile;
 	}
-	public Character getCharacter()
+	public Entity getEntity()
 	{
-		return character;
+		return entity;
 	}
 	
-	public void setCacharacter(Character x)
+	public void setEntity(Entity x)
 	{
-		this.character = x;
+		this.entity = x;
 	}
-	public Character removeCharacter()
+	public Entity removeEntity()
 	{
-		Character temp = this.character;
-		this.character = null;
+        Entity temp = this.entity;
+		this.entity = null;
 		return temp;
 	}
 	public Obstacle getObstacle()
@@ -69,7 +69,7 @@ public class MapLocation {
 	public boolean isPasable()
 	{
 		boolean result = false;
-		if(obstacle == null && character == null)
+		if(obstacle == null && entity == null && tile.isMovable)
 			result = true;
 		return result;
 	}
