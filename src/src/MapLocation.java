@@ -62,7 +62,9 @@ public class MapLocation {
 	}
 	public Loot topLoot()
 	{
-		return loot.get(loot.size()-1);
+		if(loot.size() > 0)
+			return loot.get(loot.size()-1);
+		return null;
 	}
 	public boolean isPasable()
 	{

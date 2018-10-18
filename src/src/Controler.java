@@ -30,19 +30,27 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		switch(eCode)
 		{
 			case A:
-				notifyObservers("Player moved left");
+				if(player.readInput('A',view.map)){
+					notifyObservers("Player moved left");
+				}
+				else{
+					notifyObservers("Invalid Move!");
+				}
 //				System.out.println("Left");
 				break;
 			case D:
 				notifyObservers("Player moved Right");
+				player.readInput('D',view.map);
 //				System.out.println("Right");
 				break;
 			case W:
 				notifyObservers("Player moved Up");
+				player.readInput('W',view.map);
 //				System.out.println("Up");
 				break;
 			case S:
 				notifyObservers("Player moved Down");
+				player.readInput('S',view.map);
 //				System.out.println("Down");
 				break;
 		}

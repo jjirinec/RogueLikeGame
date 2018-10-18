@@ -1,51 +1,48 @@
 package src;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import mapObjects.Coordinate;
 
-public class Character extends Tile {
-    int xMapVal;
-    int yMapVal;
-    int hp;
 
-    public ImageView getImage() {
-        Image wallG = new Image("TempChar.png");
-        ImageView wallView = new ImageView();
-        wallView.setImage(wallG);
-        wallView.setFitHeight(75);
-        wallView.setFitWidth(75);
-        wallView.setFitHeight(tileSize);
-        wallView.setFitWidth(tileSize);
-        return wallView;
+import mapObjects.*;
+
+public class Character extends Entity {
+    public Character(Coordinate location,int maxHP, int speed) {
+        super("Character", "TempChar.png", location, false, 60);
+        this.maxHp = maxHP;
+        this.hp = maxHP;
+        this.speed = speed;
     }
 
-    public Character(int tileSize) {
-    	super(tileSize);
-        this.background = getImage();
-        this.isMovable = true;
-        
+    public Character(int imageSize){
+        super("Character","TempChar.png",new Coordinate(0,0),false,imageSize );
+        this.maxHp = 10;
+        this.hp = 10;
+        this.speed = 2;
     }
 
-    boolean moveChar(int x, int y){
-        if ((x + xMapVal < Map.NUM_GRIDS-1 && x + xMapVal >0) && (y + yMapVal < Map.NUM_GRIDS-1 && y + yMapVal > 0)){
-            xMapVal += x;
-            yMapVal += y;
-            return true;
-        }
-        else{
+        /**
+         * reads char input built for smartDirection enemy
+         * @param input W,S,A,D to move, other to return false
+         * @return truth if moves, false if doesnt move
+         */
+        boolean readInput(char input,Map map){
+            if(input == 'W'){
+                move(0,-1,map);
+                return true;
+            }
+            else if(input == 'S'){
+                move(0,1,map);
+                return true;
+            }
+            else if(input == 'A'){
+                move(-1,0,map);
+                return true;
+            }
+            else if(input == 'D'){
+                move(1,0,map);
+                return true;
+            } else if (input == 'H') {
+                //hit here
+            }
             return false;
         }
-
-    }
-    public void heal(int healthPoints)
-    {
-    	hp += healthPoints;
-    }
-
-    public void setLocation(int x, int y)
-    {
-    	this.xMapVal = x;
-    	this.yMapVal = y;
-    }
 }
 
