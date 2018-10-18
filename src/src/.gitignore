@@ -3,3 +3,7 @@
 /MapLocation.class
 /TempMap.class
 /TestMap.class
+/Character.class
+/Enemy.class
+/Entity.class
+*.class
