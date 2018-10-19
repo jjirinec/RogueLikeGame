@@ -44,15 +44,11 @@ public class Map {
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
-<<<<<<< HEAD
 				//System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				//System.out.println(location[row][colum].getObstacle().description());
-			{}
-=======
 				if(location[row][colum].topLoot() != null)
 				System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				//System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
->>>>>>> c0f643283d1962aa1162a9c19ecf1592d4cee1e8
 	}
 	public void printObs()
 	{
