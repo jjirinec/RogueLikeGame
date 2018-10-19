@@ -37,13 +37,15 @@ public class Map {
 		setDoorLocations();
 		initializeGrid();
 		populateMap();
-		printLoot();
-		printObs();
+		//printLoot();
+		//printObs();
 	}
 	public void printLoot()
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
+				//System.out.println(location[row][colum].topLoot().description());							//TODO Remove
+				//System.out.println(location[row][colum].getObstacle().description());
 				if(location[row][colum].topLoot() != null)
 				System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				//System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
