@@ -52,8 +52,16 @@ public class Map {
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
+			{
 				if(location[row][colum].getObstacle() != null)
-				System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
+				System.out.println(location[row][colum].getObstacle().description());
+				if(location[row][colum].getObstacle() instanceof Crate)//TODO Remove
+				{
+					Crate temp = (Crate)location[row][colum].getObstacle();
+					temp.printContents();
+				}
+			}
+					
 	}
 	public MapLocation[][] getMapLocation()
 	{
