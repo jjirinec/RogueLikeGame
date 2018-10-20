@@ -9,6 +9,11 @@ public class Coordinate {
 		this.x = x;
 		this.y = y;
 	}
+	public Coordinate(Coordinate copy)
+	{
+		this.x = copy.getX();
+		this.y = copy.getY();
+	}
 	
 	public int getX() {return x;}
 	public int getY() {return y;}
@@ -33,6 +38,10 @@ public class Coordinate {
 					result = true;
 			}
 		return result;
+	}
+	public String toString()
+	{
+		return "(" + x + "," + y + ")";
 	}
 
 }

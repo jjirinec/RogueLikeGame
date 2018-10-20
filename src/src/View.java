@@ -78,10 +78,10 @@ public class View extends Application implements Observer{
 		root.setOnKeyPressed(ctr);
 		primaryStage.setScene(root);
 		primaryStage.show();
-		primaryStage.setFullScreen(true);
+		//primaryStage.setFullScreen(true);
 		
 		
-//		ctr.gameLoop();
+		
 		
 		
 		
