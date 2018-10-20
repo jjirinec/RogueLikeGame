@@ -73,6 +73,10 @@ public class MapLocation {
 			result = true;
 		return result;
 	}
-	
+	public String toString()
+	{
+		String string = "  Obstacle: " + this.obstacle  + "   Entaty: "+ this.entity + "   Loot: " + this.loot;
+		return string;
+	}
 	
 }

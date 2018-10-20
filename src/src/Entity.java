@@ -44,33 +44,41 @@ public abstract class Entity extends MapObject{
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
-        StackPane[][] panes = map.getStackPane();
-        MapLocation[][] mapTiles = map.getMapLocation();
-
-        MapLocation location = mapTiles[x][y];
-        StackPane currentLocationPane = panes[x][y];
-        MapLocation destination = mapTiles[x + deltaX][y + deltaY];
-        StackPane destinationPane = panes[x + deltaX][y + deltaY];
-            if (destination.isPasable()){
-            	this.setChanged();
-            	this.notifyObservers(this.getObjectName() + " Moved from: (" + x + ","+ y + ")");
-                location.removeEntity();
-                currentLocationPane.getChildren().remove(this.getImageView());
-                destinationPane.getChildren().add(this.getImageView());
-                destination.setEntity(this);
-                this.setLocation(x+deltaX,y+deltaY);
-                this.setChanged();
-            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ")");
-                this.spendActions(this.moveCost);
-                return true;
-            }
-            else {
-            	System.out.println(destination.isPasable());
-            	System.out.println(destination.getObstacle());
-            	System.out.println(destination.getEntity());
-                return false;
-            }
+        int targetX = x + deltaX;
+        int targetY = y + deltaY;
+        if(targetX > -1 && targetX < map.getMapLocation()[0].length && targetY > -1 && targetY < map.getMapLocation().length) {
+	        StackPane[][] panes = map.getStackPane();
+	        MapLocation[][] mapTiles = map.getMapLocation();
+	
+	        MapLocation location = mapTiles[x][y];
+	        StackPane currentLocationPane = panes[x][y];
+	        MapLocation destination = mapTiles[x + deltaX][y + deltaY];
+	        StackPane destinationPane = panes[x + deltaX][y + deltaY];
+	            if (destination.isPasable()){
+	            	this.setChanged();
+	            	this.notifyObservers(this.getObjectName() + " Moved from: (" + x + ","+ y + ")");
+	                location.removeEntity();
+	                currentLocationPane.getChildren().remove(this.getImageView());
+	                destinationPane.getChildren().add(this.getImageView());
+	                this.setLocation(x+deltaX,y+deltaY);
+	                destination.setEntity(this);
+	                
+	                this.setChanged();
+	            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ")");
+	                this.spendActions(this.moveCost);
+	                return true;
+	            }
+	            else {
+	            	System.out.println(destination.isPasable());
+	            	System.out.println(destination.getObstacle());
+	            	System.out.println(destination.getEntity());
+	                return false;
+	            }
+	        
         }
+        System.out.println("Move location off map");
+        return false;
+    }
 
     public void attack(MapObject target,Map map) {
     	//TODO Add Attack Logic here

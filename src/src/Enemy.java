@@ -72,7 +72,7 @@ public class Enemy extends Entity {
             //hit here
         }
         try {									///Waits a short time before acting again
-			Thread.sleep(300);
+			Thread.currentThread().sleep(800);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

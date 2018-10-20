@@ -82,16 +82,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			case DOWN:
 			case LEFT:
 			case RIGHT:
-				setChanged();
-				view.hudMsg.setFill(Color.GREEN);
-				notifyObservers("Curser Moving" + eCode);
-				System.out.println("Moving Target Curser: " + eCode);
+//				setChanged();
+//				view.hudMsg.setFill(Color.GREEN);
+//				notifyObservers("Curser Moving" + eCode);
+//				System.out.println("Moving Target Curser: " + eCode);
 				view.map.getCursor().move(eCode, view.map);
 				break;
 			case SPACE:
+				String info = getCurorInfo();
 				this.setChanged();
-				
-				this.notifyObservers("InterActing or Attacking");
+				this.notifyObservers("\nLocationInfo: " + info);
 				System.out.println("InterAct/Attack");
 				break;
 			case TAB:
@@ -119,7 +119,13 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		}//End Switch
 	}
 
-
+	public String getCurorInfo()
+	{
+		String info;
+		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
+		info = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].toString();
+		return info;
+	}
 	@Override
 	public void handle(KeyEvent event) {
 		if(player.canAct())
