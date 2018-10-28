@@ -24,25 +24,26 @@ public class Character extends Entity {
          * @return truth if moves, false if doesnt move
          */
         boolean readInput(char input,Map map){
-            if(input == 'W'){
-                move(0,-1,map);
-                return true;
+           boolean moveResult = false;
+        	if(input == 'W'){
+                moveResult = move(0,-1,map);
+                //return true;
             }
             else if(input == 'S'){
-                move(0,1,map);
-                return true;
+               moveResult =  move(0,1,map);
+                //return true;
             }
             else if(input == 'A'){
-                move(-1,0,map);
-                return true;
+                moveResult = move(-1,0,map);
+                //return true;
             }
             else if(input == 'D'){
-                move(1,0,map);
-                return true;
+                moveResult = move(1,0,map);
+                //return true;
             } else if (input == 'H') {
                 //hit here
             }
-            return false;
+            return moveResult;
         }
 }
 

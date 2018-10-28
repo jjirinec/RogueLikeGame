@@ -55,50 +55,63 @@ public class Enemy extends Entity {
      * @return truth if moves, false if doesnt move
      */
     boolean readInput(char input, Map map) {
+    	boolean result = false;
         if (input == 'W') {
             move(0, -1, map);
-            return true;
+            result =  true;
         } else if (input == 'S') {
             move(0, 1, map);
-            return true;
+            result =  true;
         } else if (input == 'A') {
             move(-1, 0, map);
-            return true;
+            result =  true;
         } else if (input == 'D') {
             move(1, 0, map);
-            return true;
+            result =  true;
         } else if (input == 'H') {
         	
             //hit here
         }
-        try {									///Waits a short time before acting again
-			Thread.currentThread().sleep(800);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        return false;
+        //timeStop(800);
+        return result;
     }
     public void turn(Character player, Map map)
     {
-    	///TODO Enemy turn logic goes here replace the folowing
-    	System.out.println(this.getObjectName() + " turn(inside enemy turn)");
     	this.newTurn();
+    	
+
+    	
+    	
+    //TODO This is just here for testing purposes
     	char[] direction = {'W','S','A','D'};
     	Random rand = new Random();
+    	
     	int randomDerection;
     	while(this.canAct())
     	{
+    		///TODO Enemy turn logic goes here replace the folowing
     	randomDerection = rand.nextInt(3);
     	readInput(direction[randomDerection],map);
+		
+		
     	
     	}
-//    	this.newTurn();
-//    	while(this.canAct())
-//    	{
-//    		readInput(smartDirectionEnemy(player ,map.getExit().getX(), map.getExit().getY(), map), map);
-//    	}
-    	
+    }
+    
+    /*
+     * Pause the thread 
+     * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map
+     */
+    private void timeStop(long time)
+    {
+    	//Thread current = Thread.currentThread();
+        try {									///Waits a short time before acting again
+			//Thread.currentThread();;
+        	System.out.println("waiting");
+        	Thread.sleep(time);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     /// For enemy action
     /// CALL readInput(smartEnemyDirection(player.getX(),player.getY(),exit.getX(),exit.getY() ///

@@ -18,6 +18,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	Character player;
 	//TargetingCursor cursor;
 	
+	/*
+	 * Constructor for controler
+	 */
 	public Controler(View view)
 	{
 		this.view = view;
@@ -27,47 +30,63 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		System.out.println("Controler Created");
 		//this.player = new Player();
 	}
+	/*
+	 * Creates a new instance of the player
+	 */
 	private void initializePlayer()
 	{
 		
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.speed = 0;
+		player.speed = 5;
 		player.newTurn();
 	}
 	private void playerMovement(KeyCode eCode)
 	{
-		setChanged();
-//		System.out.print("Moving Player ");
+		
+		boolean moveResult = false;
 		switch(eCode)
 		{
 			case A:
-				if(player.readInput('A',view.map)){
-					notifyObservers("Player moved left");
-				}
-				else{
-					notifyObservers("Invalid Move!");
-				}
-//				System.out.println("Left");
+				moveResult = player.readInput('A',view.map);
 				break;
 			case D:
-				notifyObservers("Player moved Right");
-				player.readInput('D',view.map);
-//				System.out.println("Right");
+				moveResult = player.readInput('D',view.map);				
 				break;
 			case W:
-				notifyObservers("Player moved Up");
-				player.readInput('W',view.map);
-//				System.out.println("Up");
+				moveResult = player.readInput('W',view.map);
 				break;
 			case S:
-				notifyObservers("Player moved Down");
-				player.readInput('S',view.map);
-//				System.out.println("Down");
+				moveResult = player.readInput('S',view.map);
 				break;
 		}
+		if(!moveResult) {
+			setChanged();
+			notifyObservers("Somthing is in the way!");
+		}
 	}
+	private void interactAttack()
+	{
+		Coordinate cursorLocation = view.map.getCursor().getLocation();
+		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+		if(mapLocation.getEntity() != null) {
+			setChanged();
+			notifyObservers("Player Attacking " + mapLocation.getEntity());
+		}
+		if(mapLocation.getObstacle() != null) {
+			mapLocation.getObstacle().damage(5, view.map);
+			setChanged();
+			notifyObservers("Player Attacking " + mapLocation.getEntity());
+		}
+	}
+	/*
+	 * Maps each key code to the desired task
+	 * 		WASD = player movement
+	 * 		ArowKeys = targating cursor movment
+	 * 		Space = interact/attack/getinfo (based on attack type and location of cursor)
+	 * 		Tabe = cycle attac type
+	 */
 	private void keyCodeSwitch(KeyCode eCode)
 	{
 		switch(eCode)
@@ -89,10 +108,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				view.map.getCursor().move(eCode, view.map);
 				break;
 			case SPACE:
-				String info = getCurorInfo();
-				this.setChanged();
-				this.notifyObservers("\nLocationInfo: " + info);
-				System.out.println("InterAct/Attack");
+				interactAttack();
 				break;
 			case TAB:
 				this.setChanged();
@@ -100,10 +116,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("Cycle Attack Type");
 				break;
 			case G:
+				String info = getCurorInfo();
 				this.setChanged();
-				view.hudMsg.setFill(Color.BLUE);
-				this.notifyObservers("Getting Info from Curser Location");
-				System.out.println("Getting Info from Curser Location");
+				this.notifyObservers("\nLocationInfo: " + info);
+				System.out.println("InterAct/Attack");
 				break;
 			case X:
 				for(int i = 0; i < view.map.getMapLocation().length; i++)
@@ -126,19 +142,30 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		info = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].toString();
 		return info;
 	}
+	/*
+	 * Handles all Keyboard input
+	 * Will only accept input when it is the players turn
+	 * Will wait for next key event as long as the player still has valid actions
+	 * When player no longer has actions avilable this method calls enemyTurns();
+	 * (non-Javadoc)
+	 * @see javafx.event.EventHandler#handle(javafx.event.Event)
+	 */
 	@Override
 	public void handle(KeyEvent event) {
 		if(player.canAct())
 		{
 			KeyCode eCode = event.getCode();
 			keyCodeSwitch(eCode);
-			if(!player.canAct())
-			{
+			if(!player.canAct()){//Player Turn over
 				System.out.println("End of Players turn");
 				enemyTurns();
 			}
 		}
 	}
+	/*
+	 * Loops through all enemys on map and exicutes its turn
+	 * When done starts a new turn for the player
+	 */
 	private void enemyTurns() {
 
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map

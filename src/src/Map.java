@@ -116,10 +116,11 @@ public class Map {
 		EnemyGenerator enemyGen = new EnemyGenerator(gridSize);
 		for(int enemyNum = 0; enemyNum < numberOfEnemys; enemyNum++) {
 			Coordinate enemyLocation = findEmptyLocation();
+			System.out.println("enemy spawn @ (" + enemyLocation.getX() + "," + enemyLocation.getY() + ")");
 			Enemy enemy = enemyGen.generate(roomRating, enemyLocation);
 			enemys.add(enemy);
-			location[enemyLocation.getY()][enemyLocation.getX()].setEntity(enemy);
-			stacks[enemyLocation.getY()][enemyLocation.getX()].getChildren().add(enemy.getImageView());
+			location[enemyLocation.getX()][enemyLocation.getY()].setEntity(enemy);
+			stacks[enemyLocation.getX()][enemyLocation.getY()].getChildren().add(enemy.getImageView());
 		}
 	}
 	private Coordinate findEmptyLocation()
@@ -129,7 +130,7 @@ public class Map {
 		{
 			int x = rand.nextInt(mapWidth);
 			int y = rand.nextInt(mapHight);
-			if(this.location[y][x].isPasable())
+			if(this.location[x][y].isPasable())
 				location  = new Coordinate(x,y);
 		}
 		return location;
