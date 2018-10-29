@@ -16,13 +16,13 @@ public abstract class Entity extends MapObject{
     private double attackCost = 1;		//Action cost to attack (effected by weapon speed)
     
     //Stats
-    int str;
-    int dex;
-    int con;
-    int mgk;
-    int defence;
-    int accuracy;
-    int speed;
+    private int str = 1;
+    private int dex = 1;
+    private int con = 1;
+    private int mgk = 1;
+    private int defence = 1;
+    private int accuracy = 1;
+    private int speed = 1;
     
     //Equiped
     Armor armor;
@@ -31,8 +31,63 @@ public abstract class Entity extends MapObject{
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
         
+        
     }
-//    public double getMoveCost() {return moveCost;}
+     public int getStr() {
+		return str;
+	}
+	public void setStr(int str) {
+		this.str = str;
+	}
+	public int getDex() {
+		return dex;
+	}
+	public void setDex(int dex) {
+		this.dex = dex;
+	}
+	public int getCon() {
+		return con;
+	}
+	public void setCon(int con) {
+		this.con = con;
+	}
+	public int getMgk() {
+		return mgk;
+	}
+	public void setMgk(int mgk) {
+		this.mgk = mgk;
+	}
+	public int getDefence() {
+		return defence;
+	}
+	public void setDefence(int defence) {
+		this.defence = defence;
+	}
+	public int getAccuracy() {
+		return accuracy;
+	}
+	public void setAccuracy(int accuracy) {
+		this.accuracy = accuracy;
+	}
+	public int getSpeed() {
+		return speed;
+	}
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+	public double getCurentActions() {
+		return curentActions;
+	}
+	public double getMoveCost() {
+		return moveCost;
+	}
+	public double getAttackCost() {
+		return attackCost;
+	}
+	//	public void setCurentActions(double curentActions) {
+//		this.curentActions = curentActions;
+//	}
+	//    public double getMoveCost() {return moveCost;}
 //    public double getAttackCost() {return attackCost;}
     public void setObserver(View view)
     {
@@ -108,6 +163,10 @@ public abstract class Entity extends MapObject{
 
     public void newTurn(){//myTurn set to true and reset curentActions
     	curentActions += (1 + speed/5);
+    	if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("ActionUpdate");
+    	}
     }
     public boolean canAct() {
     	if(hasMovement() || hasAttacks())
@@ -128,6 +187,10 @@ public abstract class Entity extends MapObject{
     }
     private void spendActions(double actionsCost){
     	curentActions -= actionsCost;
+    	if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("ActionUpdate");
+    	}
     	if(!canAct()){//TODO Remove this latter ????
     		this.setChanged();
     		this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");

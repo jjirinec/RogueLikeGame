@@ -8,14 +8,14 @@ public class Character extends Entity {
         super("Character", "TempChar.png", location, false, 60);
         this.maxHp = maxHP;
         this.hp = maxHP;
-        this.speed = speed;
+        this.setSpeed(speed);
     }
 
     public Character(int imageSize){
         super("Character","TempChar.png",new Coordinate(0,0),false,imageSize );
         this.maxHp = 10;
         this.hp = 10;
-        this.speed = 2;
+        this.setSpeed(2);
     }
 
         /**

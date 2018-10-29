@@ -10,14 +10,14 @@ public class Enemy extends Entity {
         super("Enemy", "TempChar.png", location, false, imageSize);
         this.maxHp = maxHP;
         this.hp = maxHP;
-        this.speed = speed;
+        this.setSpeed(speed);
     }
 
     public Enemy(int imageSize) {
         super("Enemy", "TempChar.png", new Coordinate(0, 0), false, imageSize);
         this.maxHp = 10;
         this.hp = 10;
-        this.speed = 2;
+        this.setSpeed(2);
     }
 
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd) {
@@ -72,7 +72,7 @@ public class Enemy extends Entity {
         	
             //hit here
         }
-        //timeStop(800);
+//        timeStop(800);
         return result;
     }
     public void turn(Character player, Map map)

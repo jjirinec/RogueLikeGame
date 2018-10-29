@@ -39,8 +39,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.speed = 5;
-		player.newTurn();
+		player.setSpeed(5);
+		//player.newTurn();
+		System.out.println("Player Initialized");
 	}
 	private void playerMovement(KeyCode eCode)
 	{
@@ -65,6 +66,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Somthing is in the way!");
 		}
+	}
+	public void startPlay()
+	{
+		player.newTurn();
 	}
 	private void interactAttack()
 	{
@@ -121,7 +126,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				this.notifyObservers("\nLocationInfo: " + info);
 				System.out.println("InterAct/Attack");
 				break;
-			case X:
+			case X://Testing Obstacle breaking  TODO Remove
 				for(int i = 0; i < view.map.getMapLocation().length; i++)
 					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
 					{
@@ -131,6 +136,13 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 							view.map.getMapLocation()[i][j].getObstacle().damage(5, view.map);
 						}
 					}
+			case Z://Testing health Globe  TODO Remove
+				double scale = view.healthGlobe.getChildren().get(1).getScaleY();
+				double pos = view.healthGlobe.getChildren().get(1).getTranslateY();
+				view.healthGlobe.getChildren().get(1).setTranslateY(pos + 5);
+				player.setStr(player.getStr() + 1);
+				view.updateStatGrid();;
+				//view.healthGlobe.getChildren().get(1).setScaleY(scale - .1);
 					
 		}//End Switch
 	}
