@@ -1,6 +1,7 @@
 package src;
 
 import mapObjects.*;
+import src.viewObjects.HealthGlobe;
 
 import java.awt.Dimension;
 import java.util.Observable;
@@ -50,14 +51,14 @@ public class View extends Application implements Observer{
 	Map map;
 	
 	///Character Info Variables
-	
-	private Text actionsValue;
-	private Text moveCost;
-	private Text attackCost;
+	HealthGlobe healthGlobe;
+//	private Text actionsValue;
+//	private Text moveCost;
+//	private Text attackCost;
 	
 	Text hudMsg;
 	ScrollPane hud;
-	StackPane healthGlobe;
+
 	
 	public static void main(String[]args){	launch(args);	}
 
@@ -124,9 +125,11 @@ public class View extends Application implements Observer{
 		grid.setVgap(10);
 		grid.setPadding(new Insets(0,10,0,10));
 		
-		StackPane healthGlobe = getHealthGlobe();
-		healthGlobe.setAlignment(Pos.TOP_CENTER);
-		grid.add(healthGlobe,3,2);
+		//StackPane healthGlobe = getHealthGlobe();
+		healthGlobe = new HealthGlobe(175);
+		//StackPane healthGlobe = 
+		healthGlobe.getHealthGlob().setAlignment(Pos.TOP_CENTER);
+		grid.add(healthGlobe.getHealthGlob(),3,2);
 		
 //		Text str = new Text("Str: " + ctr.player.getStr());
 //		grid.add(str, 4, 6);
@@ -213,23 +216,7 @@ public class View extends Application implements Observer{
 		grid.add(this.getCharStats(), 3, 4);
 		grid.add(this.getActionGrid(), 3, 7);
 	}
-	private StackPane getHealthGlobe() {
-		int size = 175;
-		healthGlobe = new StackPane();
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Background.png",size));
-		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size*.78);
-		healthImage.setTranslateY((size - size*.77)/2);
-		//Pane health = new Pane(healthImage);
-//		AnchorPane healthAnchor = new AnchorPane(health);
-//
-//		AnchorPane.setRightAnchor(health,50.0);
-//		AnchorPane.setBottomAnchor(health, 0.0);
-		
-		healthGlobe.getChildren().add(healthImage);
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
-		healthGlobe.setMaxSize(size, size);
-		return healthGlobe;
-	}
+
 	private ImageView getImageView(String imageFile,double size) {
 		Image image = new Image(imageFile);
 		ImageView imageView = new ImageView(image);
@@ -246,23 +233,7 @@ public class View extends Application implements Observer{
 		bottom.setPrefWidth(mapWidth);
 		return bottom;
 	}
-	public void updateHealthGlobe(double scale) {
-		ImageView image = (ImageView)healthGlobe.getChildren().get(1);//175;
-		double imageSize = image.getFitHeight();
-		double imageTransform = (175 - 175*.77)/2;
-		double newSize = imageSize*scale;
-		double move = (imageSize - newSize)/2;
-		double fullMove = move + imageTransform;
-		System.out.println("newSize: " + newSize);
-		print("Move: " + move);
-		print("ImageTransfomr:" + imageTransform);
-		print("FullMove: " + fullMove);
-		print("Scale: " + scale*100);
-		print("");
-		 
-		image.setTranslateY(fullMove);
-		image.setScaleY(scale);
-	}
+
 	private void setUpHud()
 	{
 		hud = new ScrollPane();

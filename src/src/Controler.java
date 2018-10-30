@@ -127,8 +127,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("InterAct/Attack");
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
-				double scale = view.healthGlobe.getChildren().get(1).getScaleY();
-				view.updateHealthGlobe(scale + .1);
+				double scale = view.healthGlobe.getHealthGlob().getChildren().get(1).getScaleY();
+				view.healthGlobe.updateHealthGlobe(scale + .1);
 //				for(int i = 0; i < view.map.getMapLocation().length; i++)
 //					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
 //					{
@@ -140,9 +140,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 //					}
 					break;
 			case Z://Testing health Globe  TODO Remove
-				double sc = view.healthGlobe.getChildren().get(1).getScaleY();
+				double sc = view.healthGlobe.getHealthGlob().getChildren().get(1).getScaleY();
 				view.updatePlayerInfo();
-				view.updateHealthGlobe(sc - .1);
+				view.healthGlobe.updateHealthGlobe(sc - .1);
 					
 		}//End Switch
 	}
