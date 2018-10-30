@@ -133,6 +133,7 @@ public class View extends Application implements Observer{
 		grid.add(getCharStats(), 3, 4);getCharStats();
 		grid.add(getActionGrid(),3, 7);
 		rightSideView.getChildren().add(grid);
+		//grid.add(this.getCharStats(), 3, 4);
 		return rightSideView;
 	}
 	private GridPane getCharStats() {
@@ -156,7 +157,7 @@ public class View extends Application implements Observer{
 		Text mgkValue = statText(""+ctr.player.getMgk());
 		statGrid.add(mgk, 0, 10);
 		statGrid.add(mgkValue, 1, 10);
-		Text defence = statText("Defence:");
+		Text defence = statText("Defense:");
 		Text defenceValue = statText(""+ctr.player.getDefence());
 		statGrid.add(defence, 0, 11);
 		statGrid.add(defenceValue, 1, 11);
@@ -192,33 +193,44 @@ public class View extends Application implements Observer{
 		text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
 		return text;	
 	}
-	public void updateStatGrid() {
+//	public void updateStatGrid() {
+//		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
+//		grid.getChildren().remove(1);
+//		grid.add(this.getCharStats(), 3, 4);
+//		
+//		
+//	}
+//	public void updateActionGrid() {
+//		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
+//		grid.getChildren().remove(2);
+//		grid.add(this.getActionGrid(), 3, 7);
+//	}
+	
+	public void updatePlayerInfo() {
 		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
 		grid.getChildren().remove(1);
+		grid.getChildren().remove(1);
 		grid.add(this.getCharStats(), 3, 4);
-		
-	}
-	private void updateActionGrid() {
-		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
-		grid.getChildren().remove(2);
 		grid.add(this.getActionGrid(), 3, 7);
 	}
 	private StackPane getHealthGlobe() {
 		int size = 175;
 		healthGlobe = new StackPane();
 		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Background.png",size));
-		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size);
-		Pane health = new Pane(healthImage);
+		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size*.78);
+		healthImage.setTranslateY((size - size*.77)/2);
+		//Pane health = new Pane(healthImage);
 //		AnchorPane healthAnchor = new AnchorPane(health);
 //
 //		AnchorPane.setRightAnchor(health,50.0);
 //		AnchorPane.setBottomAnchor(health, 0.0);
+		
 		healthGlobe.getChildren().add(healthImage);
 		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
 		healthGlobe.setMaxSize(size, size);
 		return healthGlobe;
 	}
-	private ImageView getImageView(String imageFile,int size) {
+	private ImageView getImageView(String imageFile,double size) {
 		Image image = new Image(imageFile);
 		ImageView imageView = new ImageView(image);
 		imageView.setFitHeight(size);
@@ -233,6 +245,23 @@ public class View extends Application implements Observer{
 		bottom.setPrefHeight(screenSize.getHeight()- mapHight-100);
 		bottom.setPrefWidth(mapWidth);
 		return bottom;
+	}
+	public void updateHealthGlobe(double scale) {
+		ImageView image = (ImageView)healthGlobe.getChildren().get(1);//175;
+		double imageSize = image.getFitHeight();
+		double imageTransform = (175 - 175*.77)/2;
+		double newSize = imageSize*scale;
+		double move = (imageSize - newSize)/2;
+		double fullMove = move + imageTransform;
+		System.out.println("newSize: " + newSize);
+		print("Move: " + move);
+		print("ImageTransfomr:" + imageTransform);
+		print("FullMove: " + fullMove);
+		print("Scale: " + scale*100);
+		print("");
+		 
+		image.setTranslateY(fullMove);
+		image.setScaleY(scale);
 	}
 	private void setUpHud()
 	{
@@ -266,7 +295,7 @@ public class View extends Application implements Observer{
 		// TODO Auto-generated method stub
 		String observedMsg = (String)arg1;
 		if(observedMsg.equals("ActionUpdate")) {
-			this.updateActionGrid();
+			this.updatePlayerInfo();
 		}
 		System.out.println("observed "+observedMsg);
 		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
@@ -274,5 +303,13 @@ public class View extends Application implements Observer{
 		
 //		hudMsg. +="\nobservedMsg";
 	}
-	
+	/*
+	 * Because I hate typing System.out.println()
+	 */
+	public void print(String x){
+		System.out.println(x);
+	}
+	public void print(int x){
+		System.out.println(x);
+	}
 }

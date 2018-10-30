@@ -127,22 +127,22 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("InterAct/Attack");
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
-				for(int i = 0; i < view.map.getMapLocation().length; i++)
-					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
-					{
-						
-						if(view.map.getMapLocation()[i][j].getObstacle() != null)
-						{
-							view.map.getMapLocation()[i][j].getObstacle().damage(5, view.map);
-						}
-					}
-			case Z://Testing health Globe  TODO Remove
 				double scale = view.healthGlobe.getChildren().get(1).getScaleY();
-				double pos = view.healthGlobe.getChildren().get(1).getTranslateY();
-				view.healthGlobe.getChildren().get(1).setTranslateY(pos + 5);
-				player.setStr(player.getStr() + 1);
-				view.updateStatGrid();;
-				//view.healthGlobe.getChildren().get(1).setScaleY(scale - .1);
+				view.updateHealthGlobe(scale + .1);
+//				for(int i = 0; i < view.map.getMapLocation().length; i++)
+//					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
+//					{
+//						
+//						if(view.map.getMapLocation()[i][j].getObstacle() != null)
+//						{
+//							view.map.getMapLocation()[i][j].getObstacle().damage(5, view.map);
+//						}
+//					}
+					break;
+			case Z://Testing health Globe  TODO Remove
+				double sc = view.healthGlobe.getChildren().get(1).getScaleY();
+				view.updatePlayerInfo();
+				view.updateHealthGlobe(sc - .1);
 					
 		}//End Switch
 	}
