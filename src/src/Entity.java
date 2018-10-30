@@ -45,5 +45,9 @@ public abstract class Entity extends MapObject {
         }
     }
 
+    public boolean hit(Entity target, int damage){
+        return true;
+    }
+
 }
 
