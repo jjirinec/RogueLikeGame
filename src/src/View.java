@@ -14,6 +14,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -24,7 +27,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -40,10 +46,18 @@ public class View extends Application implements Observer{
 	Controler ctr;
 	StackPane forANDback;
 	BorderPane layout;
+	VBox rightSideView;
 	Map map;
-	Character player;
+	
+	///Character Info Variables
+	
+	private Text actionsValue;
+	private Text moveCost;
+	private Text attackCost;
+	
 	Text hudMsg;
 	ScrollPane hud;
+	StackPane healthGlobe;
 	
 	public static void main(String[]args){	launch(args);	}
 
@@ -78,10 +92,10 @@ public class View extends Application implements Observer{
 		root.setOnKeyPressed(ctr);
 		primaryStage.setScene(root);
 		primaryStage.show();
-		primaryStage.setFullScreen(true);
+		//primaryStage.setFullScreen(true);
 		
+		ctr.startPlay();
 		
-//		ctr.gameLoop();
 		
 		
 		
@@ -91,20 +105,134 @@ public class View extends Application implements Observer{
 	{
 		BorderPane layout = new BorderPane();
 		layout.setCenter(map.getMap());
+		layout.setLeft(setUpLeftSide());
+		layout.setRight(setUpRightSide());
+		layout.setBottom(setUpBottom());
+		return layout;
+	}
+	private VBox setUpLeftSide()
+	{
 		VBox leftSideView = new VBox();
-		VBox rightSideView = new VBox();
+		leftSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
+		return leftSideView;
+	}
+	private VBox setUpRightSide() {
+		rightSideView = new VBox();
+		rightSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(0,10,0,10));
+		
+		StackPane healthGlobe = getHealthGlobe();
+		healthGlobe.setAlignment(Pos.TOP_CENTER);
+		grid.add(healthGlobe,3,2);
+		
+//		Text str = new Text("Str: " + ctr.player.getStr());
+//		grid.add(str, 4, 6);
+		grid.add(getCharStats(), 3, 4);getCharStats();
+		grid.add(getActionGrid(),3, 7);
+		rightSideView.getChildren().add(grid);
+		return rightSideView;
+	}
+	private GridPane getCharStats() {
+		GridPane statGrid = new GridPane();
+		statGrid.setVgap(10);
+		statGrid.setHgap(10);
+		statGrid.setPadding(new Insets(0,10,0,10));
+		Text str = statText("Strength: ");
+		Text strValue = statText("" + ctr.player.getStr());
+		statGrid.add(str, 0, 7);
+		statGrid.add(strValue, 1, 7);
+		Text dex = statText("Dexterity: ");
+		Text dexValue = statText("" + ctr.player.getDex());
+		statGrid.add(dex, 0, 8);
+		statGrid.add(dexValue, 1, 8);
+		Text con = statText("Constatution:");
+		Text conValue = statText(""+ ctr.player.getCon());
+		statGrid.add(con, 0, 9);
+		statGrid.add(conValue, 1, 9);
+		Text mgk = statText("Magic:");
+		Text mgkValue = statText(""+ctr.player.getMgk());
+		statGrid.add(mgk, 0, 10);
+		statGrid.add(mgkValue, 1, 10);
+		Text defence = statText("Defence:");
+		Text defenceValue = statText(""+ctr.player.getDefence());
+		statGrid.add(defence, 0, 11);
+		statGrid.add(defenceValue, 1, 11);
+		Text speed = statText("Speed:");
+		Text speedValue = statText(""+ctr.player.getSpeed());
+		statGrid.add(speed, 0, 12);
+		statGrid.add(speedValue, 1, 12);
+
+		return statGrid;
+	}
+	private GridPane getActionGrid() {
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(0,10,0,10));
+		Text actions = statText("Action Points:");
+		Text actionValue = statText(""+ctr.player.getCurentActions());
+		grid.add(actions, 0, 0);
+		grid.add(actionValue, 1, 0);
+		Text moveCost = statText("Movment Cost:");
+		Text moveCostValue = statText(""+ctr.player.getMoveCost());
+		grid.add(moveCost, 0, 1);
+		grid.add(moveCostValue, 1, 1);
+		Text attackCost = statText("Attack Cost:");
+		Text attackCostValue = statText(""+ctr.player.getAttackCost());
+		grid.add(attackCost, 0, 2);
+		grid.add(attackCostValue, 1, 2);	
+		return grid;
+	}
+//	private GridPane set
+	private Text statText(String txt) {
+		Text text = new Text(txt);
+		text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+		return text;	
+	}
+	public void updateStatGrid() {
+		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
+		grid.getChildren().remove(1);
+		grid.add(this.getCharStats(), 3, 4);
+		
+	}
+	private void updateActionGrid() {
+		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
+		grid.getChildren().remove(2);
+		grid.add(this.getActionGrid(), 3, 7);
+	}
+	private StackPane getHealthGlobe() {
+		int size = 175;
+		healthGlobe = new StackPane();
+		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Background.png",size));
+		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size);
+		Pane health = new Pane(healthImage);
+//		AnchorPane healthAnchor = new AnchorPane(health);
+//
+//		AnchorPane.setRightAnchor(health,50.0);
+//		AnchorPane.setBottomAnchor(health, 0.0);
+		healthGlobe.getChildren().add(healthImage);
+		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
+		healthGlobe.setMaxSize(size, size);
+		return healthGlobe;
+	}
+	private ImageView getImageView(String imageFile,int size) {
+		Image image = new Image(imageFile);
+		ImageView imageView = new ImageView(image);
+		imageView.setFitHeight(size);
+		imageView.setFitWidth(size);
+		return imageView;
+	}
+	private HBox setUpBottom() {
 		HBox bottom = new HBox();
 		setUpHud();
 		bottom.getChildren().add(hud);
-		bottom.setAlignment(Pos.CENTER);
+		bottom.setAlignment(Pos.TOP_CENTER);
 		bottom.setPrefHeight(screenSize.getHeight()- mapHight-100);
 		bottom.setPrefWidth(mapWidth);
-		leftSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
-		rightSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
-		layout.setLeft(leftSideView);
-		layout.setRight(rightSideView);
-		layout.setBottom(bottom);
-		return layout;
+		return bottom;
 	}
 	private void setUpHud()
 	{
@@ -112,6 +240,9 @@ public class View extends Application implements Observer{
 		hud.setPrefHeight(screenSize.getHeight() - mapHight);
 		
 		hud.setPrefViewportWidth(mapWidth);
+
+//		Background backgroud = new Background(new BackgroundFill(Paint.valueOf(Color.AQUA),new CornerRadii(20),new Insets(5.5)));
+//		hud.setBackground(backgroud);
 		hudMsg = new Text("HUD\nTest me by pressing wasd, arrow, space, tab, or g");
 		hudMsg.setFill(Color.GREEN);
 		
@@ -122,7 +253,7 @@ public class View extends Application implements Observer{
 		
 		//hudBackground.setFill(Color.BLACK);
 		hud.setBackground(hudBackground);
-		
+		hud.setPrefHeight(screenSize.getHeight() - mapHight - 100);
 	}
 	
 	public void setNewStage()
@@ -134,6 +265,9 @@ public class View extends Application implements Observer{
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		String observedMsg = (String)arg1;
+		if(observedMsg.equals("ActionUpdate")) {
+			this.updateActionGrid();
+		}
 		System.out.println("observed "+observedMsg);
 		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
 		//hud.setContent(new Text(observedMsg));

@@ -1,9 +1,11 @@
 package mapObjects;
 
+import java.util.Observable;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class MapObject {
+public class MapObject extends Observable{
 	
 	private String objectName;
 	private int imageSize;
@@ -19,7 +21,7 @@ public class MapObject {
 	public MapObject() {};
 	public MapObject(String objectName, String imageFile, boolean isPasable,int imageSize)
 	{
-		this.objectName = objectName;
+		this.setObjectName(objectName);
 		this.image = new Image(imageFile);
 		this.imageView = new ImageView(image);
 		this.isPasable = isPasable;
@@ -27,7 +29,7 @@ public class MapObject {
 	}
 	public MapObject(String objectName, String imageFile,Coordinate location, boolean isPasable, int imageSize)
 	{
-		this.objectName = objectName;
+		this.setObjectName(objectName);
 		this.imageSize = imageSize;
 		this.image = new Image(imageFile);
 		this.imageView = new ImageView(image);
@@ -57,7 +59,7 @@ public class MapObject {
 	}
 	public void setName(String name)
 	{
-		this.objectName = name;
+		this.setObjectName(name);
 	}
 	
 		
@@ -85,10 +87,16 @@ public class MapObject {
 	
 	public String toString()
 	{
-		return objectName;
+		return getObjectName();
 	}
 	public String description()
 	{
 		return "Description:\n\t";
+	}
+	public String getObjectName() {
+		return objectName;
+	}
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
 	}
 }

@@ -1,6 +1,7 @@
 package src;
 import mapObjects.*;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import javafx.scene.layout.GridPane;
@@ -13,6 +14,8 @@ public class Map {
 	private MapLocation[][] location;
 	
 	private Character player;
+	private TargetingCursor cursor;
+	private ArrayList<Enemy> enemys;
 	
 	private Loot[] loot;
 	private Obstacle[] obstacles;
@@ -25,7 +28,9 @@ public class Map {
 	private Coordinate entrance;
 	private Coordinate exit;
 	private Random rand = new Random();
-	
+///////////////////////////
+///		Constructor		///
+///////////////////////////
 	public Map(int hight, int width, int gridSize, int mapRating,Character player,int roomRating)
 	{
 		this.mapHight = hight;
@@ -34,13 +39,16 @@ public class Map {
 		this.mapRating = mapRating;
 		this.player = player;
 		this.roomRating = roomRating;
+		enemys = new ArrayList<Enemy>();
 		setDoorLocations();
 		initializeGrid();
 		populateMap();
 		//printLoot();
 		//printObs();
 	}
-	public void printLoot()
+
+
+	public void printLoot()//TODO For Testing only Remove Latter
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
@@ -50,7 +58,7 @@ public class Map {
 				System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				//System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
 	}
-	public void printObs()
+	public void printObs()///TODO For Testing only Remove Latter
 	{
 		for( int row = 0; row < location.length; row++)
 			for(int colum = 0; colum < location[row].length; colum++)
@@ -65,10 +73,19 @@ public class Map {
 			}
 					
 	}
+///////////////////////	
+///		Get/Set		///
+///////////////////////
+	public Coordinate getExit() {return new Coordinate(exit);}
+	public ArrayList<Enemy> getEnemys()
+	{
+		return enemys;
+	}
 	public MapLocation[][] getMapLocation()
 	{
 		return location;
 	}
+	public TargetingCursor getCursor() {return cursor;}
 	private void initializeGrid()
 	{
 		map = new GridPane();
@@ -91,6 +108,34 @@ public class Map {
 	
 	private void populateMap()
 	{
+		spawnPlayer(player);
+		spawnMapObjects();
+		spawnEnemys(1);
+	}
+	private void spawnEnemys(int numberOfEnemys) {
+		EnemyGenerator enemyGen = new EnemyGenerator(gridSize);
+		for(int enemyNum = 0; enemyNum < numberOfEnemys; enemyNum++) {
+			Coordinate enemyLocation = findEmptyLocation();
+			System.out.println("enemy spawn @ (" + enemyLocation.getX() + "," + enemyLocation.getY() + ")");
+			Enemy enemy = enemyGen.generate(roomRating, enemyLocation);
+			enemys.add(enemy);
+			location[enemyLocation.getX()][enemyLocation.getY()].setEntity(enemy);
+			stacks[enemyLocation.getX()][enemyLocation.getY()].getChildren().add(enemy.getImageView());
+		}
+	}
+	private Coordinate findEmptyLocation()
+	{
+		Coordinate location = null;
+		while(location == null)
+		{
+			int x = rand.nextInt(mapWidth);
+			int y = rand.nextInt(mapHight);
+			if(this.location[x][y].isPasable())
+				location  = new Coordinate(x,y);
+		}
+		return location;
+	}
+	private void spawnMapObjects() {
 		LootGenerator lootGen = new LootGenerator(gridSize);
 		ObstacleGenerrator objGen = new ObstacleGenerrator(gridSize);
 		for(int row  = 0;row < location.length; row++) {
@@ -110,13 +155,14 @@ public class Map {
 				}
 			}
 		}
-		spawnPlayer(player);
 	}
-
 	public void spawnPlayer(Character player){
 		player.setLocation(entrance.getY(),entrance.getX());
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(player.getImageView());
 		location[entrance.getY()][entrance.getX()].setEntity(player);
+		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
+		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
+				
 	}
 
 
