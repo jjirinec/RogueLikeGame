@@ -14,9 +14,9 @@ public class HealthGlobe {
 		healthGlobe = new StackPane();
 		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Background.png",size));
 		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size*centerScale);
-		healthImage.setTranslateY((size - size*centerScale)/2 + 2);
+		healthImage.setTranslateY(2);//(size - size*centerScale)/2 + 2);
 		healthGlobe.getChildren().add(healthImage);
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
+		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top_Test.png",size));
 		healthGlobe.setMaxSize(size, size);
 	}
 	private ImageView getImageView(String imageFile,double size) {
@@ -33,7 +33,7 @@ public class HealthGlobe {
 	public void updateHealthGlobe(double scale) {
 		ImageView image = (ImageView)healthGlobe.getChildren().get(1);//175;
 		double imageSize = image.getFitHeight();
-		double imageTransform = (size - size*centerScale)/2 + 2;
+		double imageTransform = (2);//size - size*centerScale)/2 + 2;
 		double newSize = imageSize*scale;
 		double move = (imageSize - newSize)/2;
 		double fullMove = move + imageTransform;
