@@ -24,6 +24,7 @@ public class MapObject extends Observable{
 		this.setObjectName(objectName);
 		this.image = new Image(imageFile);
 		this.imageView = new ImageView(image);
+		
 		this.isPasable = isPasable;
 		setImageSize(imageSize);
 	}
@@ -32,7 +33,9 @@ public class MapObject extends Observable{
 		this.setObjectName(objectName);
 		this.imageSize = imageSize;
 		this.image = new Image(imageFile);
+
 		this.imageView = new ImageView(image);
+		//imageView.localToParent(localBounds);
 		
 //		imageView.prefWidth(3);
 		this.location = location;
@@ -69,6 +72,7 @@ public class MapObject extends Observable{
 			imageSize = 80;		
 		imageView.setFitHeight(imageSize);
 		imageView.setFitWidth(imageSize);
+		imageView.autosize();
 	}
 	protected void setImage(String imageFile)
 	{
