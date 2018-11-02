@@ -64,7 +64,9 @@ public class MapObject extends Observable{
 	{
 		this.setObjectName(name);
 	}
-	
+	public int getImageSize() {
+		return imageSize;
+	}
 		
 	public void setImageSize(int imageSize)
 	{

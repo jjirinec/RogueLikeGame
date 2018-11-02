@@ -66,6 +66,11 @@ public class MapLocation {
 			return loot.get(loot.size()-1);
 		return null;
 	}
+	public boolean hasLoot() {
+		if(loot.size() > 0)
+			return true;
+		return false;
+	}
 	public boolean isPasable()
 	{
 		boolean result = false;

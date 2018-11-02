@@ -2,6 +2,7 @@ package src;
 
 import mapObjects.*;
 import src.viewObjects.HealthGlobe;
+import src.viewObjects.InventoryView;
 import src.viewObjects.PlayerInfoView;
 
 import java.awt.Dimension;
@@ -57,7 +58,8 @@ public class View extends Application implements Observer{
 	
 	///Character Info Variables
 	HealthGlobe healthGlobe;
-	PlayerInfoView playerInvoeView;
+	PlayerInfoView playerInfoView;
+	InventoryView playerInventoryView;
 //	private Text actionsValue;
 //	private Text moveCost;
 //	private Text attackCost;
@@ -113,12 +115,12 @@ public class View extends Application implements Observer{
 		BorderPane layout = new BorderPane();
 		layout.setCenter(map.getMap());
 		
+		this.playerInventoryView = new InventoryView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
+		layout.setLeft(playerInventoryView.getView());
 		
-		layout.setLeft(setUpLeftSide());
+		playerInfoView = new PlayerInfoView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
 		
-		playerInvoeView = new PlayerInfoView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
-		
-		layout.setRight(playerInvoeView.getView());
+		layout.setRight(playerInfoView.getView());
 		//layout.setRight(setUpRightSide());
 		layout.setBottom(setUpBottom());
 		return layout;
@@ -141,7 +143,13 @@ public class View extends Application implements Observer{
 	private HBox setUpBottom() {
 		HBox bottom = new HBox();
 		setUpHud();
-		bottom.getChildren().add(hud);
+		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
+		Background backGround = new Background(backGroundFill);
+		Pane hudPane = new Pane();
+		
+		hudPane.getChildren().add(hud);
+		hudPane.setBackground(backGround);
+		bottom.getChildren().add(hudPane);
 		bottom.setAlignment(Pos.TOP_CENTER);
 		bottom.setPrefHeight(screenSize.getHeight()- mapHight-100);
 		bottom.setPrefWidth(mapWidth);
@@ -151,10 +159,14 @@ public class View extends Application implements Observer{
 	private void setUpHud()
 	{
 		hud = new ScrollPane();
-		hud.setPrefHeight(screenSize.getHeight() - mapHight);
+//		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
+//		Background backGround = new Background(backGroundFill);
+//		hud.setBackground(backGround);
+		hud.setFitToHeight(true);
+		//hud.setPrefHeight(screenSize.getHeight() - mapHight);
 		
 		hud.setPrefViewportWidth(mapWidth);
-
+		hud.setOpacity(.6);
 //		Background backgroud = new Background(new BackgroundFill(Paint.valueOf(Color.AQUA),new CornerRadii(20),new Insets(5.5)));
 //		hud.setBackground(backgroud);
 		hudMsg = new Text("HUD\nTest me by pressing wasd, arrow, space, tab, or g");
@@ -181,7 +193,10 @@ public class View extends Application implements Observer{
 		String observedMsg = (String)arg1;
 		if(observedMsg.equals("ActionUpdate")) {
 			//this.updatePlayerInfo();
-			this.playerInvoeView.updatStatActionBlocks();
+			this.playerInfoView.updatStatActionBlocks();
+		}
+		if(observedMsg.equals("NewLoot")) {
+			this.playerInventoryView.updateInventory();
 		}
 		System.out.println("observed "+observedMsg);
 		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());

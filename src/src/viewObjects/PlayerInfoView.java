@@ -13,6 +13,7 @@ public class PlayerInfoView {
 	
 	public PlayerInfoView(Character player,double prefferdWidth) {
 		playerInfoView = new VBox();
+		playerInfoView.setFillWidth(true);
 		playerInfoView.setPrefWidth(prefferdWidth);
 		GridPane viewGrid = setUpGrid();
 		healthGlobe = new HealthGlobe(175);//TODO change size value to scale proporly

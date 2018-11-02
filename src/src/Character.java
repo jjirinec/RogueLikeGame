@@ -1,14 +1,24 @@
 package src;
 
 
+import java.util.ArrayList;
+
 import mapObjects.*;
 
 public class Character extends Entity {
+	ArrayList<Loot> inventory;
+	Wepon equipedWepon = null;
+	Armor equipedArmor = null;
+	
     public Character(Coordinate location,int maxHP, int speed) {
         super("Character", "TempChar.png", location, false, 60);
         this.maxHp = maxHP;
         this.hp = maxHP;
         this.setSpeed(speed);
+        inventory = new ArrayList<Loot>();
+        inventory.add(new Dagger(0,0,this.getImageSize()));
+        inventory.add(new Axe(1,0,this.getImageSize()));
+        inventory.add(new SpeedPotion(1,0,this.getImageSize()));
     }
 
     public Character(int imageSize){
@@ -16,6 +26,10 @@ public class Character extends Entity {
         this.maxHp = 10;
         this.hp = 10;
         this.setSpeed(2);
+        inventory = new ArrayList<Loot>();
+        inventory.add(new Dagger(0,0,this.getImageSize()));
+        inventory.add(new Axe(1,0,this.getImageSize()));
+        inventory.add(new SpeedPotion(1,0,this.getImageSize()));
     }
 
         /**
@@ -44,6 +58,17 @@ public class Character extends Entity {
                 //hit here
             }
             return moveResult;
+        }
+        public ArrayList<Loot> getInventory(){
+        	return inventory;
+        }
+        
+        public void grabLoot(Loot item) {
+        	this.inventory.add(item);
+        	this.setChanged();
+        	this.notifyObservers("NewLoot");
+        	for(int i = 0; i < inventory.size(); i++)
+        		System.out.println(inventory.get(i).toString());
         }
 }
 

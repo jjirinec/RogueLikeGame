@@ -106,9 +106,9 @@ public class Map {
 				stacks[row][colum].setPrefSize(gridSize, gridSize);
 				location[row][colum] = new MapLocation(tile);
 				map.add(stacks[row][colum],row,colum);
-				map.setHgrow(stacks[row][colum], Priority.ALWAYS);
-				map.setVgrow(stacks[row][colum], Priority.ALWAYS);
-				//stacks[row][colum].getChildren().get(0).autosize();;
+				//map.setHgrow(stacks[row][colum], Priority.ALWAYS);
+				//map.setVgrow(stacks[row][colum], Priority.ALWAYS);
+//				stacks[row][colum]
 				
 			}
 		}
