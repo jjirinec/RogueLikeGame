@@ -84,8 +84,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getEntity());
 		}
-		if(mapLocation.hasLoot()) {
-			player.grabLoot(mapLocation.topLoot());
+		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
+			player.grabLoot(mapLocation.getLoot());
 		}
 	}
 	/*

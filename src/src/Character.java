@@ -65,10 +65,29 @@ public class Character extends Entity {
         
         public void grabLoot(Loot item) {
         	this.inventory.add(item);
+        	this.spendActions(getMoveCost());
         	this.setChanged();
         	this.notifyObservers("NewLoot");
         	for(int i = 0; i < inventory.size(); i++)
         		System.out.println(inventory.get(i).toString());
         }
+        public void useItem(Consumable item) {
+        	item.consume(this);
+        	inventory.remove(item);
+        	this.setChanged();
+        	this.notifyObservers("NewLoot");
+        	
+//        	removeItemFromInventory(item);
+        }
+//        private void removeItemFromInventory(Object item) {
+//        	for(int i = 0; i < inventory.size(); i++) {
+//        		if(inventory.get(i).equals(item)) {
+//        			System.out.println("ItemFound");
+//        			inventory.remove(i);
+//        		}
+//        	}
+//        }
 }
+
+
 

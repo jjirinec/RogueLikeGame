@@ -10,7 +10,7 @@ public class Bow extends Wepon{
 	private static double weponSpeed = 1;
 	
 	public Bow(int extraDmg,int bonusValue,int imageSize) {
-		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
+		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"ranged",weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 		if(imageSize > this.imageSize)

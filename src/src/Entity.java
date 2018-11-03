@@ -148,7 +148,7 @@ public abstract class Entity extends MapObject{
     	}
     	if(target instanceof Obstacle) {
     		target = (Obstacle)target;
-    		((Obstacle) target).damage(5, map);
+    		((Obstacle) target).damage(5, map);//TODO update the damage dealt
     	}
     	
     	spendActions(attackCost);
@@ -185,7 +185,7 @@ public abstract class Entity extends MapObject{
     		return true;
     	return false;
     }
-    private void spendActions(double actionsCost){
+    protected void spendActions(double actionsCost){
     	curentActions -= actionsCost;
     	if(this instanceof Character) {
     		this.setChanged();
@@ -197,6 +197,21 @@ public abstract class Entity extends MapObject{
     	}
     }
     
+    public void giveActions(double actionPoints) {
+    	this.curentActions += actionPoints;
+    	this.setChanged();
+    	this.notifyObservers("ActionUpdate");
+    }
+    
+    public boolean isAdjacent(Coordinate location) {
+    	int x = this.getLocation().getX();
+    	int y = this.getLocation().getY();
+    	int xDiff = x - location.getX();
+    	int yDiff = y - location.getY();
+    	if(xDiff == 1 || xDiff == -1 || yDiff == 1 || yDiff == -1)
+    		return true;
+    	return false;
+    }
     
 }//End Class
 
