@@ -39,7 +39,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.setSpeed(5);
+		player.setSpeed(6);
 		//player.newTurn();
 		System.out.println("Player Initialized");
 	}
@@ -130,14 +130,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("InterAct/Attack");
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
-				double scale = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
-				view.playerInfoView.updateHealthGlobe(scale + .1);
+//				double scale = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
+//				view.playerInfoView.updateHealthGlobe(scale + .1);
+				player.damag(2);
 					break;
 			case Z://Testing health Globe  TODO Remove
-				double sc = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
-				player.setDex(player.getDex()+1);
-				view.playerInfoView.updatStatActionBlocks();;
-				view.playerInfoView.updateHealthGlobe(sc - .1);
+//				double sc = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
+//				player.setDex(player.getDex()+1);
+//				view.playerInfoView.updatStatActionBlocks();;
+//				view.playerInfoView.updateHealthGlobe(sc - .1);
+				player.heal(1);
 					
 		}//End Switch
 	}

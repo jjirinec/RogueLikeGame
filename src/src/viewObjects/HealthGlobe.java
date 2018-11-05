@@ -16,7 +16,7 @@ public class HealthGlobe {
 		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size*centerScale);
 		healthImage.setTranslateY(2);//(size - size*centerScale)/2 + 2);
 		healthGlobe.getChildren().add(healthImage);
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top_Test.png",size));
+		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
 		healthGlobe.setMaxSize(size, size);
 	}
 	private ImageView getImageView(String imageFile,double size) {

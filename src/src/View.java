@@ -195,14 +195,23 @@ public class View extends Application implements Observer{
 			//this.updatePlayerInfo();
 			this.playerInfoView.updatStatActionBlocks();
 		}
-		if(observedMsg.equals("NewLoot")) {
+		if(observedMsg.equals("LootChange")) {
 			this.playerInventoryView.updateInventory();
 		}
+		if(observedMsg.equals("Hp Change")) {
+			this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
+		}
+		if(observedMsg.equals("EquipmentChange")) {
+			this.playerInventoryView.updateInventory();
+			this.playerInventoryView.updateEquipedView();
+		}
+		else {
 		System.out.println("observed "+observedMsg);
 		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
 		//hud.setContent(new Text(observedMsg));
 		
 //		hudMsg. +="\nobservedMsg";
+		}
 	}
 	/*
 	 * Because I hate typing System.out.println()

@@ -4,6 +4,8 @@ import mapObjects.*;
 import java.util.ArrayList;
 import java.util.Random;
 
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
@@ -106,12 +108,17 @@ public class Map {
 				stacks[row][colum].setPrefSize(gridSize, gridSize);
 				location[row][colum] = new MapLocation(tile);
 				map.add(stacks[row][colum],row,colum);
+				
+				
 				//map.setHgrow(stacks[row][colum], Priority.ALWAYS);
 				//map.setVgrow(stacks[row][colum], Priority.ALWAYS);
 //				stacks[row][colum]
 				
 			}
 		}
+	}
+	private void moveTargetingCursor(int row, int colum) {
+		
 	}
 	
 	private void populateMap()

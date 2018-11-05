@@ -11,7 +11,11 @@ public class TargetingCursor extends MapObject{
 		super(name,imageFile,location,true,gridSize);
 	}
 	
-	
+	public void moveTo(Coordinate location, Map map) {
+		map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().remove(getImageView());
+		this.setLocation(location.getX(), location.getY());
+		map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().add(getImageView());
+	}
 	public void move(KeyCode keyCode,Map map)
 	{
 		int x = this.getLocation().getX();

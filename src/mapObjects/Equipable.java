@@ -1,7 +1,9 @@
 package mapObjects;
-
+import src.Character;
 public interface Equipable {
 	
-	public abstract void equip(Character character);
+	public abstract void equip(Character player);
+
+
 
 }

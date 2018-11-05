@@ -1,5 +1,6 @@
 package src.viewObjects;
 import javafx.geometry.Insets;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -39,7 +40,7 @@ public class ActionBlock {
 		actionBlock.setVgap(10);
 		actionBlock.setPadding(new Insets(20,10,20,10));
 		Text actions = statText("Action Points:");
-		Text actionValue = statText("" + player.getCurentActions());
+		Text actionValue = statText("" + Math.round(player.getCurentActions()*10)/10.0);
 		actionBlock.add(actions, 0, 0);
 		actionBlock.add(actionValue, 1, 0);
 		Text moveCost = statText("Movment Cost:");
@@ -54,6 +55,9 @@ public class ActionBlock {
 		BackgroundFill backGroundFill = new BackgroundFill(Color.DARKGREY, new CornerRadii(25), new Insets(0,0,0,0) );
 		Background backGround = new Background(backGroundFill);
 		actionBlock.setBackground(backGround);
+		Tooltip.install(actions, new Tooltip("1 + speed/5 actions per round"));
+		Tooltip.install(moveCost, new Tooltip("Equiped armor effects movment cost"));
+		Tooltip.install(attackCost, new Tooltip("Equiped weapon effects attack cost"));
 	}
 	
 	private Text statText(String txt) {

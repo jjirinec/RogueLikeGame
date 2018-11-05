@@ -30,9 +30,17 @@ public abstract class Entity extends MapObject{
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
-        
-        
     }
+     
+     public int getHp() {
+    	 return hp;
+     }
+     public int getMaxHp() {
+    	 return maxHp;
+     }
+     public double getHpPresentage() {
+    	 return 1.0*hp/maxHp;
+     }
      public int getStr() {
 		return str;
 	}
@@ -78,8 +86,18 @@ public abstract class Entity extends MapObject{
 	public double getCurentActions() {
 		return curentActions;
 	}
+	public void setMovecost(double moveCost) {
+		this.moveCost = moveCost;
+		this.setChanged();
+		this.notifyObservers("ActionUpdate");
+	}
 	public double getMoveCost() {
 		return moveCost;
+	}
+	public void setAttackCost(double attackCost) {
+		this.attackCost = attackCost;
+		this.setChanged();
+		this.notifyObservers("ActionUpdate");
 	}
 	public double getAttackCost() {
 		return attackCost;
@@ -159,10 +177,25 @@ public abstract class Entity extends MapObject{
         } else {
             hp += healthPoints;
         }
+        if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("Hp Change");
+    	}
+    }
+    public void damag(int dmg) {
+    	hp -= dmg;
+    	if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("Hp Change");
+    	}
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
-    	curentActions += (1 + speed/5);
+//    	double newActions = (1 + speed/5.0);
+//    	curentActions = Math.round(curentActions * 10) / 10.0;
+
+    	curentActions += (1 + speed/5.0);
+
     	if(this instanceof Character) {
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");

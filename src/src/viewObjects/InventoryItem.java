@@ -16,17 +16,27 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import mapObjects.Armor;
 import mapObjects.Consumable;
 import mapObjects.Equipable;
 import mapObjects.Loot;
+import mapObjects.Wepon;
 
 public class InventoryItem {
 	
 	Loot item;
 	HBox itemView;
 	Text name;
-	ImageView image;
+	ImageView inventoryImage;
+	ImageView equipedImage;
 	String toUseEquip = "\n\nDoubleClick";
+	
+	Color weaponColor = Color.DARKSLATEGREY;
+	Color armorColor = Color.BROWN;
+	Color consumableColor = Color.DARKGOLDENROD;
+	Background backGround;
+	BackgroundFill backGroundFill;
+	HBox equipedView;
 	
 	public InventoryItem(Loot item) {
 		this.item = item;
@@ -34,13 +44,15 @@ public class InventoryItem {
 			toUseEquip = toUseEquip + " to Use";
 		if(item instanceof Equipable)
 			toUseEquip = toUseEquip + " to Equip";
-		
-		BackgroundFill backGroundFill = new BackgroundFill(Color.DARKSLATEGREY, new CornerRadii(25), new Insets(0,0,0,0) );
-		Background backGround = new Background(backGroundFill);
+
+		backGroundFill = setBackgroundColor();
+		backGround = new Background(backGroundFill);
 		this.itemView = new HBox();
 		
+		
+		
 		itemView.setAlignment(Pos.CENTER_LEFT);
-		itemView.setSpacing(30);
+		itemView.setSpacing(20);
 		itemView.setPadding(new Insets(5,5,5,5));
 		itemView.setBackground(backGround);
 		
@@ -52,28 +64,21 @@ public class InventoryItem {
 		textPane.setAlignment(Pos.CENTER_LEFT);
 		textPane.getChildren().add(this.name);
 		
-		this.image = item.getImageView();
-		image.minHeight(200);
-		image.scaleXProperty();
+		this.inventoryImage = item.getImageView();
+//		inventoryImage.setScaleX(.2);
+//		INVENTORYIMAGE.SETSCALEY(.2);
+		//inventoryImage.scaleXProperty();
 		
 		
-		itemView.getChildren().add(image);
+		itemView.getChildren().add(inventoryImage);
 		itemView.getChildren().add(textPane);
+//		itemView.setScaleX(.8);
+//		itemView.setScaleY(.8);
 		
 		Tooltip.install(itemView, new Tooltip(item.description() + toUseEquip));
 		
-//		itemView.setOnMouseClicked(new EventHandler<MouseEvent>(){
-//			@Override
-//			public void handle(MouseEvent mouseEvent) {
-//		        if(mouseEvent.getClickCount() == 2){
-//		        	//TODO Add consume/equip logic here
-//		        	System.out.println(item.description());
-//		            System.out.println("Double clicked");
-//		         }
-//				
-//			}		
-//		});
-//		
+		setUpEquipedView();
+		
 	}
 //	
 //	private void use(Consumable potion) {
@@ -82,5 +87,31 @@ public class InventoryItem {
 	public HBox getItemView() {
 		return itemView;
 	}
-
+	private BackgroundFill setBackgroundColor() {
+		BackgroundFill fill;
+		if(item instanceof Armor)
+			fill = new BackgroundFill(armorColor, new CornerRadii(25), new Insets(0,0,0,0) );
+		else if(item instanceof Wepon)
+			fill = new BackgroundFill(weaponColor, new CornerRadii(25), new Insets(0,0,0,0) );
+		else
+			fill = new BackgroundFill(consumableColor, new CornerRadii(25), new Insets(0,0,0,0) );
+		return fill;
+	}
+	private void setUpEquipedView() {
+		ImageView image = new ImageView(item.getImageView().getImage());
+//		image.setScaleX(3.5);
+//		image.setScaleY(3.5);
+		this.equipedView = new HBox();
+		equipedView.setAlignment(Pos.CENTER);
+		equipedView.getChildren().add(image);
+		equipedView.setBackground(backGround);
+		equipedView.setScaleX(.85);
+		equipedView.setScaleY(.85);
+		Tooltip.install(equipedView, new Tooltip(item.description() + "\nDoubleClick to unEquip"));
+		
+		
+	}
+	public Pane getEquipedView() {
+		return equipedView;
+	}
 }

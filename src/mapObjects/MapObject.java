@@ -2,8 +2,11 @@ package mapObjects;
 
 import java.util.Observable;
 
+import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import src.Coordinat;
 
 public class MapObject extends Observable{
 	
@@ -23,8 +26,7 @@ public class MapObject extends Observable{
 	{
 		this.setObjectName(objectName);
 		this.image = new Image(imageFile);
-		this.imageView = new ImageView(image);
-		
+		this.imageView = new ImageView(image);	
 		this.isPasable = isPasable;
 		setImageSize(imageSize);
 	}

@@ -18,31 +18,37 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import mapObjects.Armor;
 import mapObjects.Consumable;
+import mapObjects.Equipable;
 import mapObjects.Loot;
 import mapObjects.MapObject;
+import mapObjects.Wepon;
 import src.Character;
 
 public class InventoryView {
-	VBox inventoryView;
+	VBox playerInventoryView;
 	Character player;
 	ListView<HBox> inventory;
 	ObservableList<HBox> inventroyViewList;
-	HBox equipment;
+	VBox equipment;
+	EquipedView equipedView;
 	
 	
 	public InventoryView(Character player, double prefWidth) {
 		this.player = player;
 		
-		inventoryView = new VBox();
-		inventoryView.setPadding(new Insets(0,30,30,30));
-		inventoryView.setAlignment(Pos.CENTER_RIGHT);
-		inventoryView.setPrefWidth(prefWidth);
-		inventoryView.setFillWidth(true);
+		playerInventoryView = new VBox();
+		playerInventoryView.setSpacing(20);
+		playerInventoryView.setPadding(new Insets(30,30,30,30));
+		playerInventoryView.setAlignment(Pos.CENTER_RIGHT);
+		playerInventoryView.setPrefWidth(prefWidth);
+		playerInventoryView.setFillWidth(true);
 		
 		///Equipment///
-		equipment = new HBox();
-		equipment.getChildren().add(new Text("Equiptment Gose Here"));
+		equipedView = new EquipedView();
+		equipment = equipedView.getMainView();
+		//equipment.getChildren().add(new Text("Equiptment Gose Here"));
 		
 		
 		
@@ -58,20 +64,17 @@ public class InventoryView {
 		inventory.setItems(inventroyViewList);
 		inventory.setFocusTraversable(false);
 		inventory.setFixedCellSize(75);
-		
+		HBox inventoryView = new HBox();
+		inventoryView.setAlignment(Pos.CENTER);
+		inventoryView.getChildren().add(inventory);
 		
 			
 		
 		this.updateInventory();
 		
-		inventoryView.getChildren().add(equipment);
-		inventoryView.getChildren().add(inventory);
-		
-		
-//		inventory.setOpacity(.7);
-		
-		
-//		this.player = player;
+		playerInventoryView.getChildren().add(equipment);
+		playerInventoryView.getChildren().add(inventoryView);
+		this.setUnEquipHandl();
 	}
 	
 	public void updateInventory() {
@@ -84,29 +87,78 @@ public class InventoryView {
 			itemView.getItemView().setOnMouseClicked(new EventHandler<MouseEvent>(){
 				@Override
 				public void handle(MouseEvent mouseEvent) {
-			        if(mouseEvent.getClickCount() == 2){
-			        	//TODO Add consume/equip logic here
-			        	System.out.println(item.description());
-			            System.out.println("Double clicked");
-			 
+			        if(mouseEvent.getClickCount() == 2){		 
 			            useEquip(itemView.item);
 			         }
-					
 				}		
 			});
 			
 		}
 	}
-	
+	public void updateEquipedView() {
+		InventoryItem item;
+		Armor armor = player.getEquipedArmor();
+		Wepon weapon = player.getEquipedWepon();
+		if(weapon != null) {
+			item = new InventoryItem(player.getEquipedWepon());
+			this.equipedView.getWeponView().getChildren().add(item.getEquipedView());
+		}
+		else if(weapon == null && hasWeaponImage()) {//remove image if no weapon is equiped and there is an image to remove
+			this.equipedView.getWeponView().getChildren().remove(1);
+		}
+		if(armor != null) {
+			item = new InventoryItem(player.getEquipedArmor());
+			this.equipedView.getArmorView().getChildren().add(item.getEquipedView());
+		}
+		else if(armor == null && hasArmorImage()) {//Remove image if no armor is equiped and there is an image to remove
+			this.equipedView.getArmorView().getChildren().remove(1);
+		}
+			
+	}
+	private boolean hasWeaponImage(){
+		if(this.equipedView.getWeponView().getChildren().size() >= 2)
+			return true;
+		return false;
+	}
+	private boolean hasArmorImage() {
+		if(this.equipedView.getArmorView().getChildren().size() >=2)
+			return true;
+		return false;
+	}
+	public void setUnEquipHandl() {
+		this.equipedView.getArmorView().setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+			        if(mouseEvent.getClickCount() == 2){		 
+			            removeArmorView();
+			         }
+				}		
+			});
+		this.equipedView.getWeponView().setOnMouseClicked(new EventHandler<MouseEvent>(){
+			@Override
+			public void handle(MouseEvent mouseEvent) {
+		        if(mouseEvent.getClickCount() == 2){		 
+		            removeWeaponView();
+		         }
+			}		
+		});
+	}
+	private void removeArmorView() {
+		player.unEquipArmor();
+	}
+	private void removeWeaponView() {
+		player.unEquipWeapon();
+	}
 	private void useEquip(MapObject item) {
 		if(item instanceof Consumable) {
 			player.useItem((Consumable)item);
-			System.out.println("Consumeing Potion");
 		}
+		if(item instanceof Equipable)
+			((Equipable) item).equip(player);
 	}
 	
 	public VBox getView() {
-		return inventoryView;
+		return playerInventoryView;
 	}
 
 }

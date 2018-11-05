@@ -1,5 +1,5 @@
 package mapObjects;
-
+import src.Character;
 public class Wepon extends Loot implements Equipable{
 	private int dmg;
 	private String type;
@@ -31,11 +31,12 @@ public class Wepon extends Loot implements Equipable{
 	{
 		return type;
 	}
-
 	@Override
-	public void equip(Character character) {
-		// TODO Auto-generated method stub
+	public void equip(Character player) {
+		player.equipWepon(this);
 		
 	}
+
+	
 
 }

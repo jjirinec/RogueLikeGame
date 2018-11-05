@@ -62,12 +62,17 @@ public class Character extends Entity {
         public ArrayList<Loot> getInventory(){
         	return inventory;
         }
-        
+        public Wepon getEquipedWepon() {
+        	return this.equipedWepon;
+        }
+        public Armor getEquipedArmor() {
+        	return this.equipedArmor;
+        }
         public void grabLoot(Loot item) {
         	this.inventory.add(item);
         	this.spendActions(getMoveCost());
         	this.setChanged();
-        	this.notifyObservers("NewLoot");
+        	this.notifyObservers("LootChange");
         	for(int i = 0; i < inventory.size(); i++)
         		System.out.println(inventory.get(i).toString());
         }
@@ -75,9 +80,43 @@ public class Character extends Entity {
         	item.consume(this);
         	inventory.remove(item);
         	this.setChanged();
-        	this.notifyObservers("NewLoot");
+        	this.notifyObservers("LootChange");
         	
 //        	removeItemFromInventory(item);
+        }
+        public void unEquipArmor() {
+        	if(equipedArmor != null) {
+        		inventory.add(equipedArmor);
+        		equipedArmor = null;
+        		this.setMovecost(1);
+        		this.setChanged();
+        		this.notifyObservers("EquipmentChange");
+        	}
+        }
+        public void unEquipWeapon() {
+        	if(equipedWepon != null) {
+        		inventory.add(equipedWepon);
+        		equipedWepon = null;
+        		this.setAttackCost(1);
+        		this.setChanged();
+        		this.notifyObservers("EquipmentChange");
+        	}
+        }
+        public void equipArmor(Equipable item) {
+        	unEquipArmor();
+        	this.equipedArmor = (Armor) item;
+        	this.inventory.remove(item);
+        	this.setMovecost(this.getMoveCost() + equipedArmor.getSpdPenalty());
+        	this.setChanged();
+    		this.notifyObservers("EquipmentChange");        	
+        }
+        public void equipWepon(Equipable item) {
+        	unEquipWeapon();
+        	this.equipedWepon = (Wepon) item;
+        	this.inventory.remove(item);
+        	this.setAttackCost(equipedWepon.getWepopSpeed());
+        	this.setChanged();
+    		this.notifyObservers("EquipmentChange"); 
         }
 //        private void removeItemFromInventory(Object item) {
 //        	for(int i = 0; i < inventory.size(); i++) {
