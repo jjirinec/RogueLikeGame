@@ -98,10 +98,12 @@ public class View extends Application implements Observer{
 		forANDback.getChildren().addAll(background,layout);
 		forANDback.setMaxSize(500, 500);
 		Scene root = new Scene(forANDback);
+		
 		root.setOnKeyPressed(ctr);
 		primaryStage.setScene(root);
 		primaryStage.show();
-		//primaryStage.setFullScreen(true);
+		primaryStage.sizeToScene();
+		primaryStage.setFullScreen(true);
 		
 		ctr.startPlay();
 		
@@ -113,16 +115,19 @@ public class View extends Application implements Observer{
 	private BorderPane setUpForFront()
 	{
 		BorderPane layout = new BorderPane();
-		layout.setCenter(map.getMap());
+		VBox center = new VBox();
+		center.getChildren().add(map.getMap());
+		center.getChildren().add(setUpBottom());
+		layout.setCenter(center);
 		
-		this.playerInventoryView = new InventoryView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
+		this.playerInventoryView = new InventoryView(ctr.player,(screenSize.getWidth() - mapWidth)/2,map);
 		layout.setLeft(playerInventoryView.getView());
 		
 		playerInfoView = new PlayerInfoView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
 		
 		layout.setRight(playerInfoView.getView());
 		//layout.setRight(setUpRightSide());
-		layout.setBottom(setUpBottom());
+//		layout.setBottom(setUpBottom());
 		return layout;
 	}
 	private VBox setUpLeftSide()
@@ -143,7 +148,7 @@ public class View extends Application implements Observer{
 	private HBox setUpBottom() {
 		HBox bottom = new HBox();
 		setUpHud();
-		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
+		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(20,20,20,20) );
 		Background backGround = new Background(backGroundFill);
 		Pane hudPane = new Pane();
 		

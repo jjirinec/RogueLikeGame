@@ -19,6 +19,7 @@ public class Character extends Entity {
         inventory.add(new Dagger(0,0,this.getImageSize()));
         inventory.add(new Axe(1,0,this.getImageSize()));
         inventory.add(new SpeedPotion(1,0,this.getImageSize()));
+        inventory.add(new LeatherArmor(0,0,this.getImageSize()));
     }
 
     public Character(int imageSize){
@@ -30,6 +31,7 @@ public class Character extends Entity {
         inventory.add(new Dagger(0,0,this.getImageSize()));
         inventory.add(new Axe(1,0,this.getImageSize()));
         inventory.add(new SpeedPotion(1,0,this.getImageSize()));
+        inventory.add(new LeatherArmor(0,0,this.getImageSize()));
     }
 
         /**

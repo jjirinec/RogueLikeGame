@@ -9,6 +9,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import mapObjects.Coordinate;
+import mapObjects.Loot;
 import mapObjects.Obstacle;
 import mapObjects.TargetingCursor;
 
@@ -85,7 +86,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			notifyObservers("Player Attacking " + mapLocation.getEntity());
 		}
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
-			player.grabLoot(mapLocation.getLoot());
+			Loot item = mapLocation.getLoot();
+			player.grabLoot(item);
+			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
+			                                               
 		}
 	}
 	/*
