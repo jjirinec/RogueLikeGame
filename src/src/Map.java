@@ -162,8 +162,13 @@ public class Map {
 		location[entrance.getY()][entrance.getX()].setEntity(player);
 		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
-				
 	}
+
+	public void removeEntity(Entity e){
+		stacks[e.getLocation().getY()][e.getLocation().getX()].getChildren().remove(e.getImageView());
+		location[e.getLocation().getY()][e.getLocation().getX()].removeEntity();
+	}
+
 
 
 	public GridPane getMap()

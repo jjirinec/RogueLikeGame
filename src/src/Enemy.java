@@ -21,7 +21,7 @@ public class Enemy extends Entity {
     }
 
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd) {
-    	Coordinate pos = getLocation();
+        Coordinate pos = getLocation();
         double totalD_P = calculateD(pos.getX(), pos.getY(), Xp, Yp);
         double totalDW = calculateD(pos.getX(), pos.getY() - 1, Xd, Yd) + calculateD(pos.getX(), pos.getY() - 1, Xp, Yp);
         double totalDS = calculateD(pos.getX(), pos.getY() + 1, Xd, Yd) + calculateD(pos.getX(), pos.getY() + 1, Xp, Yp);
@@ -31,7 +31,7 @@ public class Enemy extends Entity {
             System.out.println("ENEMY HIT");
             return 'H';
         } else if (totalDW < totalDS && totalDW < totalDA && totalDW < totalDD) {
-        	return ('W');
+            return ('W');
         } else if (totalDD < totalDS && totalDD < totalDA && totalDD < totalDW) {
             return ('D');
         } else if (totalDS < totalDW && totalDS < totalDA && totalDS < totalDD) {
@@ -47,7 +47,7 @@ public class Enemy extends Entity {
         return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
     }
 
-    
+
     /**
      * reads char input built for smartDirection enemy
      *
@@ -55,64 +55,63 @@ public class Enemy extends Entity {
      * @return truth if moves, false if doesnt move
      */
     boolean readInput(char input, Map map) {
-    	boolean result = false;
+        boolean result = false;
         if (input == 'W') {
-            move(0, -1, map);
-            result =  true;
+            result = move(0, -1, map);
+            if(!result) {
+            randomMove(map);
+            }
         } else if (input == 'S') {
-            move(0, 1, map);
-            result =  true;
+            result = move(0, 1, map);
+            if(!result) {
+                randomMove(map);
+            }
         } else if (input == 'A') {
-            move(-1, 0, map);
-            result =  true;
+            result = move(-1, 0, map);
+            if(!result) {
+                randomMove(map);
+            }
         } else if (input == 'D') {
-            move(1, 0, map);
-            result =  true;
+            result = move(1, 0, map);
+            if(!result) {
+                randomMove(map);
+            }
         } else if (input == 'H') {
-        	
+            result = true;
             //hit here
         }
 //        timeStop(800);
         return result;
     }
-    public void turn(Character player, Map map)
-    {
-    	this.newTurn();
-    	
 
-    	
-    	
-    //TODO This is just here for testing purposes
-    	char[] direction = {'W','S','A','D'};
-    	Random rand = new Random();
-    	
-    	int randomDerection;
-    	while(this.canAct())
-    	{
-    		///TODO Enemy turn logic goes here replace the folowing
-    	randomDerection = rand.nextInt(3);
-    	readInput(direction[randomDerection],map);
-		
-		
-    	
-    	}
+    public void turn(Character player, Map map, Coordinate doorLoc) {
+        this.newTurn();
+        while (this.canAct()) {
+            readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
+        }
     }
-    
+
+    public void randomMove(Map map) {
+        char[] direction = {'W', 'S', 'A', 'D'};
+        Random rand = new Random();
+        boolean temp = false;
+        while (!temp) {
+            int randomDirection = rand.nextInt(3);
+            temp = readInput(direction[randomDirection], map);
+        }
+    }
     /*
-     * Pause the thread 
+     * Pause the thread
      * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map
      */
-    private void timeStop(long time)
-    {
-    	//Thread current = Thread.currentThread();
-        try {									///Waits a short time before acting again
-			//Thread.currentThread();;
-        	System.out.println("waiting");
-        	Thread.sleep(time);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    private void timeStop(long time) {
+        //Thread current = Thread.currentThread();
+        try {                                    ///Waits a short time before acting again
+            //Thread.currentThread();;
+            System.out.println("waiting");
+            Thread.sleep(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
-    /// For enemy action
-    /// CALL readInput(smartEnemyDirection(player.getX(),player.getY(),exit.getX(),exit.getY() ///
 }

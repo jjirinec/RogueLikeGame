@@ -93,6 +93,7 @@ public abstract class Entity extends MapObject{
     {
     	addObserver(view);
     }
+
     boolean move(int deltaX, int deltaY,Map map){
     	System.out.println("\n\n"+this.getObjectName() + " is moving!!!!!");
         Coordinate xy = super.getLocation();
@@ -128,7 +129,6 @@ public abstract class Entity extends MapObject{
 	                this.spendActions(this.moveCost);
 	                return true;
 	            }
-	            
 	            else {
 	            	System.out.println(destination.isPasable());
 	            	System.out.println(destination.getObstacle());
@@ -141,18 +141,19 @@ public abstract class Entity extends MapObject{
         return false;
     }
 
-    public void attack(MapObject target,Map map) {
-    	//TODO Add Attack Logic here
+
+    public void attack(MapObject target, Map map) {
     	if(target instanceof Entity){
-    		target = (Entity)target;
+    		Entity ent = (Entity)target;
+    		ent.hp = ent.hp - this.str;
     	}
     	if(target instanceof Obstacle) {
-    		target = (Obstacle)target;
-    		((Obstacle) target).damage(5, map);
+			Obstacle t = (Obstacle)target;
+    		t.damage(this.str, map);
     	}
-    	
     	spendActions(attackCost);
     }
+
     public void heal(int healthPoints) {
         if (hp + healthPoints >= maxHp) {
             hp = maxHp;
@@ -161,13 +162,15 @@ public abstract class Entity extends MapObject{
         }
     }
 
-<<<<<<< HEAD
-    public boolean hit(Entity target, int damage){
-        return true;
+    public boolean checkDead(){
+        if(this.hp <= 0){
+        	return true;
+		}
+		else{
+        	return false;
+		}
     }
 
-}
-=======
     public void newTurn(){//myTurn set to true and reset curentActions
     	curentActions += (1 + speed/5);
     	if(this instanceof Character) {
@@ -192,7 +195,7 @@ public abstract class Entity extends MapObject{
     		return true;
     	return false;
     }
-    private void spendActions(double actionsCost){
+    public void spendActions(double actionsCost){
     	curentActions -= actionsCost;
     	if(this instanceof Character) {
     		this.setChanged();
@@ -203,8 +206,4 @@ public abstract class Entity extends MapObject{
     		this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
     	}
     }
-    
-    
-}//End Class
->>>>>>> 40868eeced1bddf885f8966f729469ae72d037a3
-
+}
