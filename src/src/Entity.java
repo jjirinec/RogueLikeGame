@@ -30,9 +30,17 @@ public abstract class Entity extends MapObject{
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
-        
-        
     }
+     
+     public int getHp() {
+    	 return hp;
+     }
+     public int getMaxHp() {
+    	 return maxHp;
+     }
+     public double getHpPresentage() {
+    	 return 1.0*hp/maxHp;
+     }
      public int getStr() {
 		return str;
 	}
@@ -78,8 +86,18 @@ public abstract class Entity extends MapObject{
 	public double getCurentActions() {
 		return curentActions;
 	}
+	public void setMovecost(double moveCost) {
+		this.moveCost = moveCost;
+		this.setChanged();
+		this.notifyObservers("ActionUpdate");
+	}
 	public double getMoveCost() {
 		return moveCost;
+	}
+	public void setAttackCost(double attackCost) {
+		this.attackCost = attackCost;
+		this.setChanged();
+		this.notifyObservers("ActionUpdate");
 	}
 	public double getAttackCost() {
 		return attackCost;
@@ -148,8 +166,13 @@ public abstract class Entity extends MapObject{
     		ent.hp = ent.hp - this.str;
     	}
     	if(target instanceof Obstacle) {
+<<<<<<< HEAD
 			Obstacle t = (Obstacle)target;
     		t.damage(this.str, map);
+=======
+    		target = (Obstacle)target;
+    		((Obstacle) target).damage(5, map);//TODO update the damage dealt
+>>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
     	}
     	spendActions(attackCost);
     }
@@ -160,6 +183,17 @@ public abstract class Entity extends MapObject{
         } else {
             hp += healthPoints;
         }
+        if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("Hp Change");
+    	}
+    }
+    public void damag(int dmg) {
+    	hp -= dmg;
+    	if(this instanceof Character) {
+    		this.setChanged();
+    		this.notifyObservers("Hp Change");
+    	}
     }
 
     public boolean checkDead(){
@@ -172,7 +206,11 @@ public abstract class Entity extends MapObject{
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
-    	curentActions += (1 + speed/5);
+//    	double newActions = (1 + speed/5.0);
+//    	curentActions = Math.round(curentActions * 10) / 10.0;
+
+    	curentActions += (1 + speed/5.0);
+
     	if(this instanceof Character) {
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");
@@ -195,7 +233,11 @@ public abstract class Entity extends MapObject{
     		return true;
     	return false;
     }
+<<<<<<< HEAD
     public void spendActions(double actionsCost){
+=======
+    protected void spendActions(double actionsCost){
+>>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
     	curentActions -= actionsCost;
     	if(this instanceof Character) {
     		this.setChanged();
@@ -206,4 +248,26 @@ public abstract class Entity extends MapObject{
     		this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
     	}
     }
+<<<<<<< HEAD
 }
+=======
+    
+    public void giveActions(double actionPoints) {
+    	this.curentActions += actionPoints;
+    	this.setChanged();
+    	this.notifyObservers("ActionUpdate");
+    }
+    
+    public boolean isAdjacent(Coordinate location) {
+    	int x = this.getLocation().getX();
+    	int y = this.getLocation().getY();
+    	int xDiff = x - location.getX();
+    	int yDiff = y - location.getY();
+    	if(xDiff == 1 || xDiff == -1 || yDiff == 1 || yDiff == -1)
+    		return true;
+    	return false;
+    }
+    
+}//End Class
+
+>>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1

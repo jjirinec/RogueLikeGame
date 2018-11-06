@@ -1,6 +1,9 @@
 package src;
 
 import mapObjects.*;
+import src.viewObjects.HealthGlobe;
+import src.viewObjects.InventoryView;
+import src.viewObjects.PlayerInfoView;
 
 import java.awt.Dimension;
 import java.util.Observable;
@@ -19,7 +22,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -50,14 +57,16 @@ public class View extends Application implements Observer{
 	Map map;
 	
 	///Character Info Variables
-	
-	private Text actionsValue;
-	private Text moveCost;
-	private Text attackCost;
+	HealthGlobe healthGlobe;
+	PlayerInfoView playerInfoView;
+	InventoryView playerInventoryView;
+//	private Text actionsValue;
+//	private Text moveCost;
+//	private Text attackCost;
 	
 	Text hudMsg;
 	ScrollPane hud;
-	StackPane healthGlobe;
+
 	
 	public static void main(String[]args){	launch(args);	}
 
@@ -79,11 +88,11 @@ public class View extends Application implements Observer{
 		Rectangle bgImage = new Rectangle(screenSize.getWidth(),screenSize.getHeight());
 		bgImage.setFill(Color.DARKCYAN);
 		Pane background = new Pane();
-
+		ImageView backGround = new ImageView(new Image("images/Character/background.jpg"));
 		
 		//background.setPrefSize(screenSize.getWidth(),screenSize.getHeight());
 		//background.autosize();
-		background.getChildren().add(bgImage);
+		background.getChildren().add(backGround);
 //		layout.setLeft(background);
 		
 		forANDback.getChildren().addAll(background,layout);
@@ -105,8 +114,14 @@ public class View extends Application implements Observer{
 	{
 		BorderPane layout = new BorderPane();
 		layout.setCenter(map.getMap());
-		layout.setLeft(setUpLeftSide());
-		layout.setRight(setUpRightSide());
+		
+		this.playerInventoryView = new InventoryView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
+		layout.setLeft(playerInventoryView.getView());
+		
+		playerInfoView = new PlayerInfoView(ctr.player,(screenSize.getWidth() - mapWidth)/2);
+		
+		layout.setRight(playerInfoView.getView());
+		//layout.setRight(setUpRightSide());
 		layout.setBottom(setUpBottom());
 		return layout;
 	}
@@ -116,109 +131,9 @@ public class View extends Application implements Observer{
 		leftSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
 		return leftSideView;
 	}
-	private VBox setUpRightSide() {
-		rightSideView = new VBox();
-		rightSideView.setPrefWidth((screenSize.getWidth() - mapWidth)/2);
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(0,10,0,10));
-		
-		StackPane healthGlobe = getHealthGlobe();
-		healthGlobe.setAlignment(Pos.TOP_CENTER);
-		grid.add(healthGlobe,3,2);
-		
-//		Text str = new Text("Str: " + ctr.player.getStr());
-//		grid.add(str, 4, 6);
-		grid.add(getCharStats(), 3, 4);getCharStats();
-		grid.add(getActionGrid(),3, 7);
-		rightSideView.getChildren().add(grid);
-		return rightSideView;
-	}
-	private GridPane getCharStats() {
-		GridPane statGrid = new GridPane();
-		statGrid.setVgap(10);
-		statGrid.setHgap(10);
-		statGrid.setPadding(new Insets(0,10,0,10));
-		Text str = statText("Strength: ");
-		Text strValue = statText("" + ctr.player.getStr());
-		statGrid.add(str, 0, 7);
-		statGrid.add(strValue, 1, 7);
-		Text dex = statText("Dexterity: ");
-		Text dexValue = statText("" + ctr.player.getDex());
-		statGrid.add(dex, 0, 8);
-		statGrid.add(dexValue, 1, 8);
-		Text con = statText("Constatution:");
-		Text conValue = statText(""+ ctr.player.getCon());
-		statGrid.add(con, 0, 9);
-		statGrid.add(conValue, 1, 9);
-		Text mgk = statText("Magic:");
-		Text mgkValue = statText(""+ctr.player.getMgk());
-		statGrid.add(mgk, 0, 10);
-		statGrid.add(mgkValue, 1, 10);
-		Text defence = statText("Defence:");
-		Text defenceValue = statText(""+ctr.player.getDefence());
-		statGrid.add(defence, 0, 11);
-		statGrid.add(defenceValue, 1, 11);
-		Text speed = statText("Speed:");
-		Text speedValue = statText(""+ctr.player.getSpeed());
-		statGrid.add(speed, 0, 12);
-		statGrid.add(speedValue, 1, 12);
 
-		return statGrid;
-	}
-	private GridPane getActionGrid() {
-		GridPane grid = new GridPane();
-		grid.setHgap(10);
-		grid.setVgap(10);
-		grid.setPadding(new Insets(0,10,0,10));
-		Text actions = statText("Action Points:");
-		Text actionValue = statText(""+ctr.player.getCurentActions());
-		grid.add(actions, 0, 0);
-		grid.add(actionValue, 1, 0);
-		Text moveCost = statText("Movment Cost:");
-		Text moveCostValue = statText(""+ctr.player.getMoveCost());
-		grid.add(moveCost, 0, 1);
-		grid.add(moveCostValue, 1, 1);
-		Text attackCost = statText("Attack Cost:");
-		Text attackCostValue = statText(""+ctr.player.getAttackCost());
-		grid.add(attackCost, 0, 2);
-		grid.add(attackCostValue, 1, 2);	
-		return grid;
-	}
-//	private GridPane set
-	private Text statText(String txt) {
-		Text text = new Text(txt);
-		text.setFont(Font.font("Arial", FontWeight.BOLD, 20));
-		return text;	
-	}
-	public void updateStatGrid() {
-		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
-		grid.getChildren().remove(1);
-		grid.add(this.getCharStats(), 3, 4);
-		
-	}
-	private void updateActionGrid() {
-		GridPane grid = (GridPane) this.rightSideView.getChildren().get(0);
-		grid.getChildren().remove(2);
-		grid.add(this.getActionGrid(), 3, 7);
-	}
-	private StackPane getHealthGlobe() {
-		int size = 175;
-		healthGlobe = new StackPane();
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Background.png",size));
-		ImageView healthImage = getImageView("images/Character/HealthGlobe_Center.png",size);
-		Pane health = new Pane(healthImage);
-//		AnchorPane healthAnchor = new AnchorPane(health);
-//
-//		AnchorPane.setRightAnchor(health,50.0);
-//		AnchorPane.setBottomAnchor(health, 0.0);
-		healthGlobe.getChildren().add(healthImage);
-		healthGlobe.getChildren().add(getImageView("images/Character/HealthGlobe_Top.png",size));
-		healthGlobe.setMaxSize(size, size);
-		return healthGlobe;
-	}
-	private ImageView getImageView(String imageFile,int size) {
+
+	private ImageView getImageView(String imageFile,double size) {
 		Image image = new Image(imageFile);
 		ImageView imageView = new ImageView(image);
 		imageView.setFitHeight(size);
@@ -228,19 +143,30 @@ public class View extends Application implements Observer{
 	private HBox setUpBottom() {
 		HBox bottom = new HBox();
 		setUpHud();
-		bottom.getChildren().add(hud);
+		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
+		Background backGround = new Background(backGroundFill);
+		Pane hudPane = new Pane();
+		
+		hudPane.getChildren().add(hud);
+		hudPane.setBackground(backGround);
+		bottom.getChildren().add(hudPane);
 		bottom.setAlignment(Pos.TOP_CENTER);
 		bottom.setPrefHeight(screenSize.getHeight()- mapHight-100);
 		bottom.setPrefWidth(mapWidth);
 		return bottom;
 	}
+
 	private void setUpHud()
 	{
 		hud = new ScrollPane();
-		hud.setPrefHeight(screenSize.getHeight() - mapHight);
+//		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
+//		Background backGround = new Background(backGroundFill);
+//		hud.setBackground(backGround);
+		hud.setFitToHeight(true);
+		//hud.setPrefHeight(screenSize.getHeight() - mapHight);
 		
 		hud.setPrefViewportWidth(mapWidth);
-
+		hud.setOpacity(.6);
 //		Background backgroud = new Background(new BackgroundFill(Paint.valueOf(Color.AQUA),new CornerRadii(20),new Insets(5.5)));
 //		hud.setBackground(backgroud);
 		hudMsg = new Text("HUD\nTest me by pressing wasd, arrow, space, tab, or g");
@@ -266,13 +192,34 @@ public class View extends Application implements Observer{
 		// TODO Auto-generated method stub
 		String observedMsg = (String)arg1;
 		if(observedMsg.equals("ActionUpdate")) {
-			this.updateActionGrid();
+			//this.updatePlayerInfo();
+			this.playerInfoView.updatStatActionBlocks();
 		}
+		if(observedMsg.equals("LootChange")) {
+			this.playerInventoryView.updateInventory();
+		}
+		if(observedMsg.equals("Hp Change")) {
+			this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
+		}
+		if(observedMsg.equals("EquipmentChange")) {
+			this.playerInventoryView.updateInventory();
+			this.playerInventoryView.updateEquipedView();
+		}
+		else {
 		System.out.println("observed "+observedMsg);
 		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
 		//hud.setContent(new Text(observedMsg));
 		
 //		hudMsg. +="\nobservedMsg";
+		}
 	}
-	
+	/*
+	 * Because I hate typing System.out.println()
+	 */
+	public void print(String x){
+		System.out.println(x);
+	}
+	public void print(int x){
+		System.out.println(x);
+	}
 }

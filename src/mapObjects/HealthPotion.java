@@ -24,7 +24,6 @@ public class HealthPotion extends Consumable{
 	
 	@Override
 	public void consume(src.Character character) {
-		// TODO Auto-generated method stub
 		character.heal(healthValue);
 	}
 	

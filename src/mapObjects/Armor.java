@@ -1,4 +1,5 @@
 package mapObjects;
+import src.Character;
 
 public class Armor extends Loot implements Equipable{
 	
@@ -30,6 +31,9 @@ public class Armor extends Loot implements Equipable{
 		else if(type.equals("Heavy"))
 			this.speedPenalty = .75;
 	}
+	public double getSpdPenalty() {
+		return speedPenalty;
+	}
 	
 	public int getDefence()
 	{
@@ -40,9 +44,8 @@ public class Armor extends Loot implements Equipable{
 		return this.speedPenalty;
 	}
 	@Override
-	public void equip(Character character) {
-		// TODO Auto-generated method stub
-		
+	public void equip(Character player) {
+		player.equipArmor(this);		
 	}
 
 }

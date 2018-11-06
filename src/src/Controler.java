@@ -39,7 +39,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.setSpeed(5);
+		player.setSpeed(6);
 		//player.newTurn();
 		System.out.println("Player Initialized");
 	}
@@ -95,8 +95,14 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
+<<<<<<< HEAD
 		setChanged();
 		notifyObservers("Theres nothing there to attack!");
+=======
+		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
+			player.grabLoot(mapLocation.getLoot());
+		}
+>>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
 	}
 	/*
 	 * Maps each key code to the desired task
@@ -140,22 +146,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("InterAct/Attack");
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
-				for(int i = 0; i < view.map.getMapLocation().length; i++)
-					for(int j = 0; j < view.map.getMapLocation()[i].length; j++)
-					{
-						
-						if(view.map.getMapLocation()[i][j].getObstacle() != null)
-						{
-							view.map.getMapLocation()[i][j].getObstacle().damage(5, view.map);
-						}
-					}
+//				double scale = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
+//				view.playerInfoView.updateHealthGlobe(scale + .1);
+				player.damag(2);
+					break;
 			case Z://Testing health Globe  TODO Remove
-				double scale = view.healthGlobe.getChildren().get(1).getScaleY();
-				double pos = view.healthGlobe.getChildren().get(1).getTranslateY();
-				view.healthGlobe.getChildren().get(1).setTranslateY(pos + 5);
-				player.setStr(player.getStr() + 1);
-				view.updateStatGrid();;
-				//view.healthGlobe.getChildren().get(1).setScaleY(scale - .1);
+//				double sc = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
+//				player.setDex(player.getDex()+1);
+//				view.playerInfoView.updatStatActionBlocks();;
+//				view.playerInfoView.updateHealthGlobe(sc - .1);
+				player.heal(1);
 					
 		}//End Switch
 	}
