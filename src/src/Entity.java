@@ -106,7 +106,7 @@ public abstract class Entity extends MapObject{
 //		this.curentActions = curentActions;
 //	}
 	//    public double getMoveCost() {return moveCost;}
-//    public double getAttackCost() {return attackCost;}
+
     public void setObserver(View view)
     {
     	addObserver(view);
@@ -141,7 +141,7 @@ public abstract class Entity extends MapObject{
 	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location
 	                //map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().add(this.getImageView());
 	                destination.setEntity(this);												//Add entity to location
-	                
+
 	                this.setChanged();
 	            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ") (this msg comming from Entity move())");
 	                this.spendActions(this.moveCost);
@@ -163,16 +163,14 @@ public abstract class Entity extends MapObject{
     public void attack(MapObject target, Map map) {
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-    		ent.hp = ent.hp - this.str;
+    		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
     	}
     	if(target instanceof Obstacle) {
-<<<<<<< HEAD
 			Obstacle t = (Obstacle)target;
     		t.damage(this.str, map);
-=======
     		target = (Obstacle)target;
     		((Obstacle) target).damage(5, map);//TODO update the damage dealt
->>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
+
     	}
     	spendActions(attackCost);
     }
@@ -190,6 +188,9 @@ public abstract class Entity extends MapObject{
     }
     public void damag(int dmg) {
     	hp -= dmg;
+    	if(hp<0){
+    	    hp=0;
+        }
     	if(this instanceof Character) {
     		this.setChanged();
     		this.notifyObservers("Hp Change");
@@ -233,24 +234,18 @@ public abstract class Entity extends MapObject{
     		return true;
     	return false;
     }
-<<<<<<< HEAD
-    public void spendActions(double actionsCost){
-=======
-    protected void spendActions(double actionsCost){
->>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
-    	curentActions -= actionsCost;
-    	if(this instanceof Character) {
-    		this.setChanged();
-    		this.notifyObservers("ActionUpdate");
-    	}
-    	if(!canAct()){//TODO Remove this latter ????
-    		this.setChanged();
-    		this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
-    	}
-    }
-<<<<<<< HEAD
-}
-=======
+    public void spendActions(double actionsCost) {
+            curentActions -= actionsCost;
+            if (this instanceof Character) {
+                this.setChanged();
+                this.notifyObservers("ActionUpdate");
+            }
+            if (!canAct()) {//TODO Remove this latter ????
+                this.setChanged();
+                this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
+            }
+        }
+
     
     public void giveActions(double actionPoints) {
     	this.curentActions += actionPoints;
@@ -268,6 +263,4 @@ public abstract class Entity extends MapObject{
     	return false;
     }
     
-}//End Class
-
->>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
+}

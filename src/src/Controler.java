@@ -95,14 +95,14 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
-<<<<<<< HEAD
+
 		setChanged();
 		notifyObservers("Theres nothing there to attack!");
-=======
+
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			player.grabLoot(mapLocation.getLoot());
 		}
->>>>>>> 74dde7dcf7cb1d6797b8ef57d335eca42db31bf1
+
 	}
 	/*
 	 * Maps each key code to the desired task
@@ -166,6 +166,12 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
 		info = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].toString();
 		return info;
+	}
+
+	public Enemy getEnemyAtCursor(){
+		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
+		Entity enemyAt = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].getEntity();
+		return(Enemy)enemyAt;
 	}
 	/*
 	 * Handles all Keyboard input

@@ -55,7 +55,18 @@ public class Character extends Entity {
                 moveResult = move(1,0,map);
                 //return true;
             } else if (input == 'H') {
-                //hit here
+        	    MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
+        	    Entity e = ml.getEntity();
+        	    if(e != null){
+                    if(wepon != null) {
+                        e.damag((this.getStr() * wepon.getDmg()) / e.getDefence()); // CHANGE DAMAGE HERE
+                    }
+                    else{
+                        e.damag(this.getStr() * (this.getAccuracy() / e.getDefence())); // CHANGE DAMAGE HERE
+
+                    }
+                }
+                spendActions(this.getAttackCost());
             }
             return moveResult;
         }

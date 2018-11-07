@@ -78,16 +78,34 @@ public class Enemy extends Entity {
             }
         } else if (input == 'H') {
             result = true;
-            //hit here
-        }
-//        timeStop(800);
+            if(wepon != null) {
+                map.getPlayer().damag((this.getStr() * wepon.getDmg()) / map.getPlayer().getDefence()); // CHANGE DAMAGE HERE
+            }
+            else{
+                map.getPlayer().damag(this.getStr() * (this.getAccuracy() / map.getPlayer().getDefence())); // CHANGE DAMAGE HERE
+
+            }
+            spendActions(this.getAttackCost());
+            if(map.getPlayer().checkDead()){
+                map.removeEntity(map.getPlayer());
+                setChanged();
+                notifyObservers("PLAYER IS DEAD");
+                // END GAME HERE
+            }
+            }
         return result;
     }
 
     public void turn(Character player, Map map, Coordinate doorLoc) {
         this.newTurn();
         while (this.canAct()) {
-            readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
+            //try {
+                readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
+                //Thread.sleep(500);
+            //}
+            //catch (InterruptedException ie){
+            //    System.out.println(ie.getMessage());
+            //}
         }
     }
 
@@ -106,12 +124,10 @@ public class Enemy extends Entity {
      */
     private void timeStop(long time) {
         //Thread current = Thread.currentThread();
-        try {                                    ///Waits a short time before acting again
-            //Thread.currentThread();;
-            System.out.println("waiting");
-            Thread.sleep(time);
-        } catch (Exception e) {
-            e.printStackTrace();
+        long s = System.currentTimeMillis();
+        long finish = System.currentTimeMillis();
+        while(finish-s<time){
+            finish = System.currentTimeMillis();
         }
     }
 }

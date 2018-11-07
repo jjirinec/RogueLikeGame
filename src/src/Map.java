@@ -179,9 +179,13 @@ public class Map {
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
 	}
 
+
 	public void removeEntity(Entity e){
-		stacks[e.getLocation().getY()][e.getLocation().getX()].getChildren().remove(e.getImageView());
-		location[e.getLocation().getY()][e.getLocation().getX()].removeEntity();
+		stacks[e.getLocation().getX()][e.getLocation().getY()].getChildren().remove(e.getImageView());
+		location[e.getLocation().getX()][e.getLocation().getY()].removeEntity();
+		if(e instanceof Enemy){
+			enemys.remove(e);
+		}
 	}
 
 
@@ -243,4 +247,6 @@ public class Map {
 		return door;
 		
 	}
+
+	public Character getPlayer(){return player;}
 }
