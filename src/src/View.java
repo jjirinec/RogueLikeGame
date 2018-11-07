@@ -1,6 +1,8 @@
 package src;
 
 import mapObjects.*;
+import mapObjects.Container;
+import src.viewObjects.ContainerView;
 import src.viewObjects.HealthGlobe;
 import src.viewObjects.InventoryView;
 import src.viewObjects.PlayerInfoView;
@@ -8,38 +10,28 @@ import src.viewObjects.PlayerInfoView;
 import java.awt.Dimension;
 import java.util.Observable;
 import java.util.Observer;
-
-import javax.swing.plaf.basic.BasicBorders.RolloverButtonBorder;
-import com.sun.javafx.tk.Toolkit;
-
+import src.Character;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class View extends Application implements Observer{
 	
@@ -66,13 +58,14 @@ public class View extends Application implements Observer{
 	
 	Text hudMsg;
 	ScrollPane hud;
-
+	Stage mainStage;
 	
 	public static void main(String[]args){	launch(args);	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
+		mainStage = new Stage();
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		
 		ctr = new Controler(this);
@@ -100,10 +93,10 @@ public class View extends Application implements Observer{
 		Scene root = new Scene(forANDback);
 		
 		root.setOnKeyPressed(ctr);
-		primaryStage.setScene(root);
-		primaryStage.show();
-		primaryStage.sizeToScene();
-		primaryStage.setFullScreen(true);
+		mainStage.setScene(root);
+		mainStage.show();
+		mainStage.sizeToScene();
+		mainStage.setFullScreen(true);
 		
 		ctr.startPlay();
 		
@@ -200,13 +193,13 @@ public class View extends Application implements Observer{
 			//this.updatePlayerInfo();
 			this.playerInfoView.updatStatActionBlocks();
 		}
-		if(observedMsg.equals("LootChange")) {
+		else if(observedMsg.equals("LootChange")) {
 			this.playerInventoryView.updateInventory();
 		}
-		if(observedMsg.equals("Hp Change")) {
+		else if(observedMsg.equals("Hp Change")) {
 			this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
 		}
-		if(observedMsg.equals("EquipmentChange")) {
+		else if(observedMsg.equals("EquipmentChange")) {
 			this.playerInventoryView.updateInventory();
 			this.playerInventoryView.updateEquipedView();
 		}
@@ -217,6 +210,26 @@ public class View extends Application implements Observer{
 		
 //		hudMsg. +="\nobservedMsg";
 		}
+	}
+	
+	public void containerView(Container container,Character player,Map map) {
+		ContainerView cView = new ContainerView(container,player);
+
+		Scene conatinerView = new Scene(cView.getContainerView());
+		
+		Stage containerStage = new Stage();
+		containerStage.setOnCloseRequest(new EventHandler<WindowEvent>(){
+			@Override
+			public void handle(WindowEvent arg0) {
+				System.out.println("ContainerView Closed");
+				map.getMap().requestFocus();
+			}
+		});
+		containerStage.initOwner(mainStage);
+		containerStage.setTitle(container.toString());
+		containerStage.setScene(conatinerView);
+		containerStage.show();
+		
 	}
 	/*
 	 * Because I hate typing System.out.println()

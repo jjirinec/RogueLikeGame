@@ -205,9 +205,21 @@ public class Map {
 	private void setDoorLocations()
 	{
 		entrance = setDoor();
-		while(exit == null || exit.equals(entrance))
+		while(exit == null || exit.equals(entrance) || isAdjacentToEntrance())
 			exit = setDoor();
 		
+	}
+	private boolean isAdjacentToEntrance() {
+		boolean result = false;
+		if(entrance.getX() == exit.getX()) {
+			if(Math.abs(entrance.getY() - exit.getY()) == 1)
+				result = true;
+		}
+		if(entrance.getY() == exit.getY()) {
+			if(Math.abs(entrance.getX() - exit.getX()) == 1)
+				result = true;
+		}
+		return result;
 	}
 	private Coordinate setDoor()
 	{

@@ -8,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import mapObjects.Container;
 import mapObjects.Coordinate;
 import mapObjects.Loot;
 import mapObjects.Obstacle;
@@ -81,7 +82,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			notifyObservers("Player Attacking " + mapLocation.getEntity());
 		}
 		if(mapLocation.getObstacle() != null) {
-			mapLocation.getObstacle().damage(5, view.map);
+			Obstacle obstacle = mapLocation.getObstacle();
+			obstacle.damage(5, view.map);
+			if(obstacle instanceof Container) {
+				Container container = (Container) obstacle;
+				System.out.println(container.getContents().size());
+				if(container.getContents().size() > 0) {
+					System.out.println(container.getContents());
+					view.containerView(container,player,view.map);
+				}
+			}
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getEntity());
 		}

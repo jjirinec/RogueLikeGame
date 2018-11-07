@@ -72,7 +72,8 @@ public class Enemy extends Entity {
         	
             //hit here
         }
-//        timeStop(800);
+        System.out.println(Thread.interrupted());
+        timeStop(3800);
         return result;
     }
     public void turn(Character player, Map map)
@@ -102,12 +103,14 @@ public class Enemy extends Entity {
      * Pause the thread 
      * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map
      */
-    private void timeStop(long time)
+    private synchronized void timeStop(long time)
     {
     	//Thread current = Thread.currentThread();
         try {									///Waits a short time before acting again
 			//Thread.currentThread();;
-        	System.out.println("waiting");
+//        	System.out.println("waiting");
+//        	this.wait();
+        	System.out.println("Sleeping");
         	Thread.sleep(time);
 		} catch (Exception e) {
 			e.printStackTrace();
