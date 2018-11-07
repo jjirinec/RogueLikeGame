@@ -73,15 +73,26 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		player.newTurn();
 	}
+
 	private void interactAttack()
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
 		if(mapLocation.getEntity() != null) {
-			setChanged();
-			notifyObservers("Player Attacking " + mapLocation.getEntity());
+			Entity target = mapLocation.getEntity();
+			player.attack(target,view.map);
+			if(target.checkDead()){
+				view.map.removeEntity(target);
+				setChanged();
+				notifyObservers("Player Killed! " + mapLocation.getEntity());
+			}
+			else {
+				setChanged();
+				notifyObservers("Player Attacking " + mapLocation.getEntity() + " for " + player.getStr() + " damage");
+			}
 		}
 		if(mapLocation.getObstacle() != null) {
+<<<<<<< HEAD
 			Obstacle obstacle = mapLocation.getObstacle();
 			obstacle.damage(5, view.map);
 			if(obstacle instanceof Container) {
@@ -92,15 +103,24 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					view.containerView(container,player,view.map);
 				}
 			}
+=======
+			Obstacle target = mapLocation.getObstacle();
+			player.attack(target,view.map);
+>>>>>>> e64367c702675f4011b7059cfc09c798abc2ce84
 			setChanged();
-			notifyObservers("Player Attacking " + mapLocation.getEntity());
+			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
+
+		setChanged();
+		notifyObservers("Theres nothing there to attack!");
+
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
 			player.grabLoot(item);
 			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
 			                                               
 		}
+
 	}
 	/*
 	 * Maps each key code to the desired task
@@ -165,6 +185,12 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		info = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].toString();
 		return info;
 	}
+
+	public Enemy getEnemyAtCursor(){
+		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
+		Entity enemyAt = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].getEntity();
+		return(Enemy)enemyAt;
+	}
 	/*
 	 * Handles all Keyboard input
 	 * Will only accept input when it is the players turn
@@ -193,7 +219,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
 			Enemy enemy = view.map.getEnemys().get(eIndex);
-			enemy.turn(player,view.map);
+			enemy.turn(player,view.map,view.map.getExit());
 		}
 		player.newTurn();		//When enemys are done reset player turn 
 	}

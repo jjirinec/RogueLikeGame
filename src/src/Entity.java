@@ -106,11 +106,12 @@ public abstract class Entity extends MapObject{
 //		this.curentActions = curentActions;
 //	}
 	//    public double getMoveCost() {return moveCost;}
-//    public double getAttackCost() {return attackCost;}
+
     public void setObserver(View view)
     {
     	addObserver(view);
     }
+
     boolean move(int deltaX, int deltaY,Map map){
     	System.out.println("\n\n"+this.getObjectName() + " is moving!!!!!");
         Coordinate xy = super.getLocation();
@@ -140,13 +141,12 @@ public abstract class Entity extends MapObject{
 	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location
 	                //map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().add(this.getImageView());
 	                destination.setEntity(this);												//Add entity to location
-	                
+
 	                this.setChanged();
 	            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ") (this msg comming from Entity move())");
 	                this.spendActions(this.moveCost);
 	                return true;
 	            }
-	            
 	            else {
 	            	System.out.println(destination.isPasable());
 	            	System.out.println(destination.getObstacle());
@@ -159,18 +159,22 @@ public abstract class Entity extends MapObject{
         return false;
     }
 
-    public void attack(MapObject target,Map map) {
-    	//TODO Add Attack Logic here
+
+    public void attack(MapObject target, Map map) {
     	if(target instanceof Entity){
-    		target = (Entity)target;
+    		Entity ent = (Entity)target;
+    		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
     	}
     	if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+    		t.damage(this.str, map);
     		target = (Obstacle)target;
     		((Obstacle) target).damage(5, map);//TODO update the damage dealt
+
     	}
-    	
     	spendActions(attackCost);
     }
+
     public void heal(int healthPoints) {
         if (hp + healthPoints >= maxHp) {
             hp = maxHp;
@@ -184,10 +188,22 @@ public abstract class Entity extends MapObject{
     }
     public void damag(int dmg) {
     	hp -= dmg;
+    	if(hp<0){
+    	    hp=0;
+        }
     	if(this instanceof Character) {
     		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
+    }
+
+    public boolean checkDead(){
+        if(this.hp <= 0){
+        	return true;
+		}
+		else{
+        	return false;
+		}
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
@@ -218,17 +234,18 @@ public abstract class Entity extends MapObject{
     		return true;
     	return false;
     }
-    protected void spendActions(double actionsCost){
-    	curentActions -= actionsCost;
-    	if(this instanceof Character) {
-    		this.setChanged();
-    		this.notifyObservers("ActionUpdate");
-    	}
-    	if(!canAct()){//TODO Remove this latter ????
-    		this.setChanged();
-    		this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
-    	}
-    }
+    public void spendActions(double actionsCost) {
+            curentActions -= actionsCost;
+            if (this instanceof Character) {
+                this.setChanged();
+                this.notifyObservers("ActionUpdate");
+            }
+            if (!canAct()) {//TODO Remove this latter ????
+                this.setChanged();
+                this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
+            }
+        }
+
     
     public void giveActions(double actionPoints) {
     	this.curentActions += actionPoints;
@@ -246,5 +263,4 @@ public abstract class Entity extends MapObject{
     	return false;
     }
     
-}//End Class
-
+}

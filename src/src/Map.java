@@ -177,8 +177,17 @@ public class Map {
 		location[entrance.getY()][entrance.getX()].setEntity(player);
 		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
-				
 	}
+
+
+	public void removeEntity(Entity e){
+		stacks[e.getLocation().getX()][e.getLocation().getY()].getChildren().remove(e.getImageView());
+		location[e.getLocation().getX()][e.getLocation().getY()].removeEntity();
+		if(e instanceof Enemy){
+			enemys.remove(e);
+		}
+	}
+
 
 
 	public GridPane getMap()
@@ -250,4 +259,6 @@ public class Map {
 		return door;
 		
 	}
+
+	public Character getPlayer(){return player;}
 }
