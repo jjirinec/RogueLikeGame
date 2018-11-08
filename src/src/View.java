@@ -16,9 +16,11 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -70,7 +72,7 @@ public class View extends Application implements Observer{
 		
 		ctr = new Controler(this);
 		forANDback = new StackPane();
-		map = new Map(mapRows,mapColums,gridSize,2,ctr.player,2);
+		map = new Map(mapRows,mapColums,gridSize,ctr.player);
 		
 		
 		
@@ -91,6 +93,7 @@ public class View extends Application implements Observer{
 		forANDback.getChildren().addAll(background,layout);
 		forANDback.setMaxSize(500, 500);
 		Scene root = new Scene(forANDback);
+		
 		
 		root.setOnKeyPressed(ctr);
 		mainStage.setScene(root);
@@ -121,6 +124,7 @@ public class View extends Application implements Observer{
 		layout.setRight(playerInfoView.getView());
 		//layout.setRight(setUpRightSide());
 //		layout.setBottom(setUpBottom());
+		
 		return layout;
 	}
 	private VBox setUpLeftSide()
@@ -179,7 +183,38 @@ public class View extends Application implements Observer{
 		hud.setBackground(hudBackground);
 		hud.setPrefHeight(screenSize.getHeight() - mapHight - 100);
 	}
-	
+	public void setScoreScene() {
+		VBox scorePane = new VBox();
+		scorePane.setPrefSize(mapWidth, this.mapHight);
+		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0))));
+		Text headerText = new Text("Score");
+		HBox header = new HBox(headerText);
+		header.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(25), new Insets(0,0,0,0))));
+		scorePane.getChildren().add(header);
+		Button nextMapButton = new Button();
+		nextMapButton.setAlignment(Pos.BASELINE_CENTER);
+		nextMapButton.setText("Continue");
+		nextMapButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+				@Override
+				public void handle(MouseEvent mouseEvent) {
+			        nextMap();
+				}		
+			});
+		scorePane.getChildren().add(nextMapButton);
+		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
+		//layout.getChildren().remove(3);
+		VBox center = (VBox)layout.getCenter();
+		center.getChildren().remove(0);
+		center.getChildren().add(0, scorePane);
+	}
+	public void nextMap(){
+		map = new Map(mapRows,mapColums,gridSize,ctr.player);
+		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
+		//layout.getChildren().remove(3);
+		VBox center = (VBox)layout.getCenter();
+		center.getChildren().remove(0);
+		center.getChildren().add(0, map.getMap());
+	}
 	public void setNewStage()
 	{
 		
@@ -195,6 +230,8 @@ public class View extends Application implements Observer{
 		}
 		else if(observedMsg.equals("LootChange")) {
 			this.playerInventoryView.updateInventory();
+			if(!ctr.player.canAct())
+				ctr.enemyTurns();
 		}
 		else if(observedMsg.equals("Hp Change")) {
 			this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
@@ -202,6 +239,9 @@ public class View extends Application implements Observer{
 		else if(observedMsg.equals("EquipmentChange")) {
 			this.playerInventoryView.updateInventory();
 			this.playerInventoryView.updateEquipedView();
+		}
+		else if(observedMsg.equals("Exit")) {
+			setScoreScene();
 		}
 		else {
 		System.out.println("observed "+observedMsg);

@@ -52,15 +52,23 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		switch(eCode)
 		{
 			case A:
+				if(player.hasExited(view.map.getExit(), 'A'))
+						System.out.println("Exit");
 				moveResult = player.readInput('A',view.map);
 				break;
 			case D:
+				if(player.hasExited(view.map.getExit(), 'D'))
+						System.out.println("Exit");
 				moveResult = player.readInput('D',view.map);				
 				break;
 			case W:
+				if(player.hasExited(view.map.getExit(), 'W'))
+						System.out.println("Exit");
 				moveResult = player.readInput('W',view.map);
 				break;
 			case S:
+				if(player.hasExited(view.map.getExit(), 'S'))
+						System.out.println("Exit");
 				moveResult = player.readInput('S',view.map);
 				break;
 		}
@@ -92,7 +100,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			}
 		}
 		if(mapLocation.getObstacle() != null) {
-<<<<<<< HEAD
+
 			Obstacle obstacle = mapLocation.getObstacle();
 			obstacle.damage(5, view.map);
 			if(obstacle instanceof Container) {
@@ -103,10 +111,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					view.containerView(container,player,view.map);
 				}
 			}
-=======
+
 			Obstacle target = mapLocation.getObstacle();
 			player.attack(target,view.map);
->>>>>>> e64367c702675f4011b7059cfc09c798abc2ce84
+
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
@@ -215,7 +223,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 * Loops through all enemys on map and exicutes its turn
 	 * When done starts a new turn for the player
 	 */
-	private void enemyTurns() {
+	public void enemyTurns() {
 
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
 			Enemy enemy = view.map.getEnemys().get(eIndex);
@@ -224,14 +232,5 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player.newTurn();		//When enemys are done reset player turn 
 	}
 
-	
-//	public void gameLoop()
-//	{
-//		while(player.hp > 0)
-//		{
-//			if()
-//			
-//			System.out.println("player still alive");
-//		}
-//	}
+
 }//End of Class

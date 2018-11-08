@@ -11,7 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
 public class Map {
-	private int roomRating;
+	private static int roomRating = 0;
 	private GridPane map;
 	private StackPane[][] stacks;
 	private MapLocation[][] location;
@@ -34,14 +34,14 @@ public class Map {
 ///////////////////////////
 ///		Constructor		///
 ///////////////////////////
-	public Map(int hight, int width, int gridSize, int mapRating,Character player,int roomRating)
+	public Map(int hight, int width, int gridSize,Character player)//,int roomRating)
 	{
+		this.roomRating++;
 		this.mapHight = hight;
 		this.mapWidth = width;
 		this.gridSize = gridSize;
-		this.mapRating = mapRating;
 		this.player = player;
-		this.roomRating = roomRating;
+		//this.roomRating = roomRating;
 		enemys = new ArrayList<Enemy>();
 		setDoorLocations();
 		initializeGrid();
@@ -215,8 +215,7 @@ public class Map {
 	{
 		entrance = setDoor();
 		while(exit == null || exit.equals(entrance) || isAdjacentToEntrance())
-			exit = setDoor();
-		
+			exit = setDoor();		
 	}
 	private boolean isAdjacentToEntrance() {
 		boolean result = false;

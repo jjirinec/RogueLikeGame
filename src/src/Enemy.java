@@ -77,13 +77,7 @@ public class Enemy extends Entity {
                 randomMove(map);
             }
         } else if (input == 'H') {
-<<<<<<< HEAD
-        	
             //hit here
-        }
-        System.out.println(Thread.interrupted());
-        timeStop(3800);
-=======
             result = true;
             if(wepon != null) {
                 map.getPlayer().damag((this.getStr() * wepon.getDmg()) / map.getPlayer().getDefence()); // CHANGE DAMAGE HERE
@@ -100,7 +94,7 @@ public class Enemy extends Entity {
                 // END GAME HERE
             }
             }
->>>>>>> e64367c702675f4011b7059cfc09c798abc2ce84
+//        timeStop(800);
         return result;
     }
 
@@ -130,27 +124,31 @@ public class Enemy extends Entity {
      * Pause the thread
      * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map
      */
-<<<<<<< HEAD
+
     private synchronized void timeStop(long time)
     {
     	//Thread current = Thread.currentThread();
-        try {									///Waits a short time before acting again
-			//Thread.currentThread();;
+        try {	///Waits a short time before acting again
+			System.out.println(Thread.currentThread());
+			System.out.println(Thread.activeCount());
+        	//Thread.currentThread();;
 //        	System.out.println("waiting");
 //        	this.wait();
         	System.out.println("Sleeping");
+        	System.out.println("Has lobck: "+Thread.holdsLock(this));
         	Thread.sleep(time);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-=======
-    private void timeStop(long time) {
-        //Thread current = Thread.currentThread();
-        long s = System.currentTimeMillis();
-        long finish = System.currentTimeMillis();
-        while(finish-s<time){
-            finish = System.currentTimeMillis();
-        }
->>>>>>> e64367c702675f4011b7059cfc09c798abc2ce84
     }
+
+//    private void timeStop(long time) {
+//        //Thread current = Thread.currentThread();
+//        long s = System.currentTimeMillis();
+//        long finish = System.currentTimeMillis();
+//        while(finish-s<time){
+//            finish = System.currentTimeMillis();
+//        }
+//
+//    }
 }

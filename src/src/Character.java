@@ -56,18 +56,18 @@ public class Character extends Entity {
             else if(input == 'D'){
                 moveResult = move(1,0,map);
                 //return true;
-            } else if (input == 'H') {
-        	    MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
-        	    Entity e = ml.getEntity();
-        	    if(e != null){
-                    if(wepon != null) {
-                        e.damag((this.getStr() * wepon.getDmg()) / e.getDefence()); // CHANGE DAMAGE HERE
-                    }
-                    else{
-                        e.damag(this.getStr() * (this.getAccuracy() / e.getDefence())); // CHANGE DAMAGE HERE
-
-                    }
-                }
+//            } else if (input == 'H') {
+//        	    MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
+//        	    Entity e = ml.getEntity();
+//        	    if(e != null){
+//                    if(wepon != null) {
+//                        e.damag((this.getStr() * wepon.getDmg()) / e.getDefence()); // CHANGE DAMAGE HERE
+//                    }
+//                    else{
+//                        e.damag(this.getStr() * (this.getAccuracy() / e.getDefence())); // CHANGE DAMAGE HERE
+//
+//                    }
+//                }
                 spendActions(this.getAttackCost());
             }
             return moveResult;
@@ -139,6 +139,39 @@ public class Character extends Entity {
 //        		}
 //        	}
 //        }
+        public boolean hasExited(Coordinate exit1,char direction) {
+        	boolean result = false;
+        	Coordinate exit = new Coordinate(exit1.getY(),exit1.getX());
+        	System.out.println("Checking exit");
+        	if(this.getLocation().equals(exit)) {
+        		System.out.println("this location: " + this.getLocation().toString() + "\texit Location: " + exit.toString());
+	        	switch(direction) {
+	        	
+	        		case 'A':
+	        			if(exit.getX() - 1 < 0)
+	        				result = true;
+	        			break;
+	        		case 'D':
+	        			if(this.getLocation().getX() + 1 > exit.getX())
+	        				result = true;
+	        			break;
+	        		case 'W':
+	        			if(exit.getY() - 1 < 0)
+	        				result = true;
+	        			break;
+	        		case 'S':
+	        			if(this.getLocation().getY() + 1 > exit.getY())
+	        				result = true;
+	        			break;
+	        	}
+        	}
+        	System.out.println(result);
+        	if(result) {
+        		this.setChanged();
+        		this.notifyObservers("Exit");
+        	}
+        	return result;
+        }
 }
 
 
