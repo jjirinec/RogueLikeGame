@@ -7,8 +7,6 @@ import mapObjects.*;
 
 public class Character extends Entity {
 	ArrayList<Loot> inventory;
-	Wepon equipedWepon = null;
-	Armor equipedArmor = null;
 	
     public Character(Coordinate location,int maxHP, int speed) {
         super("Character", "TempChar.png", location, false, 60);
@@ -60,18 +58,13 @@ public class Character extends Entity {
         	    MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
         	    Entity e = ml.getEntity();
         	    if(e != null){
-                    if(wepon != null) {
-                        e.damag((this.getStr() * wepon.getDmg()) / e.getDefence()); // CHANGE DAMAGE HERE
-                    }
-                    else{
-                        e.damag(this.getStr() * (this.getAccuracy() / e.getDefence())); // CHANGE DAMAGE HERE
-
+                    attack(e,map);
                     }
                 }
-                spendActions(this.getAttackCost());
-            }
+
             return moveResult;
         }
+
         public ArrayList<Loot> getInventory(){
         	return inventory;
         }

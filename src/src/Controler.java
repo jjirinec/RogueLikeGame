@@ -80,15 +80,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		if(mapLocation.getEntity() != null) {
 			Entity target = mapLocation.getEntity();
 			player.attack(target,view.map);
-			if(target.checkDead()){
-				view.map.removeEntity(target);
-				setChanged();
-				notifyObservers("Player Killed! " + mapLocation.getEntity());
-			}
-			else {
-				setChanged();
-				notifyObservers("Player Attacking " + mapLocation.getEntity() + " for " + player.getStr() + " damage");
-			}
+			if(target.checkDead()) {
+                view.map.removeEntity(target);
+            }
 		}
 		if(mapLocation.getObstacle() != null) {
 			Obstacle target = mapLocation.getObstacle();
@@ -96,9 +90,6 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
-
-		setChanged();
-		notifyObservers("Theres nothing there to attack!");
 
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();

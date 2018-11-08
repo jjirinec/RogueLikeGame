@@ -78,14 +78,7 @@ public class Enemy extends Entity {
             }
         } else if (input == 'H') {
             result = true;
-            if(wepon != null) {
-                map.getPlayer().damag((this.getStr() * wepon.getDmg()) / map.getPlayer().getDefence()); // CHANGE DAMAGE HERE
-            }
-            else{
-                map.getPlayer().damag(this.getStr() * (this.getAccuracy() / map.getPlayer().getDefence())); // CHANGE DAMAGE HERE
-
-            }
-            spendActions(this.getAttackCost());
+            attack(map.getPlayer(),map);
             if(map.getPlayer().checkDead()){
                 map.removeEntity(map.getPlayer());
                 setChanged();
