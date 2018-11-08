@@ -103,17 +103,14 @@ public abstract class Entity extends MapObject{
 	public double getAttackCost() {
 		return attackCost;
 	}
-	//	public void setCurentActions(double curentActions) {
-//		this.curentActions = curentActions;
-//	}
-	//    public double getMoveCost() {return moveCost;}
+
 
     public void setObserver(View view)
     {
     	addObserver(view);
     }
 
-    boolean move(int deltaX, int deltaY,Map map){
+   synchronized boolean move(int deltaX, int deltaY,Map map){
     	System.out.println("\n\n"+this.getObjectName() + " is moving!!!!!");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
@@ -146,6 +143,7 @@ public abstract class Entity extends MapObject{
 	                this.setChanged();
 	            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ") (this msg comming from Entity move())");
 	                this.spendActions(this.moveCost);
+	                this.notifyAll();
 	                return true;
 	            }
 	            else {
@@ -165,6 +163,7 @@ public abstract class Entity extends MapObject{
     public void attack(MapObject target, Map map) {
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
+<<<<<<< HEAD
 			if(equipedWepon != null) {
 				ent.damag((this.getStr() * equipedWepon.getDmg()) / ent.getDefence()); // CHANGE DAMAGE HERE
 				setChanged();
@@ -175,6 +174,10 @@ public abstract class Entity extends MapObject{
 				setChanged();
 				notifyObservers(this + " hit " + target + " for " + (this.getStr() * (this.getAccuracy() / ent.getDefence())) + "damage" );
 			}
+=======
+    		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
+    		System.out.println("Using Attack method");
+>>>>>>> 7a345dc089f1f7c63cb895bf72cc6705ce0d1a8c
     	}
     	if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
@@ -233,11 +236,7 @@ public abstract class Entity extends MapObject{
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
-//    	double newActions = (1 + speed/5.0);
-//    	curentActions = Math.round(curentActions * 10) / 10.0;
-
     	curentActions += (1 + speed/5.0);
-
     	if(this instanceof Character) {
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");

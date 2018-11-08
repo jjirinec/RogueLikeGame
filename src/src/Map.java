@@ -11,7 +11,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
 public class Map {
-	private int roomRating;
+	private static int roomRating = 0;
 	private GridPane map;
 	private StackPane[][] stacks;
 	private MapLocation[][] location;
@@ -34,14 +34,14 @@ public class Map {
 ///////////////////////////
 ///		Constructor		///
 ///////////////////////////
-	public Map(int hight, int width, int gridSize, int mapRating,Character player,int roomRating)
+	public Map(int hight, int width, int gridSize,Character player)//,int roomRating)
 	{
+		this.roomRating++;
 		this.mapHight = hight;
 		this.mapWidth = width;
 		this.gridSize = gridSize;
-		this.mapRating = mapRating;
 		this.player = player;
-		this.roomRating = roomRating;
+		//this.roomRating = roomRating;
 		enemys = new ArrayList<Enemy>();
 		setDoorLocations();
 		initializeGrid();
@@ -214,9 +214,20 @@ public class Map {
 	private void setDoorLocations()
 	{
 		entrance = setDoor();
-		while(exit == null || exit.equals(entrance))
-			exit = setDoor();
-		
+		while(exit == null || exit.equals(entrance) || isAdjacentToEntrance())
+			exit = setDoor();		
+	}
+	private boolean isAdjacentToEntrance() {
+		boolean result = false;
+		if(entrance.getX() == exit.getX()) {
+			if(Math.abs(entrance.getY() - exit.getY()) == 1)
+				result = true;
+		}
+		if(entrance.getY() == exit.getY()) {
+			if(Math.abs(entrance.getX() - exit.getX()) == 1)
+				result = true;
+		}
+		return result;
 	}
 	private Coordinate setDoor()
 	{

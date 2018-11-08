@@ -1,21 +1,22 @@
 package mapObjects;
 
+import java.util.ArrayList;
+
 public class Crate extends Obstacle implements Container{
 
 	private static String imageFiles[] = {"Crate00.png","Crate01.png","Crate02.png","Crate03.png"};
 	private static String name = "Crate";
 	private static int imageSize = 60;
 	private static int baseHp = 30;
-	private Loot[] items = null;
+	private ArrayList<Loot> items = null;
 	
 	
 	public Crate(int numberOfItems, Coordinate location, int itemRating,int imageSize) {
 		super(name, baseHp, location, imageFiles, imageSize);
 		this.imageSize = imageSize;
-		if(numberOfItems > 0)
-		{
-			this.items = new Loot[numberOfItems];
-			generateContents(itemRating);
+		items = new ArrayList<Loot>();
+		if(numberOfItems > 0) {
+			generateContents(itemRating,numberOfItems);
 		}
 		if(imageSize > this.imageSize)
 			this.setImageSize(this.imageSize);
@@ -27,25 +28,31 @@ public class Crate extends Obstacle implements Container{
 //	}
 
 	@Override
-	public Loot[] getContents() {
+	public ArrayList<Loot> getContents() {
 		return items;
 	}
 	
 	public void printContents() {
 		System.out.println("This container holds: ");
 		if(items != null)
-		for(int i = 0; i < items.length; i++)
-			System.out.println("\t" + items[i].toString());
+		for(int i = 0; i < items.size(); i++)
+			System.out.println("\t" + items.get(i).toString());
 		else
 			System.out.println("Nothing");
 		System.out.println("\n");
 	}
 
 	@Override
-	public void generateContents(int itemRating) {
+	public void generateContents(int itemRating,int numberOfItems) {
 		LootGenerator lootGen = new LootGenerator(imageSize);
-		for(int item = 0; item < items.length; item++)
-			items[item] = lootGen.generate(itemRating);
+		for(int item = 0; item < numberOfItems; item++)
+			items.add(lootGen.generate(itemRating));
+		
+	}
+
+	@Override
+	public void removeItem(Loot item) {
+		this.items.remove(item);
 		
 	}
 
