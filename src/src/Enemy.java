@@ -2,6 +2,8 @@ package src;
 
 import java.util.Random;
 
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import mapObjects.*;
 
 
@@ -21,6 +23,7 @@ public class Enemy extends Entity {
     }
 
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd) {
+    	//System.out.println("SmartMove");
         Coordinate pos = getLocation();
         double totalD_P = calculateD(pos.getX(), pos.getY(), Xp, Yp);
         double totalDW = calculateD(pos.getX(), pos.getY() - 1, Xd, Yd) + calculateD(pos.getX(), pos.getY() - 1, Xp, Yp);
@@ -55,6 +58,7 @@ public class Enemy extends Entity {
      * @return truth if moves, false if doesnt move
      */
     boolean readInput(char input, Map map) {
+    	//System.out.println("readInput");
         boolean result = false;
         if (input == 'W') {
             result = move(0, -1, map);
@@ -94,22 +98,18 @@ public class Enemy extends Entity {
                 // END GAME HERE
             }
             }
-//        timeStop(800);
+     //   timeStop(800);
         return result;
     }
 
-    public void turn(Character player, Map map, Coordinate doorLoc) {
+    public synchronized void turn(Character player, Map map, Coordinate doorLoc) {
         this.newTurn();
-        while (this.canAct()) {
-            //try {
-                readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
-                //Thread.sleep(500);
-            //}
-            //catch (InterruptedException ie){
-            //    System.out.println(ie.getMessage());
-            //}
-        }
-    }
+		while (this.canAct()) {
+    		timeStop(500);
+    		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
+		}
+    }///End turn
+
 
     public void randomMove(Map map) {
         char[] direction = {'W', 'S', 'A', 'D'};
@@ -127,28 +127,12 @@ public class Enemy extends Entity {
 
     private synchronized void timeStop(long time)
     {
-    	//Thread current = Thread.currentThread();
         try {	///Waits a short time before acting again
-			System.out.println(Thread.currentThread());
-			System.out.println(Thread.activeCount());
-        	//Thread.currentThread();;
-//        	System.out.println("waiting");
-//        	this.wait();
-        	System.out.println("Sleeping");
-        	System.out.println("Has lobck: "+Thread.holdsLock(this));
         	Thread.sleep(time);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
     }
 
-//    private void timeStop(long time) {
-//        //Thread current = Thread.currentThread();
-//        long s = System.currentTimeMillis();
-//        long finish = System.currentTimeMillis();
-//        while(finish-s<time){
-//            finish = System.currentTimeMillis();
-//        }
-//
-//    }
+
 }

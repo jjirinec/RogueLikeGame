@@ -3,6 +3,7 @@ package src;
 import java.util.Observable;
 import java.util.Random;
 
+import javafx.concurrent.Task;
 import javafx.event.EventHandler;
 //import javafx.event.ActionEvent;
 import javafx.scene.input.KeyCode;
@@ -172,15 +173,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("InterAct/Attack");
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
-//				double scale = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
-//				view.playerInfoView.updateHealthGlobe(scale + .1);
+
 				player.damag(2);
 					break;
 			case Z://Testing health Globe  TODO Remove
-//				double sc = view.playerInfoView.getGlob().getHealthGlob().getChildren().get(1).getScaleY();
-//				player.setDex(player.getDex()+1);
-//				view.playerInfoView.updatStatActionBlocks();;
-//				view.playerInfoView.updateHealthGlobe(sc - .1);
 				player.heal(1);
 					
 		}//End Switch
@@ -215,21 +211,46 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			keyCodeSwitch(eCode);
 			if(!player.canAct()){//Player Turn over
 				System.out.println("End of Players turn");
-				enemyTurns();
+//				enemyTurns();
+				Task<Enemy> task = new Task<Enemy>() {
+					@Override
+					protected Enemy call() throws Exception {
+						enemyTurns();
+						return null;
+					}
+				};
+				Thread enemyTurnsThread = new Thread(task);
+				enemyTurnsThread.start();
 			}
 		}
 	}
 	/*
-	 * Loops through all enemys on map and exicutes its turn
+	 * Loops through all enemy's on map and executes its turn
 	 * When done starts a new turn for the player
 	 */
 	public void enemyTurns() {
-
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
+			System.out.println("Enemy " + (eIndex +1) + " turn");
 			Enemy enemy = view.map.getEnemys().get(eIndex);
-			enemy.turn(player,view.map,view.map.getExit());
+			Task<Integer> task = new Task<Integer>() {		//The task is the enemy turn
+				@Override
+				protected Integer call() throws Exception {
+					enemy.turn(player,view.map,view.map.getExit());
+					return null;
+				}
+			};
+			Thread enemyThread = new Thread(task);		//Each enemy turn executes on a separate thread
+			enemyThread.start();
+			try {
+				enemyThread.join();						//Join on enemy turn before next enemy taks turn
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Turn over!!!");
 		}
-		player.newTurn();		//When enemys are done reset player turn 
+		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn 
+		System.out.println("All enemy turns Done:");
+		
 	}
 
 

@@ -31,6 +31,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -185,14 +187,17 @@ public class View extends Application implements Observer{
 	}
 	public void setScoreScene() {
 		VBox scorePane = new VBox();
+		scorePane.setPadding(new Insets(20,20,20,20));
 		scorePane.setPrefSize(mapWidth, this.mapHight);
-		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0))));
+		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(10,10,10,10))));
 		Text headerText = new Text("Score");
+		headerText.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 20));
 		HBox header = new HBox(headerText);
+		header.setAlignment(Pos.TOP_CENTER);
 		header.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(25), new Insets(0,0,0,0))));
 		scorePane.getChildren().add(header);
 		Button nextMapButton = new Button();
-		nextMapButton.setAlignment(Pos.BASELINE_CENTER);
+		nextMapButton.setAlignment(Pos.BOTTOM_CENTER);
 		nextMapButton.setText("Continue");
 		nextMapButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
 				@Override

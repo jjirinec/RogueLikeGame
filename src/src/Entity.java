@@ -1,5 +1,6 @@
 package src;
 
+import javafx.concurrent.Task;
 import javafx.scene.layout.StackPane;
 import mapObjects.Armor;
 import mapObjects.Coordinate;
@@ -110,7 +111,7 @@ public abstract class Entity extends MapObject{
     }
 
    synchronized boolean move(int deltaX, int deltaY,Map map){
-    	System.out.println("\n\n"+this.getObjectName() + " is moving!!!!!");
+    	System.out.println(this.getObjectName() + " is moving!!!!!");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
@@ -119,30 +120,16 @@ public abstract class Entity extends MapObject{
         if(targetX > -1 && targetX < map.getMapLocation()[0].length && targetY > -1 && targetY < map.getMapLocation().length) {
 	        StackPane[][] panes = map.getStackPane();
 	        MapLocation[][] mapTiles = map.getMapLocation();
-	
 	        MapLocation location = mapTiles[x][y];
 	        StackPane currentLocationPane = panes[x][y];
 	        MapLocation destination = mapTiles[x + deltaX][y + deltaY];
 	        StackPane destinationPane = panes[x + deltaX][y + deltaY];
 	            if (destination.isPasable()){
-	            	this.setChanged();
-	            	this.notifyObservers(this.getObjectName() + " Moved from: (" + x + ","+ y + ") (this msg comming from Entity move())");
-	            	 	System.out.println("("+x+","+y+") entity = "+ location.getEntity());
 	            	location.removeEntity();
-	                	System.out.println("("+x+","+y+") entity = "+ location.getEntity());
-	                currentLocationPane.getChildren().remove(this.getImageView());				//Remove Image from old location 
-	                //map.getStackPane()[x][y].getChildren().remove(this.getImageView());
-	                destinationPane.getChildren().add(this.getImageView());						//Add Image to new location
-	                //map.getStackPane()[x+deltaX][y+deltaY].getChildren().add(this.getImageView());
-	                //map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().remove(this.getImageView());
-	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location
-	                //map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().add(this.getImageView());
+	                this.updateGridImgage(currentLocationPane, destinationPane);	
+	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location      
 	                destination.setEntity(this);												//Add entity to location
-
-	                this.setChanged();
-	            	this.notifyObservers(this.getObjectName() + " Moved to: (" + this.getLocation().getX() + ","+ this.getLocation().getY() + ") (this msg comming from Entity move())");
 	                this.spendActions(this.moveCost);
-	                this.notifyAll();
 	                return true;
 	            }
 	            else {
@@ -157,8 +144,13 @@ public abstract class Entity extends MapObject{
         return false;
     }
 
-
+   private void updateGridImgage(StackPane currentLocationPane, StackPane destinationPane) {
+	   javafx.application.Platform.runLater( () ->currentLocationPane.getChildren().remove(this.getImageView()));				//Remove Image from old location
+	   javafx.application.Platform.runLater( () ->destinationPane.getChildren().add(this.getImageView()));						//Add Image to new location
+   }
+   
     public void attack(MapObject target, Map map) {
+    	
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
     		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
@@ -206,8 +198,10 @@ public abstract class Entity extends MapObject{
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
+    	
     	curentActions += (1 + speed/5.0);
     	if(this instanceof Character) {
+    		System.out.println("Plaer NewTurn");
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");
     	}

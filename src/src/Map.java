@@ -108,14 +108,20 @@ public class Map {
 				stacks[row][colum].setPrefSize(gridSize, gridSize);
 				location[row][colum] = new MapLocation(tile);
 				map.add(stacks[row][colum],row,colum);
-				
-				
-				//map.setHgrow(stacks[row][colum], Priority.ALWAYS);
-				//map.setVgrow(stacks[row][colum], Priority.ALWAYS);
-//				stacks[row][colum]
-				
+				setMouseClick(new Coordinate(colum,row),stacks[row][colum]);
 			}
 		}
+	}
+	private void setMouseClick(Coordinate destination,StackPane stack) {
+		stack.setOnMouseClicked(new EventHandler<MouseEvent>() {
+
+			@Override
+			public void handle(MouseEvent arg0) {
+				cursor.moveTo(destination, map);
+				
+			}
+			
+		});
 	}
 	private void moveTargetingCursor(int row, int colum) {
 		
@@ -125,7 +131,7 @@ public class Map {
 	{
 		spawnPlayer(player);
 		spawnMapObjects();
-		spawnEnemys(1);
+		spawnEnemys(3);
 	}
 	private void spawnEnemys(int numberOfEnemys) {
 		EnemyGenerator enemyGen = new EnemyGenerator(gridSize);

@@ -1,6 +1,7 @@
 package mapObjects;
 
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
 import src.Map;
 
 public class TargetingCursor extends MapObject{
@@ -11,10 +12,10 @@ public class TargetingCursor extends MapObject{
 		super(name,imageFile,location,true,gridSize);
 	}
 	
-	public void moveTo(Coordinate location, Map map) {
-		map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().remove(getImageView());
-		this.setLocation(location.getX(), location.getY());
-		map.getStackPane()[this.getLocation().getX()][this.getLocation().getY()].getChildren().add(getImageView());
+	public void moveTo(Coordinate location, GridPane map) {
+		map.getChildren().remove(getImageView());
+		this.setLocation(location.getY(), location.getX());
+		map.add(getImageView(), location.getY(), location.getX());
 	}
 	public void move(KeyCode keyCode,Map map)
 	{
