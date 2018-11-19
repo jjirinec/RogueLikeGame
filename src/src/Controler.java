@@ -90,7 +90,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			Entity target = mapLocation.getEntity();
 			player.attack(target,view.map);
 			if(target.checkDead()) {
+				view.map.getEnemys().remove(target);
                 view.map.removeEntity(target);
+
             }
 		}
 		if(mapLocation.getObstacle() != null) {
@@ -215,12 +217,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 * When done starts a new turn for the player
 	 */
 	public void enemyTurns() {
-
-		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
-			Enemy enemy = view.map.getEnemys().get(eIndex);
-			enemy.turn(player,view.map,view.map.getExit());
+		if(view.map.getEnemys().isEmpty()){
+			player.newTurn();
 		}
-		player.newTurn();		//When enemys are done reset player turn 
+		else {
+			for (int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
+				Enemy enemy = view.map.getEnemys().get(eIndex);
+				enemy.turn(player, view.map, view.map.getExit());
+			}
+			player.newTurn();
+		}//When enemys are done reset player turn
 	}
 
 

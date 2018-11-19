@@ -8,10 +8,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 import mapObjects.Coordinate;
-<<<<<<< HEAD
-=======
-
->>>>>>> 7a345dc089f1f7c63cb895bf72cc6705ce0d1a8c
 
 public class MapObject extends Observable{
 	

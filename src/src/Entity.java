@@ -163,7 +163,6 @@ public abstract class Entity extends MapObject{
     public void attack(MapObject target, Map map) {
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-<<<<<<< HEAD
 			if(equipedWepon != null) {
 				ent.damag((this.getStr() * equipedWepon.getDmg()) / ent.getDefence()); // CHANGE DAMAGE HERE
 				setChanged();
@@ -174,10 +173,6 @@ public abstract class Entity extends MapObject{
 				setChanged();
 				notifyObservers(this + " hit " + target + " for " + (this.getStr() * (this.getAccuracy() / ent.getDefence())) + "damage" );
 			}
-=======
-    		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
-    		System.out.println("Using Attack method");
->>>>>>> 7a345dc089f1f7c63cb895bf72cc6705ce0d1a8c
     	}
     	if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;

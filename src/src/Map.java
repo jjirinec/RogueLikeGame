@@ -79,7 +79,7 @@ public class Map {
 ///////////////////////	
 ///		Get/Set		///
 ///////////////////////
-	public Coordinate getExit() {return new Coordinate(exit);}
+	public Coordinate getExit() {return new Coordinate(exit.getY(),exit.getX());}
 	public ArrayList<Enemy> getEnemys()
 	{
 		return enemys;
@@ -183,9 +183,6 @@ public class Map {
 	public void removeEntity(Entity e){
 		stacks[e.getLocation().getX()][e.getLocation().getY()].getChildren().remove(e.getImageView());
 		location[e.getLocation().getX()][e.getLocation().getY()].removeEntity();
-		if(e instanceof Enemy){
-			enemys.remove(e);
-		}
 	}
 
 

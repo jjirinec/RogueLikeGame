@@ -99,7 +99,7 @@ public class View extends Application implements Observer{
 		mainStage.setScene(root);
 		mainStage.show();
 		mainStage.sizeToScene();
-		mainStage.setFullScreen(true);
+		//mainStage.setFullScreen(true);
 		
 		ctr.startPlay();
 		
