@@ -16,7 +16,7 @@ public class EnemyGenerator {
 	public Enemy generate(int mapRating, Coordinate location)
 	{
 		//TODO Add logic to generate enemy with challenge rating according to mapRating
-		Enemy enemy  = new Enemy(location,20,10,gridSize);
+		Enemy enemy  = new Enemy(location,gridSize,2);
 		return enemy;
 	}
 

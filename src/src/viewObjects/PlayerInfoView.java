@@ -56,7 +56,7 @@ public class PlayerInfoView {
 		healthGlobe.updateHealthGlobe(scale);
 		this.playerCurentHp = player.getHp();
 		this.playerMaxHp = player.getMaxHp();
-		this.playerHpPercentage = 100*player.getHpPresentage();
+		this.playerHpPercentage = (Math.round(1000*player.getHpPresentage())/10);
 		Tooltip.install(healthGlobeStack, new Tooltip("%" + this.playerHpPercentage + "\n==========\nCurrentHp: " + this.playerCurentHp + "\nMaxHp: " + this.playerMaxHp ));
 		
 	}

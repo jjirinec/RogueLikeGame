@@ -10,13 +10,15 @@ import mapObjects.Wepon;
 
 public abstract class Entity extends MapObject{
     //boolean myTurn;
-	int hp;
-    int maxHp;
+	int hp;		//Curretn Hp
+    int maxHp;	//Maximum Hp based on lvl and constitution.
     private double curentActions;		//Actions curentrly available
     private double moveCost = 1;		//Action cost to move (effected by armor speed penalty)
     private double attackCost = 1;		//Action cost to attack (effected by weapon speed)
     
-    //Stats
+    protected int lvl = 1;		//Default to one
+    int availableStatPoint;		
+    //Stats 
     private int str = 1;
     private int dex = 1;
     private int con = 1;
@@ -32,7 +34,9 @@ public abstract class Entity extends MapObject{
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
     }
-     
+     public int getAvailableStatPts() {
+    	 return this.availableStatPoint;
+     }
      public int getHp() {
     	 return hp;
      }
@@ -45,48 +49,85 @@ public abstract class Entity extends MapObject{
      public int getStr() {
 		return str;
 	}
-	public void setStr(int str) {
-		this.str = str;
+	public void incrementStr(int val) {
+		if(val > 0)
+			str++;
+		else 
+			str--;
+		notify("StatUpdate");
 	}
 	public int getDex() {
 		return dex;
 	}
-	public void setDex(int dex) {
-		this.dex = dex;
+	public void incrementDex(int val) {
+		if(val > 0)
+			dex++;
+		else
+			dex--;
+		notify("StatUpdate");
 	}
 	public int getCon() {
 		return con;
 	}
-	public void setCon(int con) {
-		this.con = con;
+	public void incrementCon(int val) {
+		if(val > 0)	
+			con++;
+		else
+			con--;
+		calcMaxHp();
+		notify("StatUpdate");
 	}
 	public int getMgk() {
 		return mgk;
 	}
-	public void setMgk(int mgk) {
-		this.mgk = mgk;
+	public void incrementMgk(int val) {
+		if(val > 0)
+			mgk++;
+		else
+			mgk--;
+		notify("StatUpdate");
 	}
 	public int getDefence() {
 		return defence;
 	}
-	public void setDefence(int defence) {
-		this.defence = defence;
+	public void incrementDefence(int val) {
+		if(val > 0)
+			defence++;
+		else 
+			defence--;
+		notify("StatUpdate");
 	}
 	public int getAccuracy() {
 		return accuracy;
 	}
-	public void setAccuracy(int accuracy) {
-		this.accuracy = accuracy;
+	public void incrementAccuracy(int val) {
+		if(val > 0)
+			accuracy++;
+		else
+			accuracy--;
+		notify("StatUpdate");
 	}
 	public int getSpeed() {
 		return speed;
 	}
-	public void setSpeed(int speed) {
-		this.speed = speed;
+	public void incrementSpeed(int val) {
+		if(val > 0)
+			speed++;
+		else 
+			speed--;
+		notify("StatUpdate");
 	}
 	public double getCurentActions() {
 		return curentActions;
 	}
+	public void notify(String msg) {
+		if(this instanceof Character) {
+			this.setChanged();
+			this.notifyObservers(msg);
+		}
+	}
+	
+	public abstract void lvlUp();
 	public void setMovecost(double moveCost) {
 		this.moveCost = moveCost;
 		this.setChanged();
@@ -176,6 +217,12 @@ public abstract class Entity extends MapObject{
     		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
+    }
+    public void calcMaxHp() {
+    	int curentMax = maxHp;
+    	this.maxHp = 10 * lvl + 10 * lvl * getCon()/5;
+    	this.hp += (maxHp - curentMax);
+    	notify("Hp Change");
     }
     public void damag(int dmg) {
     	hp -= dmg;

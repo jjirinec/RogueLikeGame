@@ -42,9 +42,15 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.setSpeed(6);
+		//player.setSpeed(6);
 		//player.newTurn();
 		System.out.println("Player Initialized");
+		
+		System.out.println(player.calcNextLvl(1));
+		System.out.println(player.calcNextLvl(2));
+		System.out.println(player.calcNextLvl(3));
+		System.out.println(player.calcNextLvl(4));
+		System.out.println(player.calcNextLvl(5));
 	}
 	private void playerMovement(KeyCode eCode)
 	{
@@ -82,7 +88,21 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		player.newTurn();
 	}
-
+	private void interact() {
+		Coordinate cursorLocation = view.map.getCursor().getLocation();
+		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+		if(mapLocation.getObstacle() != null) {
+			Obstacle obstacle = mapLocation.getObstacle();
+			if(obstacle instanceof Container) {
+				Container container = (Container) obstacle;
+				System.out.println(container.getContents().size());
+				if(container.getContents().size() >= 0) {
+					System.out.println(container.getContents());
+					view.containerView(container,player,view.map);
+				}
+			}
+		}
+	}
 	private void interactAttack()
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
@@ -101,17 +121,17 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			}
 		}
 		if(mapLocation.getObstacle() != null) {
-
-			Obstacle obstacle = mapLocation.getObstacle();
-			obstacle.damage(5, view.map);
-			if(obstacle instanceof Container) {
-				Container container = (Container) obstacle;
-				System.out.println(container.getContents().size());
-				if(container.getContents().size() > 0) {
-					System.out.println(container.getContents());
-					view.containerView(container,player,view.map);
-				}
-			}
+//
+//			Obstacle obstacle = mapLocation.getObstacle();
+////			obstacle.damage(5, view.map);
+//			if(obstacle instanceof Container) {
+//				Container container = (Container) obstacle;
+//				System.out.println(container.getContents().size());
+//				if(container.getContents().size() > 0) {
+//					System.out.println(container.getContents());
+//					view.containerView(container,player,view.map);
+//				}
+//			}
 
 			Obstacle target = mapLocation.getObstacle();
 			player.attack(target,view.map);
@@ -171,6 +191,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				this.setChanged();
 				this.notifyObservers("\nLocationInfo: " + info);
 				System.out.println("InterAct/Attack");
+				break;
+			case E:
+				interact();
 				break;
 			case X://Testing Obstacle breaking  TODO Remove
 

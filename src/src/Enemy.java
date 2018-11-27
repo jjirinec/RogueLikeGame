@@ -7,19 +7,24 @@ import javafx.concurrent.Task;
 import mapObjects.*;
 
 
+
 public class Enemy extends Entity {
-    public Enemy(Coordinate location, int maxHP, int speed, int imageSize) {
+	
+	public final int STAT_PTS_PER_LVL = 3;
+	
+    public Enemy(Coordinate location, int imageSize, int chalengeRating) {
         super("Enemy", "TempChar.png", location, false, imageSize);
-        this.maxHp = maxHP;
-        this.hp = maxHP;
-        this.setSpeed(speed);
+        this.lvl = chalengeRating;
+        this.lvlUp();
+        this.hp = maxHp;
+       // this.setSpeed(speed);
     }
 
     public Enemy(int imageSize) {
         super("Enemy", "TempChar.png", new Coordinate(0, 0), false, imageSize);
         this.maxHp = 10;
         this.hp = 10;
-        this.setSpeed(2);
+       // this.setSpeed(2);
     }
 
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd) {
@@ -124,7 +129,6 @@ public class Enemy extends Entity {
      * Pause the thread
      * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map
      */
-
     private synchronized void timeStop(long time)
     {
         try {	///Waits a short time before acting again
@@ -133,6 +137,12 @@ public class Enemy extends Entity {
 			e.printStackTrace();
 		}
     }
+
+	@Override
+	public void lvlUp() {
+		this.availableStatPoint = this.STAT_PTS_PER_LVL * this.lvl;
+		this.calcMaxHp();
+	}
 
 
 }

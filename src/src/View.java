@@ -5,6 +5,7 @@ import mapObjects.Container;
 import src.viewObjects.ContainerView;
 import src.viewObjects.HealthGlobe;
 import src.viewObjects.InventoryView;
+import src.viewObjects.LevelUpScene;
 import src.viewObjects.PlayerInfoView;
 
 import java.awt.Dimension;
@@ -51,7 +52,7 @@ public class View extends Application implements Observer{
 	BorderPane layout;
 	VBox rightSideView;
 	Map map;
-	
+	LevelUpScene levelUpView;
 	///Character Info Variables
 	HealthGlobe healthGlobe;
 	PlayerInfoView playerInfoView;
@@ -73,6 +74,7 @@ public class View extends Application implements Observer{
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		
 		ctr = new Controler(this);
+		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
 		forANDback = new StackPane();
 		map = new Map(mapRows,mapColums,gridSize,ctr.player);
 		
@@ -114,7 +116,8 @@ public class View extends Application implements Observer{
 	{
 		BorderPane layout = new BorderPane();
 		VBox center = new VBox();
-		center.getChildren().add(map.getMap());
+		
+		center.getChildren().add(levelUpView.levelUp(5));
 		center.getChildren().add(setUpBottom());
 		layout.setCenter(center);
 		
@@ -229,7 +232,7 @@ public class View extends Application implements Observer{
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		String observedMsg = (String)arg1;
-		if(observedMsg.equals("ActionUpdate")) {
+		if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
 			//this.updatePlayerInfo();
 			this.playerInfoView.updatStatActionBlocks();
 		}
