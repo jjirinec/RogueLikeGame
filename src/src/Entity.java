@@ -185,7 +185,6 @@ public abstract class Entity extends MapObject{
 				oTarget.damage(this.getStr() * (this.getAccuracy()),map); // CHANGE DAMAGE HERE
 
 			}
-
     	}
     	spendActions(attackCost);
     }

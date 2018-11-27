@@ -22,8 +22,8 @@ public class Character extends Entity {
 
     public Character(int imageSize) {
         super("Character", "TempChar.png", new Coordinate(0, 0), false, imageSize);
-        this.maxHp = 10;
-        this.hp = 10;
+        this.maxHp = 100;
+        this.hp = 100;
         this.setSpeed(2);
         inventory = new ArrayList<Loot>();
         inventory.add(new Dagger(0, 0, this.getImageSize()));

@@ -92,12 +92,16 @@ public class Enemy extends Entity {
         return result;
     }
 
-    public boolean isSurrounded(Map map){
+    public boolean isSurrounded(Map map) {
         Coordinate Loc = getLocation();
         int x = Loc.getX();
         int y = Loc.getY();
+        if (Loc == map.getExit()){
+            return true;
+
+        }
         return(!(map.getMapLocation()[x+1][y].isPasable()) && !(map.getMapLocation()[x-1][y].isPasable())
-        && !(map.getMapLocation()[x][y+1].isPasable()) && !(map.getMapLocation()[x][y-1].isPasable()));
+        && !(map.getMapLocation()[x][y+1].isPasable()) && !(map.getMapLocation()[x][y-1].isPasable())); /// BUGGED IF ENEMY IS IN DOORWAY
     }
 
     public void turn(Character player, Map map, Coordinate doorLoc) {

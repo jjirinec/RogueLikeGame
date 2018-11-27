@@ -41,7 +41,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.setSpeed(6);
+		player.setSpeed(10);
 		//player.newTurn();
 		System.out.println("Player Initialized");
 	}
@@ -74,7 +74,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		}
 		if(!moveResult) {
 			setChanged();
-			notifyObservers("Somthing is in the way!");
+			notifyObservers("Something is in the way!");
 		}
 	}
 	public void startPlay()
