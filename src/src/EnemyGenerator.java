@@ -15,8 +15,20 @@ public class EnemyGenerator {
 	
 	public Enemy generate(int mapRating, Coordinate location)
 	{
-		//TODO Add logic to generate enemy with challenge rating according to mapRating
-		Enemy enemy  = new Enemy(location,gridSize,2);
+
+		int stats = mapRating * 3;
+		int health = mapRating * 2 + 10;
+		int speed = mapRating * 2 + 10;
+		Enemy enemy  = new Enemy(location,health,speed,gridSize);
+		for(int i = 0 ; i < stats ; i++) {
+			double rnd = Math.random();
+			if (rnd > .50) {
+				enemy.setDefence(enemy.getDefence() + 1);
+			} else {
+				enemy.setStr(enemy.getStr() + 1);
+			}
+		}
+
 		return enemy;
 	}
 

@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 
 import mapObjects.Coordinate;
 
-
 public class MapObject extends Observable{
 	
 	private String objectName;

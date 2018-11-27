@@ -27,8 +27,9 @@ public class Enemy extends Entity {
        // this.setSpeed(2);
     }
 
-    char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd) {
-    	//System.out.println("SmartMove");
+
+    char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd,Map map) {
+
         Coordinate pos = getLocation();
         double totalD_P = calculateD(pos.getX(), pos.getY(), Xp, Yp);
         double totalDW = calculateD(pos.getX(), pos.getY() - 1, Xd, Yd) + calculateD(pos.getX(), pos.getY() - 1, Xp, Yp);
@@ -47,15 +48,13 @@ public class Enemy extends Entity {
         } else if (totalDA < totalDS && totalDA < totalDW && totalDA < totalDD) {
             return ('A');
         } else {
-            return ('A');
+                return(randomChar(map));
         }
     }
 
     double calculateD(int x1, int y1, int x2, int y2) {
         return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
     }
-
-
     /**
      * reads char input built for smartDirection enemy
      *
@@ -65,10 +64,14 @@ public class Enemy extends Entity {
     boolean readInput(char input, Map map) {
     	//System.out.println("readInput");
         boolean result = false;
+        if(isSurrounded(map)){
+            this.spendActions(1);
+            return true;
+        }
         if (input == 'W') {
             result = move(0, -1, map);
             if(!result) {
-            randomMove(map);
+                randomMove(map);
             }
         } else if (input == 'S') {
             result = move(0, 1, map);
@@ -86,16 +89,8 @@ public class Enemy extends Entity {
                 randomMove(map);
             }
         } else if (input == 'H') {
-            //hit here
             result = true;
-            if(wepon != null) {
-                map.getPlayer().damag((this.getStr() * wepon.getDmg()) / map.getPlayer().getDefence()); // CHANGE DAMAGE HERE
-            }
-            else{
-                map.getPlayer().damag(this.getStr() * (this.getAccuracy() / map.getPlayer().getDefence())); // CHANGE DAMAGE HERE
-
-            }
-            spendActions(this.getAttackCost());
+            attack(map.getPlayer(),map);
             if(map.getPlayer().checkDead()){
                 map.removeEntity(map.getPlayer());
                 setChanged();
@@ -107,6 +102,7 @@ public class Enemy extends Entity {
         return result;
     }
 
+
     public synchronized void turn(Character player, Map map, Coordinate doorLoc) {
         this.newTurn();
 		while (this.canAct()) {
@@ -114,6 +110,20 @@ public class Enemy extends Entity {
     		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
 		}
     }///End turn
+
+
+    public boolean isSurrounded(Map map) {
+        Coordinate Loc = getLocation();
+        int x = Loc.getX();
+        int y = Loc.getY();
+        if (Loc == map.getExit()){
+            return true;
+
+        }
+        return(!(map.getMapLocation()[x+1][y].isPasable()) && !(map.getMapLocation()[x-1][y].isPasable())
+        && !(map.getMapLocation()[x][y+1].isPasable()) && !(map.getMapLocation()[x][y-1].isPasable())); /// BUGGED IF ENEMY IS IN DOORWAY
+    }
+
 
 
     public void randomMove(Map map) {
@@ -125,6 +135,14 @@ public class Enemy extends Entity {
             temp = readInput(direction[randomDirection], map);
         }
     }
+
+    public char randomChar(Map map) {
+        char[] direction = {'W', 'S', 'A', 'D'};
+        Random rand = new Random();
+            int randomDirection = rand.nextInt(3);
+            char temp = direction[randomDirection];
+            return temp;
+        }
     /*
      * Pause the thread
      * The purpose of this method is to wait a short time each time an enamy moves so that it dose not just jump from place to place on the map

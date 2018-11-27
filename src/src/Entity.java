@@ -28,8 +28,9 @@ public abstract class Entity extends MapObject{
     private int speed = 1;
     
     //Equiped
-    Armor armor;
-    Wepon wepon;
+	Wepon equipedWepon = null;
+	Armor equipedArmor = null;
+
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
@@ -185,26 +186,47 @@ public abstract class Entity extends MapObject{
         return false;
     }
 
+
    private void updateGridImgage(StackPane currentLocationPane, StackPane destinationPane) {
 	   javafx.application.Platform.runLater( () ->currentLocationPane.getChildren().remove(this.getImageView()));				//Remove Image from old location
 	   javafx.application.Platform.runLater( () ->destinationPane.getChildren().add(this.getImageView()));						//Add Image to new location
    }
    
+
     public void attack(MapObject target, Map map) {
     	
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-    		ent.hp = ent.hp - this.str*3; // 3 for testing change the damage here
-    		System.out.println("Using Attack method");
+			if(equipedWepon != null) {
+				ent.damag((this.getStr() * equipedWepon.getDmg()) / ent.getDefence()); // CHANGE DAMAGE HERE
+				setChanged();
+				notifyObservers(this + " hit " + target + " for " + (this.getStr() * equipedWepon.getDmg()) / ent.getDefence() + "damage" );
+			}
+			else{
+				ent.damag(this.getStr() * (this.getAccuracy() / ent.getDefence())); // CHANGE DAMAGE HERE
+				setChanged();
+				notifyObservers(this + " hit " + target + " for " + (this.getStr() * (this.getAccuracy() / ent.getDefence())) + "damage" );
+			}
     	}
     	if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
     		t.damage(this.str, map);
-    		target = (Obstacle)target;
-    		((Obstacle) target).damage(5, map);//TODO update the damage dealt
+    		Obstacle oTarget = (Obstacle)target;
+			if(equipedWepon != null) {
+				oTarget.damage((this.getStr() * equipedWepon.getDmg()),map); // CHANGE DAMAGE HERE
+			}
+			else{
+				oTarget.damage(this.getStr() * (this.getAccuracy()),map); // CHANGE DAMAGE HERE
 
+			}
     	}
     	spendActions(attackCost);
+    }
+	public void calcMaxHp() {
+    	int curentMax = maxHp;
+    	this.maxHp = 10 * lvl + 10 * lvl * getCon()/5;
+    	this.hp += (maxHp - curentMax);
+    	notify("Hp Change");
     }
 
     public void heal(int healthPoints) {
@@ -213,17 +235,20 @@ public abstract class Entity extends MapObject{
         } else {
             hp += healthPoints;
         }
-        if(this instanceof Character) {
-    		this.setChanged();
+
+		if(this instanceof Character) {
+			this.setChanged();
+			this.notifyObservers("Character health increased by" + healthPoints);
+			this.setChanged();
     		this.notifyObservers("Hp Change");
-    	}
-    }
-    public void calcMaxHp() {
-    	int curentMax = maxHp;
-    	this.maxHp = 10 * lvl + 10 * lvl * getCon()/5;
-    	this.hp += (maxHp - curentMax);
-    	notify("Hp Change");
-    }
+		}
+		if(this instanceof Enemy){
+			this.setChanged();
+			this.notifyObservers("ENEMY Healed FOR " + healthPoints);
+		}
+     }
+
+
     public void damag(int dmg) {
     	hp -= dmg;
     	if(hp<0){
@@ -231,8 +256,14 @@ public abstract class Entity extends MapObject{
         }
     	if(this instanceof Character) {
     		this.setChanged();
+    		this.notifyObservers("Character health decreased by" + dmg);
+    		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
+    	if(this instanceof Enemy){
+    		this.setChanged();
+    		this.notifyObservers("ENEMY HIT FOR " + dmg);
+		}
     }
 
     public boolean checkDead(){

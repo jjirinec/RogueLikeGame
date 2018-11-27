@@ -81,7 +81,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		}
 		if(!moveResult) {
 			setChanged();
-			notifyObservers("Somthing is in the way!");
+			notifyObservers("Something is in the way!");
 		}
 	}
 	public void startPlay()
@@ -107,31 +107,29 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		if(mapLocation.getEntity() != null) {
+		if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 			Entity target = mapLocation.getEntity();
 			player.attack(target,view.map);
-			if(target.checkDead()){
-				view.map.removeEntity(target);
-				setChanged();
-				notifyObservers("Player Killed! " + mapLocation.getEntity());
-			}
-			else {
-				setChanged();
-				notifyObservers("Player Attacking " + mapLocation.getEntity() + " for " + player.getStr() + " damage");
-			}
+			if(target.checkDead()) {
+				view.map.getEnemys().remove(target);
+                view.map.removeEntity(target);
+
+            }
 		}
-		if(mapLocation.getObstacle() != null) {
-//
-//			Obstacle obstacle = mapLocation.getObstacle();
-////			obstacle.damage(5, view.map);
-//			if(obstacle instanceof Container) {
-//				Container container = (Container) obstacle;
-//				System.out.println(container.getContents().size());
-//				if(container.getContents().size() > 0) {
-//					System.out.println(container.getContents());
-//					view.containerView(container,player,view.map);
-//				}
-//			}
+
+		if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
+
+			Obstacle obstacle = mapLocation.getObstacle();
+			obstacle.damage(5, view.map);
+			if(obstacle instanceof Container) {
+				Container container = (Container) obstacle;
+				System.out.println(container.getContents().size());
+				if(container.getContents().size() > 0) {
+					System.out.println(container.getContents());
+					view.containerView(container,player,view.map);
+				}
+			}
+
 
 			Obstacle target = mapLocation.getObstacle();
 			player.attack(target,view.map);
@@ -139,9 +137,6 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
-
-		setChanged();
-		notifyObservers("Theres nothing there to attack!");
 
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
@@ -252,6 +247,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 * When done starts a new turn for the player
 	 */
 	public void enemyTurns() {
+
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
 			System.out.println("Enemy " + (eIndex +1) + " turn");
 			Enemy enemy = view.map.getEnemys().get(eIndex);
@@ -274,6 +270,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn 
 		System.out.println("All enemy turns Done:");
 		
+
 	}
 
 
