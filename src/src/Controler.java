@@ -41,7 +41,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		player = new Character(view.gridSize);
 		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		player.setSpeed(10);
+		player.setSpeed(6);
 		//player.newTurn();
 		System.out.println("Player Initialized");
 	}
@@ -86,7 +86,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		if(mapLocation.getEntity() != null) {
+		if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 			Entity target = mapLocation.getEntity();
 			player.attack(target,view.map);
 			if(target.checkDead()) {
@@ -95,7 +95,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 
             }
 		}
-		if(mapLocation.getObstacle() != null) {
+		if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 
 			Obstacle obstacle = mapLocation.getObstacle();
 			obstacle.damage(5, view.map);
