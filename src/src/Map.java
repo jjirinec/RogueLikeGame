@@ -131,7 +131,7 @@ public class Map {
 	{
 		spawnPlayer(player);
 		spawnMapObjects();
-		spawnEnemys(3);
+		spawnEnemys(5);
 	}
 	private void spawnEnemys(int numberOfEnemys) {
 		EnemyGenerator enemyGen = new EnemyGenerator(gridSize);

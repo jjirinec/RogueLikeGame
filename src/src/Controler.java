@@ -107,7 +107,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		if(mapLocation.getEntity() != null) {
+		if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 			Entity target = mapLocation.getEntity();
 			player.attack(target,view.map);
 			if(target.checkDead()){
@@ -120,7 +120,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				notifyObservers("Player Attacking " + mapLocation.getEntity() + " for " + player.getStr() + " damage");
 			}
 		}
-		if(mapLocation.getObstacle() != null) {
+		if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 //
 //			Obstacle obstacle = mapLocation.getObstacle();
 ////			obstacle.damage(5, view.map);
@@ -135,19 +135,18 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 
 			Obstacle target = mapLocation.getObstacle();
 			player.attack(target,view.map);
-
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
-
-		setChanged();
-		notifyObservers("Theres nothing there to attack!");
-
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
 			player.grabLoot(item);
 			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
-			                                               
+
+		}
+		else {
+			setChanged();
+			notifyObservers("Theres nothing there to attack!");
 		}
 
 	}

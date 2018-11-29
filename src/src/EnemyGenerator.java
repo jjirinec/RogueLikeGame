@@ -13,11 +13,20 @@ public class EnemyGenerator {
 		rand = new Random();
 	}
 	
-	public Enemy generate(int mapRating, Coordinate location)
-	{
-		//TODO Add logic to generate enemy with challenge rating according to mapRating
-		Enemy enemy  = new Enemy(location,gridSize,2);
-		return enemy;
+	public Enemy generate(int mapRating, Coordinate location) {
+		double rnd = Math.random();
+		if (rnd > .66) {
+			Enemy enemy = new EnemySpeedy(location, gridSize, mapRating);
+			return enemy;
+		}
+		else if(rnd > .33) {
+			Enemy enemy = new EnemyStrong(location, gridSize, mapRating);
+			return enemy;
+		}
+		else
+		{
+			Enemy enemy = new EnemyTanky(location, gridSize, mapRating);
+			return enemy;
+		}
 	}
-
 }
