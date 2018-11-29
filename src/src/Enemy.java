@@ -16,7 +16,8 @@ public class Enemy extends Entity {
         super("Enemy", "EnemySpeedy.png", location, false, imageSize);
         this.lvl = chalengeRating;
         this.lvlUp();
-        this.hp = maxHp;
+        this.calcMaxHp();
+        //this.hp = maxHp;
         // this.setSpeed(speed);
     }
 
