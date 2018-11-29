@@ -35,6 +35,11 @@ public abstract class Entity extends MapObject{
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
     }
+
+	Entity(String objectName, String imageFile, boolean isPasable, int imageSize){
+		super(objectName,imageFile,isPasable,imageSize);
+	}
+
      public int getAvailableStatPts() {
     	 return this.availableStatPoint;
      }
@@ -194,7 +199,6 @@ public abstract class Entity extends MapObject{
    
 
     public void attack(MapObject target, Map map) {
-    	
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
 			if(equipedWepon != null) {

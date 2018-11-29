@@ -9,26 +9,36 @@ import mapObjects.*;
 
 
 public class Enemy extends Entity {
-	
-	public final int STAT_PTS_PER_LVL = 3;
-	
+
+    public final int STAT_PTS_PER_LVL = 3;
+
     public Enemy(Coordinate location, int imageSize, int chalengeRating) {
-        super("Enemy", "TempChar.png", location, false, imageSize);
+        super("Enemy", "EnemySpeedy.png", location, false, imageSize);
         this.lvl = chalengeRating;
         this.lvlUp();
         this.hp = maxHp;
-       // this.setSpeed(speed);
+        // this.setSpeed(speed);
     }
 
     public Enemy(int imageSize) {
-        super("Enemy", "TempChar.png", new Coordinate(0, 0), false, imageSize);
+        super("Enemy", "EnemySpeedy.png", new Coordinate(0, 0), false, imageSize);
         this.maxHp = 10;
         this.hp = 10;
-       // this.setSpeed(2);
+        // this.setSpeed(2);
+    }
+
+    Enemy(int imageSize, int chalengeRating,String image,Coordinate loc) {
+        super("Enemy", image, false, imageSize);
+        this.lvl = chalengeRating;
+        this.lvlUp();
+        this.setLocation(loc.getX(),loc.getY());
+        this.hp = maxHp;
     }
 
 
+
     char smartDirectionEnemy(int Xp, int Yp, int Xd, int Yd,Map map) {
+
 
         Coordinate pos = getLocation();
         double totalD_P = calculateD(pos.getX(), pos.getY(), Xp, Yp);

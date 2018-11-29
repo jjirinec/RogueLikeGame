@@ -13,23 +13,22 @@ public class EnemyGenerator {
 		rand = new Random();
 	}
 	
-	public Enemy generate(int mapRating, Coordinate location)
-	{
 
-		int stats = mapRating * 3;
-		int health = mapRating * 2 + 10;
-		int speed = mapRating * 2 + 10;
-		Enemy enemy  = new Enemy(location,health,gridSize);
-		for(int i = 0 ; i < stats ; i++) {
-			double rnd = Math.random();
-			if (rnd > .50) {
-				enemy.incrementDefence(enemy.getDefence() + 1);
-			} else {
-				enemy.incrementStr(enemy.getStr() + 1);
-			}
+	public Enemy generate(int mapRating, Coordinate location) {
+		double rnd = Math.random();
+		if (rnd > .66) {
+			Enemy enemy = new EnemySpeedy(location, gridSize, mapRating);
+			return enemy;
+		}
+		else if(rnd > .33) {
+			Enemy enemy = new EnemyStrong(location, gridSize, mapRating);
+			return enemy;
+		}
+		else
+		{
+			Enemy enemy = new EnemyTanky(location, gridSize, mapRating);
+			return enemy;
 		}
 
-		return enemy;
 	}
-
 }
