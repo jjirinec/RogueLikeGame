@@ -7,6 +7,7 @@ import src.viewObjects.HealthGlobe;
 import src.viewObjects.InventoryView;
 import src.viewObjects.LevelUpScene;
 import src.viewObjects.PlayerInfoView;
+import src.viewObjects.ScoreView;
 
 import java.awt.Dimension;
 import java.util.Observable;
@@ -76,7 +77,8 @@ public class View extends Application implements Observer{
 		ctr = new Controler(this);
 		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
 		forANDback = new StackPane();
-		map = new Map(mapRows,mapColums,gridSize,ctr.player);
+		map = new Map();
+		//map = new Map(mapRows,mapColums,gridSize,ctr.player);
 		
 		
 		
@@ -103,7 +105,7 @@ public class View extends Application implements Observer{
 		mainStage.setScene(root);
 		mainStage.show();
 		mainStage.sizeToScene();
-		//mainStage.setFullScreen(true);
+		mainStage.setFullScreen(true);
 		
 		ctr.startPlay();
 		
@@ -189,28 +191,30 @@ public class View extends Application implements Observer{
 		hud.setPrefHeight(screenSize.getHeight() - mapHight - 100);
 	}
 	public void setScoreScene() {
-		VBox scorePane = new VBox();
-		scorePane.setPadding(new Insets(20,20,20,20));
-		scorePane.setPrefSize(mapWidth, this.mapHight);
-		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(10,10,10,10))));
-		Text headerText = new Text("Score");
-		headerText.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 20));
-		HBox header = new HBox(headerText);
-		header.setAlignment(Pos.TOP_CENTER);
-		header.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(25), new Insets(0,0,0,0))));
-		scorePane.getChildren().add(header);
-		Button nextMapButton = new Button();
-		nextMapButton.setAlignment(Pos.BOTTOM_CENTER);
-		nextMapButton.setText("Continue");
-		nextMapButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
-				@Override
-				public void handle(MouseEvent mouseEvent) {
-			        nextMap();
-				}		
-			});
-		scorePane.getChildren().add(nextMapButton);
+		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
+		BorderPane scorePane = scoreView.getScoreView();
+//		VBox scorePane = new VBox();
+//		scorePane.setPadding(new Insets(20,20,20,20));
+//		scorePane.setPrefSize(mapWidth, this.mapHight);
+//		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(10,10,10,10))));
+//		Text headerText = new Text("Score");
+//		headerText.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 20));
+//		HBox header = new HBox(headerText);
+//		header.setAlignment(Pos.TOP_CENTER);
+//		header.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(25), new Insets(0,0,0,0))));
+//		scorePane.getChildren().add(header);
+//		Button nextMapButton = new Button();
+//		nextMapButton.setAlignment(Pos.BOTTOM_CENTER);
+//		nextMapButton.setText("Continue");
+//		nextMapButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
+//				@Override
+//				public void handle(MouseEvent mouseEvent) {
+//			        nextMap();
+//				}		
+//			});
+//		scorePane.getChildren().add(nextMapButton);
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
-		//layout.getChildren().remove(3);
+//		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();
 		center.getChildren().remove(0);
 		center.getChildren().add(0, scorePane);
@@ -261,7 +265,7 @@ public class View extends Application implements Observer{
 	}
 	
 	public void containerView(Container container,Character player,Map map) {
-		ContainerView cView = new ContainerView(container,player);
+		ContainerView cView = new ContainerView(container,player,map);
 
 		Scene conatinerView = new Scene(cView.getContainerView());
 		

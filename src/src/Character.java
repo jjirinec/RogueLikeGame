@@ -74,7 +74,7 @@ public class Character extends Entity {
         } else if (input == 'D') {
             moveResult = move(1, 0, map);
             //return true;
-        } else if (input == 'H') {
+        } /*else if (input == 'H') {
             MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
             Entity e = ml.getEntity();
             if (e != null) {
@@ -82,7 +82,7 @@ public class Character extends Entity {
 
             }
         }
-        spendActions(this.getAttackCost());
+        spendActions(this.getAttackCost());*/
         return moveResult;
 }
 
@@ -167,7 +167,7 @@ public class Character extends Entity {
         	return experianceNeeded;
         }
         
-        public boolean hasExited(Coordinate exit1,char direction) {
+        public boolean hasExited(Coordinate exit,char direction) {
 
         	boolean result = false;
         	//Coordinate exit = new Coordinate(exit1.getY(),exit1.getX());

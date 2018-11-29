@@ -107,7 +107,7 @@ public class Enemy extends Entity {
         this.newTurn();
 		while (this.canAct()) {
     		timeStop(500);
-    		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY()), map);
+    		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY(),map), map);
 		}
     }///End turn
 

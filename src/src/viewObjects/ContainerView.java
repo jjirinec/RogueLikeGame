@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import mapObjects.Container;
 import mapObjects.Loot;
 import src.Character;
+import src.Map;
 public class ContainerView {
 	
 	ObservableList<HBox> containerList;
@@ -25,10 +26,12 @@ public class ContainerView {
 	VBox cratePane;
 	Container container;
 	Character player;
+	Map map;
 	
 	
-	public ContainerView(Container container,Character player) {
+	public ContainerView(Container container,Character player,Map map) {
 		this.container = container;
+		this.map = map;
 		this.player = player;
 		background = new Background(new BackgroundFill(Color.BROWN, new CornerRadii(0), new Insets(0,0,0,0)));
 		containerList = FXCollections.observableArrayList();
@@ -58,6 +61,7 @@ public class ContainerView {
 			        if(mouseEvent.getClickCount() == 2){		 
 			            player.grabLoot(item);
 			            container.removeItem(item);
+			            map.addToLootColected(item);
 			            updateLootList();
 			         }
 				}		

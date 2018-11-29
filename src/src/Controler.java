@@ -120,15 +120,15 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 
 			Obstacle obstacle = mapLocation.getObstacle();
-			obstacle.damage(5, view.map);
-			if(obstacle instanceof Container) {
-				Container container = (Container) obstacle;
-				System.out.println(container.getContents().size());
-				if(container.getContents().size() > 0) {
-					System.out.println(container.getContents());
-					view.containerView(container,player,view.map);
-				}
-			}
+			//obstacle.damage(5, view.map);
+//			if(obstacle instanceof Container) {
+//				Container container = (Container) obstacle;
+//				System.out.println(container.getContents().size());
+//				if(container.getContents().size() > 0) {
+//					System.out.println(container.getContents());
+//					view.containerView(container,player,view.map);
+//				}
+//			}
 
 
 			Obstacle target = mapLocation.getObstacle();
@@ -141,6 +141,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
 			player.grabLoot(item);
+			view.map.addToLootColected(item);
 			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
 			                                               
 		}

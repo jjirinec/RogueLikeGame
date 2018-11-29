@@ -302,7 +302,9 @@ public abstract class Entity extends MapObject{
     	return false;
     }
     public void spendActions(double actionsCost) {
+    		System.out.println(actionsCost + " Actions spent \nStarting with " + curentActions);
             curentActions -= actionsCost;
+            System.out.println("Ending with " + curentActions);
             if (this instanceof Character) {
                 this.setChanged();
                 this.notifyObservers("ActionUpdate");

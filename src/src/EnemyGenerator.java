@@ -19,13 +19,13 @@ public class EnemyGenerator {
 		int stats = mapRating * 3;
 		int health = mapRating * 2 + 10;
 		int speed = mapRating * 2 + 10;
-		Enemy enemy  = new Enemy(location,health,speed,gridSize);
+		Enemy enemy  = new Enemy(location,health,gridSize);
 		for(int i = 0 ; i < stats ; i++) {
 			double rnd = Math.random();
 			if (rnd > .50) {
-				enemy.setDefence(enemy.getDefence() + 1);
+				enemy.incrementDefence(enemy.getDefence() + 1);
 			} else {
-				enemy.setStr(enemy.getStr() + 1);
+				enemy.incrementStr(enemy.getStr() + 1);
 			}
 		}
 

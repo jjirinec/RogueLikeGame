@@ -11,43 +11,61 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 
 public class Map {
-	private static int roomRating = 0;
+	
+	//RoomNumber and rating
+	private final static int DIFICULTY_INCREAS_FREQUENCY = 3;
+	public static int ROOM_NUMBER = 0;
+	private int roomRating;
+	
+	//Map Locations
 	private GridPane map;
 	private StackPane[][] stacks;
 	private MapLocation[][] location;
 	
+	//Player and enemys
 	private Character player;
 	private TargetingCursor cursor;
 	private ArrayList<Enemy> enemys;
+	private int startEnemyCount = 0;
 	
-	private Loot[] loot;
+	//Loot and obstacles
+	private ArrayList<Loot> lootColected;
 	private Obstacle[] obstacles;
+	private int startLootCount = 0;
 	
+	
+	//Map Dimintions
 	private int mapHight;
 	private int mapWidth;
 	private int gridSize;
-	private int mapRating;
+	
+	
 	
 	private Coordinate entrance;
 	private Coordinate exit;
 	private Random rand = new Random();
+	private int minumMoves;
 ///////////////////////////
 ///		Constructor		///
 ///////////////////////////
+	public Map() {map = new GridPane();}
 	public Map(int hight, int width, int gridSize,Character player)//,int roomRating)
 	{
-		this.roomRating++;
+		this.ROOM_NUMBER++;
+		this.roomRating = ROOM_NUMBER / DIFICULTY_INCREAS_FREQUENCY;
 		this.mapHight = hight;
 		this.mapWidth = width;
 		this.gridSize = gridSize;
 		this.player = player;
 		//this.roomRating = roomRating;
 		enemys = new ArrayList<Enemy>();
+		lootColected = new ArrayList<Loot>();
 		setDoorLocations();
 		initializeGrid();
 		populateMap();
 		//printLoot();
 		//printObs();
+		//lootCount += this.loot.length;
 	}
 
 
@@ -79,6 +97,12 @@ public class Map {
 ///////////////////////	
 ///		Get/Set		///
 ///////////////////////
+	public int getRoomNumber() {
+		return this.ROOM_NUMBER;
+	}
+	public int getRoomRating() {
+		return this.roomRating;
+	}
 	public Coordinate getExit() {return new Coordinate(exit.getY(),exit.getX());}
 	public ArrayList<Enemy> getEnemys()
 	{
@@ -142,6 +166,7 @@ public class Map {
 			enemys.add(enemy);
 			location[enemyLocation.getX()][enemyLocation.getY()].setEntity(enemy);
 			stacks[enemyLocation.getX()][enemyLocation.getY()].getChildren().add(enemy.getImageView());
+			startEnemyCount++;
 		}
 	}
 	private Coordinate findEmptyLocation()
@@ -163,22 +188,25 @@ public class Map {
 			for (int colum = 0; colum < location[row].length; colum++) {
 				int lNumber = rand.nextInt(100);
 				int oNumber = rand.nextInt(100);
-				if (lNumber <= 5 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
+				if (lNumber <= 3 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
 					location[row][colum].addObject(lootGen.generate(roomRating));
 					stacks[row][colum].getChildren().add(location[row][colum].topLoot().getImageView());
+					this.startLootCount++;
 		//			System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				}
 				if (oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
-					location[row][colum].setObstacle(objGen.generate(roomRating, new Coordinate(row, colum)));
+					Obstacle obs = objGen.generate(roomRating, new Coordinate(row, colum));
+					location[row][colum].setObstacle(obs);
 					stacks[row][colum].getChildren().add(location[row][colum].getObstacle().getImageView());
-			//		System.out.println(location[row][colum].topLoot().description());							//TODO Remove
-				//	System.out.println(location[row][colum].getObstacle().description());						//TODO Remove
+					if(obs instanceof Container)
+						startLootCount += ((Container) obs).getContents().size();
 				}
 			}
 		}
 	}
 	public void spawnPlayer(Character player){
 		player.setLocation(entrance.getY(),entrance.getX());
+		
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(player.getImageView());
 		location[entrance.getY()][entrance.getX()].setEntity(player);
 		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
@@ -263,4 +291,19 @@ public class Map {
 	}
 
 	public Character getPlayer(){return player;}
+	public int getStartLootCount() {
+		return startLootCount;
+	}
+	public int getLootColected() {
+		return lootColected.size();
+	}
+	public void addToLootColected(Loot item) {
+		lootColected.add(item);
+	}
+	public int getStartEnemyCount() {
+		return startEnemyCount;
+	}
+	public int getEnemyKillCount() {
+		return startEnemyCount - enemys.size();
+	}
 }
