@@ -219,7 +219,7 @@ public abstract class Entity extends MapObject{
     		spendActions(attackCost);
     	}
     	setChanged();
-		notifyObservers(this + " hit " + target + " for " + dmg + " damage" );
+		notifyObservers(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
     	return dmg;
         
     }
