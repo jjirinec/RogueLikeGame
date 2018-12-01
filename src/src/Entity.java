@@ -205,25 +205,23 @@ public abstract class Entity extends MapObject{
    
 
     public int attack(MapObject target, Map map) {
+    	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-            int dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
+            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
 				ent.damag(dmg); // CHANGE DAMAGE HERE
-				setChanged();
-				notifyObservers(this + " hit " + target + " for " + dmg + "damage" );
                 spendActions(attackCost);
-				return dmg;
     	}
     	else if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
-            int round = Math.round((float)calcBaseDmg());
-    		t.damage(round, map);
+            dmg = Math.round((float)calcBaseDmg());
+    		t.damage(dmg, map);
     		spendActions(attackCost);
-    		return round;
     	}
-    	else{
-    	    return 0;
-        }
+    	setChanged();
+		notifyObservers(this + " hit " + target + " for " + dmg + "damage" );
+    	return dmg;
+        
     }
 
 	public void calcMaxHp() {
