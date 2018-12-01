@@ -339,7 +339,7 @@ public abstract class Entity extends MapObject{
             return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
         }
         else{
-            return(this.str/5.0);
+            return(1 + 1 * str/5.0);
         }
     }
 
