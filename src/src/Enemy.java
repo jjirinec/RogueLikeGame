@@ -27,8 +27,11 @@ public class Enemy extends Entity {
         // this.setSpeed(2);
     }
 
-    Enemy(int imageSize, int chalengeRating,String image,Coordinate loc) {
-        super("Enemy", image, false, imageSize);
+
+    Enemy(String name,int imageSize, int chalengeRating,String image,Coordinate loc) {
+        super(name, image, false, imageSize);
+        this.lvl = chalengeRating;
+        this.lvlUp();
         this.setLocation(loc.getX(),loc.getY());
         this.baseDmg = chalengeRating + 1;
     }
@@ -170,5 +173,7 @@ public class Enemy extends Entity {
 		this.calcMaxHp();
 	}
 
-
+	public String toString() {
+		return this.getObjectName() + "\n\tHp: " + this.hp + "\n\tDmg: " + this.baseDmg;
+	}
 }
