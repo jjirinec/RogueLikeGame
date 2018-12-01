@@ -38,7 +38,9 @@ public class Map {
 	private int mapHight;
 	private int mapWidth;
 	private int gridSize;
-	
+
+	// STATS
+	private int damageDealt = 0;
 	
 	
 	private Coordinate entrance;
@@ -306,4 +308,11 @@ public class Map {
 	public int getEnemyKillCount() {
 		return startEnemyCount - enemys.size();
 	}
+
+	public void updateDamageDealt(int dmg){
+	    this.damageDealt+= dmg;
+    }
+    public int getDamageDealt(){
+	    return damageDealt;
+    }
 }

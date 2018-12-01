@@ -198,34 +198,28 @@ public abstract class Entity extends MapObject{
    }
    
 
-    public void attack(MapObject target, Map map) {
+    public int attack(MapObject target, Map map) {
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-			if(equipedWepon != null) {
-				ent.damag((this.getStr() * equipedWepon.getDmg()) / ent.getDefence()); // CHANGE DAMAGE HERE
+            int dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
+				ent.damag(dmg); // CHANGE DAMAGE HERE
 				setChanged();
-				notifyObservers(this + " hit " + target + " for " + (this.getStr() * equipedWepon.getDmg()) / ent.getDefence() + "damage" );
-			}
-			else{
-				ent.damag(this.getStr() * (this.getAccuracy() / ent.getDefence())); // CHANGE DAMAGE HERE
-				setChanged();
-				notifyObservers(this + " hit " + target + " for " + (this.getStr() * (this.getAccuracy() / ent.getDefence())) + "damage" );
-			}
+				notifyObservers(this + " hit " + target + " for " + dmg + "damage" );
+                spendActions(attackCost);
+				return dmg;
     	}
-    	if(target instanceof Obstacle) {
+    	else if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
-    		t.damage(this.str, map);
-    		Obstacle oTarget = (Obstacle)target;
-			if(equipedWepon != null) {
-				oTarget.damage((this.getStr() * equipedWepon.getDmg()),map); // CHANGE DAMAGE HERE
-			}
-			else{
-				oTarget.damage(this.getStr() * (this.getAccuracy()),map); // CHANGE DAMAGE HERE
-
-			}
+            int round = Math.round((float)calcBaseDmg());
+    		t.damage(round, map);
+    		spendActions(attackCost);
+    		return round;
     	}
-    	spendActions(attackCost);
+    	else{
+    	    return 0;
+        }
     }
+
 	public void calcMaxHp() {
     	int curentMax = maxHp;
     	this.maxHp = 10 * lvl + 10 * lvl * getCon()/5;
@@ -334,6 +328,19 @@ public abstract class Entity extends MapObject{
     	if(xDiff == 1 || xDiff == -1 || yDiff == 1 || yDiff == -1)
     		return true;
     	return false;
+    }
+
+    public double calcBaseDmg(){
+        if(equipedWepon != null) {
+            return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
+        }
+        else{
+            return(this.str/5.0);
+        }
+    }
+
+    public double calcHitChance(int def) {
+	    return((4.0*this.accuracy)/(3.0*def));
     }
     
 }

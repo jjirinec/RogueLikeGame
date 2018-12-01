@@ -109,7 +109,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
 		if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 			Entity target = mapLocation.getEntity();
-			player.attack(target,view.map);
+			view.map.updateDamageDealt(player.attack(target,view.map));
 			if(target.checkDead()) {
 				view.map.getEnemys().remove(target);
                 view.map.removeEntity(target);
