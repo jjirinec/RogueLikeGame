@@ -55,7 +55,7 @@ public class Character extends Entity {
     	int nextLvl = this.calcNextLvl(this.lvl);
     	System.out.println("Gaining EXP\n\tGaind: " + exp + "\n\tTotal: " + this.exp + "Neede to lvl: " + nextLvl);
     	System.out.println("Actions Points Available: " + this.availableStatPoint);
-    	if(exp >= nextLvl)
+    	if(this.exp >= nextLvl)
     		this.lvlUp();
     }
 	public int getStatPtsPerLvl() {

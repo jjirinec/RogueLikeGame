@@ -200,7 +200,7 @@ public class ScoreView {
 		button.setOnMouseClicked(new EventHandler<MouseEvent>(){
 			@Override
 			public void handle(MouseEvent mouseEvent) {
-				if(player.getCurentActions() > 0) {
+				if(player.getAvailableStatPts() > 0) {
 					System.out.println("StatsPts: " + player.getAvailableStatPts());
 					view.showLevleUpScene();
 				}
