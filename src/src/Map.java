@@ -294,8 +294,8 @@ public class Map {
 	public int getStartLootCount() {
 		return startLootCount;
 	}
-	public int getLootColected() {
-		return lootColected.size();
+	public ArrayList<Loot> getLootColected() {
+		return lootColected;
 	}
 	public void addToLootColected(Loot item) {
 		lootColected.add(item);
