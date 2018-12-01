@@ -114,10 +114,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 
 		else if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
-			player.grabLoot(item);
 			view.map.addToLootColected(item);
 			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
-
+			player.grabLoot(item);
 		}
 		else {
 			setChanged();
@@ -125,6 +124,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		}
 
 	}
+	
+	
 	/*
 	 * Maps each key code to the desired task
 	 * 		WASD = player movement
@@ -190,7 +191,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			Entity entity = mapLocation.getEntity();
 			if(entity instanceof Enemy) {
 				Enemy enemy = (Enemy)entity;
-				info = enemy.toString();
+				info = enemy.description();
 			}
 			
 		}

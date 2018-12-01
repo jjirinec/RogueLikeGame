@@ -2,6 +2,8 @@ package src;
 
 import javafx.concurrent.Task;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import mapObjects.Armor;
 import mapObjects.Coordinate;
 import mapObjects.MapObject;
@@ -218,10 +220,17 @@ public abstract class Entity extends MapObject{
     		t.damage(dmg, map);
     		spendActions(attackCost);
     	}
-    	setChanged();
-		notifyObservers(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
+    	sendMesage(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
     	return dmg;
         
+    }
+    private void sendMesage(String msg) {
+    	setChanged();
+    	Text msgText = new Text(msg);
+    	msgText.setFill(Color.GREEN);
+    	if(this instanceof Enemy)
+    		msgText.setFill(Color.RED);
+		notifyObservers(msgText);
     }
 
 	public void calcMaxHp() {

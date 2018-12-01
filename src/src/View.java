@@ -61,7 +61,7 @@ public class View extends Application implements Observer{
 //	private Text actionsValue;
 //	private Text moveCost;
 //	private Text attackCost;
-	
+	VBox hudBox;
 	Text hudMsg;
 	ScrollPane hud;
 	Stage mainStage;
@@ -185,17 +185,22 @@ public class View extends Application implements Observer{
 		hud.setOpacity(.6);
 //		Background backgroud = new Background(new BackgroundFill(Paint.valueOf(Color.AQUA),new CornerRadii(20),new Insets(5.5)));
 //		hud.setBackground(backgroud);
-		hudMsg = new Text("HUD\nTest me by pressing wasd, arrow, space, tab, or g");
+		hudMsg = new Text("HUD");
 		hudMsg.setFill(Color.GREEN);
-		
-		hud.setContent(hudMsg);
-		
-		BackgroundFill[] bfill = {new BackgroundFill(Color.BLACK,new CornerRadii(20),new Insets(5))};
-		Background hudBackground = new Background(bfill);
+		hudBox = new VBox();
+		hudBox.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(10),new Insets(0,0,0,0))));
+		hudBox.setPadding(new Insets(5,5,5,5));
+		hudBox.getChildren().add(hudMsg);
+		//hud.setContent(hudMsg);
+		hud.setContent(hudBox);
+		//BackgroundFill[] bfill = {new BackgroundFill(Color.BLACK,new CornerRadii(20),new Insets(5))};
+		//Background hudBackground = new Background(bfill);
 		
 		//hudBackground.setFill(Color.BLACK);
-		hud.setBackground(hudBackground);
+		//hud.setBackground(hudBackground);
 		hud.setPrefHeight(screenSize.getHeight() - mapHight - 100);
+		hudBox.setPrefHeight(screenSize.getHeight() - mapHight - 100);
+		hudBox.setMinWidth(mapWidth);
 	}
 	public void setScoreScene() {
 		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
@@ -223,32 +228,39 @@ public class View extends Application implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
-		String observedMsg = (String)arg1;
-		if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
-			//this.updatePlayerInfo();
-			this.playerInfoView.updatStatActionBlocks();
-		}
-		else if(observedMsg.equals("LootChange")) {
-			this.playerInventoryView.updateInventory();
-			if(!ctr.player.canAct())
-				ctr.enemyTurns();
-		}
-		else if(observedMsg.equals("Hp Change")) {
-			this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
-		}
-		else if(observedMsg.equals("EquipmentChange")) {
-			this.playerInventoryView.updateInventory();
-			this.playerInventoryView.updateEquipedView();
-		}
-		else if(observedMsg.equals("Exit")) {
-			setScoreScene();
+		if(arg1 instanceof String) {
+			String observedMsg = (String)arg1;
+			if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
+				//this.updatePlayerInfo();
+				this.playerInfoView.updatStatActionBlocks();
+			}
+			else if(observedMsg.equals("LootChange")) {
+				this.playerInventoryView.updateInventory();
+				if(!ctr.player.canAct())
+					ctr.enemyTurns();
+			}
+			else if(observedMsg.equals("Hp Change")) {
+				this.playerInfoView.updateHealthGlobe(ctr.player.getHpPresentage());
+			}
+			else if(observedMsg.equals("EquipmentChange")) {
+				this.playerInventoryView.updateInventory();
+				this.playerInventoryView.updateEquipedView();
+			}
+			else if(observedMsg.equals("Exit")) {
+				setScoreScene();
+			}
 		}
 		else {
-		System.out.println("observed "+observedMsg);
-		hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
-		//hud.setContent(new Text(observedMsg));
-		
-//		hudMsg. +="\nobservedMsg";
+			if(arg1 instanceof Text) {
+			
+				//hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
+				//hud.setContent(new Text(observedMsg));
+				Text msg = (Text)arg1;
+				msg.setFill(Color.GREEN);
+				hudBox.getChildren().add(0,msg);
+				
+		//		hudMsg. +="\nobservedMsg";
+			}
 		}
 	}
 	

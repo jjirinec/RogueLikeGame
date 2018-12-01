@@ -173,7 +173,8 @@ public class Enemy extends Entity {
 		this.calcMaxHp();
 	}
 
-	public String toString() {
-		return this.getObjectName() + "\n\tHp: " + this.hp + "\n\tDmg: " + this.baseDmg;
+	public String description() {
+		return this.getObjectName() + "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 
+	this.getStr() + " Con-" +this.getCon() + " Acc-" + this.getAccuracy() + " Def-" + this.getDefence()+ " Spd-" +this.getSpeed();
 	}
 }
