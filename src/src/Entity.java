@@ -208,6 +208,11 @@ public abstract class Entity extends MapObject{
     	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
+    		double baseD = calcBaseDmg();
+    		double hitChance = calcHitChance(ent.getDefence());
+            System.out.println(baseD);
+            System.out.println(hitChance);
+
             dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
 				ent.damag(dmg); // CHANGE DAMAGE HERE
                 spendActions(attackCost);
@@ -219,7 +224,7 @@ public abstract class Entity extends MapObject{
     		spendActions(attackCost);
     	}
     	setChanged();
-		notifyObservers(this + " hit " + target + " for " + dmg + "damage" );
+		notifyObservers(this + " hit " + target + " for " + dmg + " damage" );
     	return dmg;
         
     }
@@ -339,12 +344,17 @@ public abstract class Entity extends MapObject{
             return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
         }
         else{
+
             return(1 + 1 * str/5.0);
+
         }
     }
 
     public double calcHitChance(int def) {
-	    return((4.0*this.accuracy)/(3.0*def));
+	    double chance = (4.0*this.accuracy)/(3.0*def);
+	    if (chance>1)
+	        chance = 1;
+	    return chance;
+        }
     }
     
-}
