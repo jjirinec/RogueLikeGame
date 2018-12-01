@@ -150,7 +150,7 @@ public class ScoreView {
 		HBox enemysKilled = textBlock("Enemys Killed", ""+map.getEnemyKillCount());
 		HBox totalLoot = textBlock("Total Loot", ""+map.getStartLootCount());
 		HBox lootColected = textBlock("Loot Colected", ""+map.getLootColected().size());
-		HBox dmgDelt = textBlock("Damage Delt", "Get this from player");
+		HBox dmgDelt = textBlock("Damage Delt", ""+map.getDamageDealt());
 		HBox actionsSpent = textBlock("Actions Used","Get this from player");
 		//Add all text blocks to scoreBlock
 		scoreBlock.getChildren().addAll(roomRating,totalEnemys,enemysKilled,totalLoot,lootColected,dmgDelt);

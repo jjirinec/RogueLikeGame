@@ -4,7 +4,7 @@ import mapObjects.Coordinate;
 
 public class EnemySpeedy extends Enemy {
     public EnemySpeedy(Coordinate location, int imageSize, int chalengeRating) {
-        super(imageSize,chalengeRating,"EnemySpeedy.png",location);
+        super("Speedster",imageSize,chalengeRating,"EnemySpeedy.png",location);
         this.lvl = chalengeRating;
         this.lvlUp();
         this.hp = maxHp;

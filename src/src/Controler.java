@@ -169,6 +169,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			case E:
 				interact();
 				break;
+			
 			case X://Testing Obstacle breaking  TODO Remove
 
 				player.damag(2);
@@ -183,7 +184,16 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		String info;
 		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
-		info = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()].toString();
+		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+		info = mapLocation.toString();
+		if(mapLocation.getEntity() != null) {
+			Entity entity = mapLocation.getEntity();
+			if(entity instanceof Enemy) {
+				Enemy enemy = (Enemy)entity;
+				info = enemy.toString();
+			}
+			
+		}
 		return info;
 	}
 
