@@ -10,10 +10,10 @@ public class EnemyTanky extends Enemy {
         this.hp = maxHp;
         for(int i = 0 ; i < availableStatPoint ; i++) {
             double rnd = Math.random();
-            if (rnd > .50) {
+            if (rnd > .40) {
                 incrementDefence(1);
             }
-            else if (rnd > .3) {
+            else if (rnd > .1) {
                 incrementCon(1);
             }
             else {

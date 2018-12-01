@@ -10,10 +10,10 @@ public class EnemyStrong extends Enemy {
         this.hp = maxHp;
         for(int i = 0 ; i < availableStatPoint ; i++) {
             double rnd = Math.random();
-            if (rnd > .50) {
+            if (rnd > .40) {
                 incrementStr(1);
             }
-            else if (rnd > .3) {
+            else if (rnd > .2) {
                 incrementSpeed(1);
             }
             else {
