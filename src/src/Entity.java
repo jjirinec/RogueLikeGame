@@ -340,6 +340,10 @@ public abstract class Entity extends MapObject{
     }
 
     public double calcBaseDmg(){
+	    if(this instanceof Enemy){
+	        Enemy e = (Enemy)this;
+            return(e.baseDmg + e.baseDmg * str/5.0);
+        }
         if(equipedWepon != null) {
             return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
         }

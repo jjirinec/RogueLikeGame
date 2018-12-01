@@ -11,12 +11,14 @@ import mapObjects.*;
 public class Enemy extends Entity {
 
     public final int STAT_PTS_PER_LVL = 3;
+    public int baseDmg;
 
     public Enemy(Coordinate location, int imageSize, int chalengeRating) {
         super("Enemy", "EnemySpeedy.png", location, false, imageSize);
         this.lvl = chalengeRating;
         this.lvlUp();
         this.calcMaxHp();
+        this.baseDmg = chalengeRating;
         //this.hp = maxHp;
         // this.setSpeed(speed);
     }
@@ -34,6 +36,7 @@ public class Enemy extends Entity {
         this.lvlUp();
         this.setLocation(loc.getX(),loc.getY());
         this.hp = maxHp;
+        this.baseDmg = chalengeRating;
     }
 
 

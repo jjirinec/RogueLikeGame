@@ -41,6 +41,7 @@ public class Map {
 
 	// STATS
 	private int damageDealt = 0;
+	private int totalActions = 0;
 	
 	
 	private Coordinate entrance;
@@ -315,4 +316,9 @@ public class Map {
     public int getDamageDealt(){
 	    return damageDealt;
     }
+
+    public void tallyAction(){
+	    this.totalActions++;
+    }
+    public int getTotalActions(){return totalActions;}
 }
