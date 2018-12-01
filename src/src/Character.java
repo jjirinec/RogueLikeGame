@@ -8,8 +8,6 @@ import mapObjects.*;
 public class Character extends Entity {
 
 	ArrayList<Loot> inventory;
-	Wepon equipedWepon = null;
-	Armor equipedArmor = null;
 	static final int statingStats = 5;
 	static final int statPtsPerLvl = 3;
 	
