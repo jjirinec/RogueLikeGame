@@ -15,10 +15,7 @@ public class Enemy extends Entity {
 
     public Enemy(Coordinate location, int imageSize, int chalengeRating) {
         super("Enemy", "EnemySpeedy.png", location, false, imageSize);
-        this.lvl = chalengeRating;
-        this.lvlUp();
-        this.calcMaxHp();
-        this.baseDmg = chalengeRating;
+        this.baseDmg = chalengeRating + 1;
         //this.hp = maxHp;
         // this.setSpeed(speed);
     }
@@ -32,11 +29,8 @@ public class Enemy extends Entity {
 
     Enemy(int imageSize, int chalengeRating,String image,Coordinate loc) {
         super("Enemy", image, false, imageSize);
-        this.lvl = chalengeRating;
-        this.lvlUp();
         this.setLocation(loc.getX(),loc.getY());
-        this.hp = maxHp;
-        this.baseDmg = chalengeRating;
+        this.baseDmg = chalengeRating + 1;
     }
 
 

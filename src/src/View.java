@@ -108,10 +108,7 @@ public class View extends Application implements Observer{
 		mainStage.setFullScreen(true);
 		
 		//ctr.startPlay();
-		
-		
-		
-		
+
 	}
 	public Controler getControler() {
 		return ctr;

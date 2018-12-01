@@ -208,11 +208,6 @@ public abstract class Entity extends MapObject{
     	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-    		double baseD = calcBaseDmg();
-    		double hitChance = calcHitChance(ent.getDefence());
-            System.out.println(baseD);
-            System.out.println(hitChance);
-
             dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
 				ent.damag(dmg); // CHANGE DAMAGE HERE
                 spendActions(attackCost);

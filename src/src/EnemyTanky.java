@@ -5,7 +5,7 @@ import mapObjects.Coordinate;
 public class EnemyTanky extends Enemy {
     public EnemyTanky(Coordinate location, int imageSize, int chalengeRating) {
         super(imageSize,chalengeRating,"EnemyTanky.png",location);
-        this.lvl = chalengeRating;
+        this.lvl = chalengeRating+1;
         this.lvlUp();
         this.hp = maxHp;
         for(int i = 0 ; i < availableStatPoint ; i++) {
@@ -20,5 +20,6 @@ public class EnemyTanky extends Enemy {
                 incrementStr(1);
             }
         }
+        this.availableStatPoint=0;
     }
 }
