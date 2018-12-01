@@ -76,28 +76,29 @@ public class Enemy extends Entity {
     	//System.out.println("readInput");
         boolean result = false;
         if(isSurrounded(map)){
-            this.spendActions(1);
+            spendActions(10);
+            System.out.println("IS SURROUNDED CHUNK");
             return true;
         }
         if (input == 'W') {
             result = move(0, -1, map);
             if(!result) {
-                randomMove(map);
+                result = randomMove(map);
             }
         } else if (input == 'S') {
             result = move(0, 1, map);
             if(!result) {
-                randomMove(map);
+                result = randomMove(map);
             }
         } else if (input == 'A') {
             result = move(-1, 0, map);
             if(!result) {
-                randomMove(map);
+                result = randomMove(map);
             }
         } else if (input == 'D') {
             result = move(1, 0, map);
             if(!result) {
-                randomMove(map);
+                result = randomMove(map);
             }
         } else if (input == 'H') {
             result = true;
@@ -109,14 +110,13 @@ public class Enemy extends Entity {
                 // END GAME HERE
             }
             }
-     //   timeStop(800);
         return result;
     }
 
 
     public synchronized void turn(Character player, Map map, Coordinate doorLoc) {
         this.newTurn();
-		while (this.canAct()) {
+		while (this.canAct() && !isSurrounded(map) && this.getCurentActions() > 0) {
     		timeStop(500);
     		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY(),map), map);
 		}
@@ -129,7 +129,6 @@ public class Enemy extends Entity {
         int y = Loc.getY();
         if (Loc == map.getExit()){
             return true;
-
         }
         return(!(map.getMapLocation()[x+1][y].isPasable()) && !(map.getMapLocation()[x-1][y].isPasable())
         && !(map.getMapLocation()[x][y+1].isPasable()) && !(map.getMapLocation()[x][y-1].isPasable())); /// BUGGED IF ENEMY IS IN DOORWAY
@@ -137,20 +136,23 @@ public class Enemy extends Entity {
 
 
 
-    public void randomMove(Map map) {
+    public boolean randomMove(Map map) {
         char[] direction = {'W', 'S', 'A', 'D'};
         Random rand = new Random();
         boolean temp = false;
-        while (!temp) {
-            int randomDirection = rand.nextInt(3);
+        int counter = 0;
+        while (!temp && counter < 100) {
+            int randomDirection = rand.nextInt(4);
             temp = readInput(direction[randomDirection], map);
+            counter++;
         }
+        return temp;
     }
 
     public char randomChar(Map map) {
         char[] direction = {'W', 'S', 'A', 'D'};
         Random rand = new Random();
-            int randomDirection = rand.nextInt(3);
+            int randomDirection = rand.nextInt(4);
             char temp = direction[randomDirection];
             return temp;
         }
