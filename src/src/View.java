@@ -107,11 +107,21 @@ public class View extends Application implements Observer{
 		mainStage.sizeToScene();
 		mainStage.setFullScreen(true);
 		
-		ctr.startPlay();
+		//ctr.startPlay();
 		
 		
 		
 		
+	}
+	public Controler getControler() {
+		return ctr;
+	}
+	public void showLevleUpScene() {
+		//this.layout.setCenter(this.levelUpView.levelUp());
+		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
+		VBox center = (VBox)layout.getCenter();
+		center.getChildren().remove(0);
+		center.getChildren().add(0, levelUpView.levelUp());
 	}
 	
 	private BorderPane setUpForFront()
@@ -119,7 +129,7 @@ public class View extends Application implements Observer{
 		BorderPane layout = new BorderPane();
 		VBox center = new VBox();
 		
-		center.getChildren().add(levelUpView.levelUp(5));
+		center.getChildren().add(levelUpView.levelUp());
 		center.getChildren().add(setUpBottom());
 		layout.setCenter(center);
 		
@@ -193,26 +203,7 @@ public class View extends Application implements Observer{
 	public void setScoreScene() {
 		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
 		BorderPane scorePane = scoreView.getScoreView();
-//		VBox scorePane = new VBox();
-//		scorePane.setPadding(new Insets(20,20,20,20));
-//		scorePane.setPrefSize(mapWidth, this.mapHight);
-//		scorePane.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(10,10,10,10))));
-//		Text headerText = new Text("Score");
-//		headerText.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 20));
-//		HBox header = new HBox(headerText);
-//		header.setAlignment(Pos.TOP_CENTER);
-//		header.setBackground(new Background(new BackgroundFill(Color.GRAY, new CornerRadii(25), new Insets(0,0,0,0))));
-//		scorePane.getChildren().add(header);
-//		Button nextMapButton = new Button();
-//		nextMapButton.setAlignment(Pos.BOTTOM_CENTER);
-//		nextMapButton.setText("Continue");
-//		nextMapButton.setOnMouseClicked(new EventHandler<MouseEvent>(){
-//				@Override
-//				public void handle(MouseEvent mouseEvent) {
-//			        nextMap();
-//				}		
-//			});
-//		scorePane.getChildren().add(nextMapButton);
+
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
 //		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();

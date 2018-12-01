@@ -14,7 +14,7 @@ public class Character extends Entity {
 	static final int statPtsPerLvl = 3;
 	
 	private int exp = 0;
-//	int availableStatPoint;
+
 
 	
     public Character(Coordinate location,int maxHP, int speed) {
@@ -24,6 +24,7 @@ public class Character extends Entity {
         calcMaxHp();
         this.hp = maxHP;
         this.availableStatPoint = this.statingStats;
+        System.out.println("Starting stats: " +this.availableStatPoint);
        // this.setSpeed(speed);
         inventory = new ArrayList<Loot>();
         inventory.add(new Dagger(0, 0, this.getImageSize()));
@@ -39,6 +40,7 @@ public class Character extends Entity {
         calcMaxHp();
         this.hp = maxHp;
         this.availableStatPoint = this.statingStats;
+        System.out.println("Starting stats: " +this.availableStatPoint);
        // this.setSpeed(2);
 
         inventory = new ArrayList<Loot>();
@@ -47,12 +49,24 @@ public class Character extends Entity {
         inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
         inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
     }
-
+    public int getExp() {
+    	return this.exp;
+    }
+    public void givExp(int exp) {
+    	this.exp += exp;
+    	int nextLvl = this.calcNextLvl(this.lvl);
+    	System.out.println("Gaining EXP\n\tGaind: " + exp + "\n\tTotal: " + this.exp + "Neede to lvl: " + nextLvl);
+    	System.out.println("Actions Points Available: " + this.availableStatPoint);
+    	if(exp >= nextLvl)
+    		this.lvlUp();
+    }
 	public int getStatPtsPerLvl() {
     	return statPtsPerLvl;
     }
     public void useStatPts(int ptsUsed) {
+    	System.out.print("UsingStatPts:\n\tBefore: "+this.availableStatPoint + "\n\tPts Used: "+ptsUsed+ "\n\tAfter: ");
     	this.availableStatPoint -= ptsUsed;
+    	System.out.print(this.availableStatPoint);
     }
     /**
      * reads char input built for smartDirection enemy
@@ -150,7 +164,9 @@ public class Character extends Entity {
 
         public void lvlUp() {
         	this.lvl++;
+        	System.out.println("Leveled Up\n\tLevel: " + this.lvl + "\n\tStatPoints befor lvl: " + this.availableStatPoint);
         	this.availableStatPoint += this.statPtsPerLvl;
+        	System.out.println("\tStat Points after Lvl: " + this.availableStatPoint);
         	calcMaxHp();
         }
         
@@ -160,7 +176,7 @@ public class Character extends Entity {
          * returns experience needed
          */
         public int calcNextLvl(int currentLvl) {
-        	int experianceNeeded = 50;	//The expericance needed to advance to next level defaults to half of desired experiance needed for lvl 1
+        	int experianceNeeded = 15;	//The expericance needed to advance to next level defaults to half of desired experiance needed for lvl 1
         	for(int lvl = 0; lvl < currentLvl; lvl++) {
         		experianceNeeded += experianceNeeded;
         	}

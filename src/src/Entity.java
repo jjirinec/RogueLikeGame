@@ -39,7 +39,10 @@ public abstract class Entity extends MapObject{
 	Entity(String objectName, String imageFile, boolean isPasable, int imageSize){
 		super(objectName,imageFile,isPasable,imageSize);
 	}
-
+	public void statPointIncrement(int vale) {
+		this.availableStatPoint  += vale;
+		System.out.println("Aval stat points" + this.availableStatPoint);
+	}
      public int getAvailableStatPts() {
     	 return this.availableStatPoint;
      }
@@ -125,6 +128,9 @@ public abstract class Entity extends MapObject{
 	}
 	public double getCurentActions() {
 		return curentActions;
+	}
+	public int getLevel() {
+		return this.lvl;
 	}
 	public void notify(String msg) {
 		if(this instanceof Character) {

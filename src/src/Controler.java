@@ -26,31 +26,19 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 */
 	public Controler(View view)
 	{
+		System.out.println("Controler Created");
 		this.view = view;
 		initializePlayer();
-		//System.out.println(player.curentActions);
 		addObserver(view);
-		System.out.println("Controler Created");
-		//this.player = new Player();
 	}
 	/*
 	 * Creates a new instance of the player
 	 */
 	private void initializePlayer()
 	{
-		
 		player = new Character(view.gridSize);
-		//cursor = new TargetingCursor(view.gridSize,new Coordinate(player.getLocation()));
 		player.setObserver(view);
-		//player.setSpeed(6);
-		//player.newTurn();
 		System.out.println("Player Initialized");
-		
-		System.out.println(player.calcNextLvl(1));
-		System.out.println(player.calcNextLvl(2));
-		System.out.println(player.calcNextLvl(3));
-		System.out.println(player.calcNextLvl(4));
-		System.out.println(player.calcNextLvl(5));
 	}
 	private void playerMovement(KeyCode eCode)
 	{

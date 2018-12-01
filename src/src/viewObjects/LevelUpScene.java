@@ -109,9 +109,11 @@ public class LevelUpScene {
 			@Override
 			public void handle(MouseEvent arg0) {
 				int usedPts = totalPts - availablePts;
-				System.out.println(usedPts);
+				System.out.println("Pts Used"+usedPts);
 				player.useStatPts(usedPts);
-				view.nextMap();				
+				
+				view.nextMap();	
+				view.getControler().startPlay();
 			}
 			
 		});
@@ -304,6 +306,7 @@ public class LevelUpScene {
 				player.incrementSpeed(val);
 				break;
 		}
+		//player.statPointIncrement(-val);
 	}
 	
 	private HBox downButton(Stat stat, Label value) {
@@ -345,8 +348,8 @@ public class LevelUpScene {
 		Background background = new Background(fill);
 		return background;
 	}
-	public BorderPane levelUp(int statPoints) {
-		this.statPoints = statPoints;
+	public BorderPane levelUp() {
+		this.statPoints = player.getAvailableStatPts();
 		return mainPane;
 	}
 
