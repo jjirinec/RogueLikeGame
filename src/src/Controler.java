@@ -105,28 +105,14 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
             }
 		}
 
-		if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
-//
-//			Obstacle obstacle = mapLocation.getObstacle();
-////			obstacle.damage(5, view.map);
-
-//			if(obstacle instanceof Container) {
-//				Container container = (Container) obstacle;
-//				System.out.println(container.getContents().size());
-//				if(container.getContents().size() > 0) {
-//					System.out.println(container.getContents());
-//					view.containerView(container,player,view.map);
-//				}
-//			}
-
-
+		else if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 			Obstacle target = mapLocation.getObstacle();
 			player.attack(target,view.map);
 			setChanged();
 			notifyObservers("Player Attacking " + mapLocation.getObstacle());
 		}
 
-		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
+		else if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
 			Loot item = mapLocation.getLoot();
 			player.grabLoot(item);
 			view.map.addToLootColected(item);

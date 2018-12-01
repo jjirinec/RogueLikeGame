@@ -210,7 +210,7 @@ public abstract class Entity extends MapObject{
             int dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
 				ent.damag(dmg); // CHANGE DAMAGE HERE
 				setChanged();
-				notifyObservers(this + " hit " + target + " for " + dmg + "damage" );
+				notifyObservers(this + " hit " + target + " for " + dmg + " damage" );
                 spendActions(attackCost);
 				return dmg;
     	}
