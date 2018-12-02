@@ -5,7 +5,7 @@ public class LeatherArmor extends Armor{
 	private static String name = "Leather Armor";
 	private static String imageFile = "images/armor/LeatharArmor.png";
 	private static int baseDefence = 2;
-	private static String type = "Light";
+	private static Armor.Type type = Armor.Type.LIGHT;
 	private static int baseValue = 20;
 	private static int imageSize = 50;
 	

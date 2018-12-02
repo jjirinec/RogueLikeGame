@@ -5,7 +5,7 @@ public class ChainMail extends Armor{
 	private static String name = "ChainMail";
 	private static String imageFile = "images/armor/LeatharArmor.png";
 	private static int baseDefence = 4;
-	private static String type = "Medium";
+	private static Armor.Type type = Armor.Type.MEDIUM;
 	private static int baseValue = 30;
 	private static int imageSize = 50;
 	

@@ -11,6 +11,7 @@ public class Character extends Entity {
 	static final int statingStats = 5;
 	static final int statPtsPerLvl = 3;
 	
+	
 	private int exp = 0;
 
 
@@ -25,10 +26,11 @@ public class Character extends Entity {
         System.out.println("Starting stats: " +this.availableStatPoint);
        // this.setSpeed(speed);
         inventory = new ArrayList<Loot>();
-        inventory.add(new Dagger(0, 0, this.getImageSize()));
-        inventory.add(new Axe(1, 0, this.getImageSize()));
-        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
-        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+        startLoot(2);
+//        inventory.add(new Dagger(0, 0, this.getImageSize()));
+//        inventory.add(new Axe(1, 0, this.getImageSize()));
+//        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
+//        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
     }
 
 
@@ -42,10 +44,17 @@ public class Character extends Entity {
        // this.setSpeed(2);
 
         inventory = new ArrayList<Loot>();
-        inventory.add(new Dagger(0, 0, this.getImageSize()));
-        inventory.add(new Axe(1, 0, this.getImageSize()));
-        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
-        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+        startLoot(2);
+//        inventory.add(new Dagger(0, 0, this.getImageSize()));
+//        inventory.add(new Axe(1, 0, this.getImageSize()));
+//        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
+//        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+    }
+    private void startLoot(int numberOfItems) {
+    	LootGenerator lootGen = new LootGenerator(this.getImageSize());
+    	for(int i = 0; i < numberOfItems; i++)
+    		inventory.add(lootGen.generate(0));
+    	
     }
     public int getExp() {
     	return this.exp;
@@ -158,8 +167,12 @@ public class Character extends Entity {
     		this.notifyObservers("EquipmentChange"); 
         }
 
-
-
+        public boolean isMyTurn() {
+        	return this.myTurn;
+        }
+        public void endTurn() {
+        	this.myTurn = false;
+        }
         public void lvlUp() {
         	this.lvl++;
         	System.out.println("Leveled Up\n\tLevel: " + this.lvl + "\n\tStatPoints befor lvl: " + this.availableStatPoint);

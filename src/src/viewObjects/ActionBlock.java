@@ -40,7 +40,7 @@ public class ActionBlock {
 		actionBlock.setVgap(10);
 		actionBlock.setPadding(new Insets(20,10,20,10));
 		Text actions = statText("Action Points:");
-		Text actionValue = statText("" + Math.round(player.getCurentActions()*10)/10.0);
+		Text actionValue = statText("" + Math.round(player.getCurentActions()*100)/100.0);
 		actionBlock.add(actions, 0, 0);
 		actionBlock.add(actionValue, 1, 0);
 		Text moveCost = statText("Movment Cost:");

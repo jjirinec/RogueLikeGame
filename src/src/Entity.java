@@ -20,7 +20,8 @@ public abstract class Entity extends MapObject{
     protected String status = "Uninjured";
     
     protected int lvl = 1;		//Default to one
-    int availableStatPoint;		
+    int availableStatPoint;	
+    protected boolean myTurn = false;
     //Stats 
     private int str = 1;
     private int dex = 1;
@@ -99,8 +100,35 @@ public abstract class Entity extends MapObject{
 			mgk--;
 		notify("StatUpdate");
 	}
-	public int getDefence() {
+	public int getDefence() {//This retruns the stat value of Defence
 		return defence;
+	}
+	public double getTotalDefence() {//This includes Armor and Dextarity
+		Armor.Type armorType = null;
+		int armorDefenceiveValue = 0;
+		if(this.equipedArmor != null) {
+			armorDefenceiveValue = equipedArmor.getDefence();
+			armorType = equipedArmor.getType();
+		}
+		double dexBonus = this.dex / 10.0;
+		double maxDexBonus = maxDexBonus(armorType);
+		if(maxDexBonus > 0 && dexBonus > maxDexBonus)
+			dexBonus = maxDexBonus;
+		double totalDefence = defence + armorDefenceiveValue + dexBonus;
+		System.out.println("TotalDevence: " + totalDefence);
+		return totalDefence;
+	}
+	private double maxDexBonus(Armor.Type armorType) {
+		double bonus = 0;
+		if(armorType == null)
+			bonus = -1;//Flag for no maxDexBonus
+		else if(armorType.equals(Armor.Type.LIGHT))
+			bonus = 1;
+		else if(armorType.equals(Armor.Type.MEDIUM))
+			bonus = .75;
+		else if(armorType.equals(Armor.Type.HEAVY))
+			bonus = .25;
+		return bonus;
 	}
 	public void incrementDefence(int val) {
 		if(val > 0)
@@ -207,9 +235,11 @@ public abstract class Entity extends MapObject{
     	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
-				ent.damag(dmg); // CHANGE DAMAGE HERE
-                spendActions(attackCost);
+            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
     	}
     	else if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
@@ -219,23 +249,17 @@ public abstract class Entity extends MapObject{
     	}
     	String dmgDeltMsg = this + ": hit " + target.getObjectName() + " for " + dmg + " damage" ;
     	sendHudMsg(dmgDeltMsg);
-    	setChanged();
-		this.notifyObservers("This is just a string" + dmgDeltMsg);
-
     	return dmg;
         
     }
     private void sendHudMsg(String msg) {
-    	System.out.println("Attack Made: " + msg);
-    	
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
     	if(this instanceof Enemy) 
     		msgText.setFill(Color.RED);
-    	
     	javafx.application.Platform.runLater( () ->setChanged());
     	javafx.application.Platform.runLater( () ->notifyObservers(msgText));
-    	
+
 		
     }
 
@@ -300,12 +324,16 @@ public abstract class Entity extends MapObject{
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
-    	
+    	myTurn  = true;
     	curentActions += (1 + speed/5.0);
     	if(this instanceof Character) {
 //    		System.out.println("Plaer NewTurn");
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");
+    		Text yourTurnMsg = new Text("Its Your Turn");
+    		yourTurnMsg.setFill(Color.ORANGE);
+    		this.setChanged();
+    		this.notifyObservers(yourTurnMsg);
     	}
     }
     public boolean canAct() {
@@ -321,24 +349,25 @@ public abstract class Entity extends MapObject{
     		
     }
     public boolean hasAttacks() {
+    	System.out.println("CurrentActions: " + curentActions + " AttackCost: " + attackCost);
     	if(curentActions >= attackCost)
     		return true;
     	return false;
     }
     public void spendActions(double actionsCost) {
-//    		System.out.println(actionsCost + " Actions spent \nStarting with " + curentActions);
             curentActions -= actionsCost;
-//            System.out.println("Ending with " + curentActions);
+            curentActions = removeExtraDecimal(curentActions);
             if (this instanceof Character) {
                 this.setChanged();
                 this.notifyObservers("ActionUpdate");
             }
-            if (!canAct()) {//TODO Remove this latter ????
-                this.setChanged();
-                this.notifyObservers(this.getObjectName() + " turn over.\n");
-            }
         }
-
+    private double removeExtraDecimal(double num) {
+    	num *= 100;
+    	num = Math.round(num);
+    	num /= 100.0;
+    	return num;
+    }
     
     public void giveActions(double actionPoints) {
     	this.curentActions += actionPoints;
@@ -370,8 +399,8 @@ public abstract class Entity extends MapObject{
 
         }
     }
-
-    public double calcHitChance(int def) {
+    
+    public double calcHitChance(double def) {
 	    double chance = (4.0*this.accuracy)/(3.0*def);
 	    if (chance>1)
 	        chance = 1;
