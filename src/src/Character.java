@@ -15,9 +15,9 @@ public class Character extends Entity {
 
 
 	
-    public Character(Coordinate location,int maxHP, int speed) {
+    public Character(String name,Coordinate location,int maxHP, int speed) {
 
-        super("Character", "TempChar.png", location, false, 60);
+        super(name, "TempChar.png", location, false, 60);
 //        this.maxHp = maxHP;
         calcMaxHp();
         this.hp = maxHP;
@@ -32,8 +32,8 @@ public class Character extends Entity {
     }
 
 
-    public Character(int imageSize){
-        super("Character","TempChar.png",new Coordinate(0,0),false,imageSize );
+    public Character(String name,int imageSize){
+        super(name,"TempChar.png",new Coordinate(0,0),false,imageSize );
        // this.maxHp = 10;
         calcMaxHp();
         this.hp = maxHp;

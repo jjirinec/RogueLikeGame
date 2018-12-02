@@ -37,7 +37,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 */
 	private void initializePlayer()
 	{
-		player = new Character(view.gridSize);
+		player = new Character("Player",view.gridSize);
 		player.setObserver(view);
 		System.out.println("Player Initialized");
 	}
@@ -258,7 +258,9 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					return null;
 				}
 			};
-			Thread enemyThread = new Thread(task);		//Each enemy turn executes on a separate thread
+			
+			Thread enemyThread = new Thread(task);	//Each enemy turn executes on a separate thread
+			
 			enemyThread.start();
 			try {
 				enemyThread.join();						//Join on enemy turn before next enemy taks turn

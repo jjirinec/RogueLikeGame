@@ -218,8 +218,8 @@ public abstract class Entity extends MapObject{
     	}
     	String dmgDeltMsg = this + " hit " + target.getObjectName() + " for " + dmg + " damage" ;
     	sendHudMsg(dmgDeltMsg);
-    	//setChanged();
-		//this.notifyObservers(dmgDeltMsg);
+    	setChanged();
+		this.notifyObservers("This is just a string" + dmgDeltMsg);
 
     	return dmg;
         
@@ -229,17 +229,12 @@ public abstract class Entity extends MapObject{
     	
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
-    	if(this instanceof Enemy) {
+    	if(this instanceof Enemy) 
     		msgText.setFill(Color.RED);
-    		javafx.application.Platform.runLater( () ->setChanged());
-    		javafx.application.Platform.runLater( () ->notifyObservers(msgText));
-    		setChanged();
-    		this.notifyObservers(msg);
-    	}
-    	else {
-    	setChanged();
-		notifyObservers(msgText);
-    	}
+    	
+    	javafx.application.Platform.runLater( () ->setChanged());
+    	javafx.application.Platform.runLater( () ->notifyObservers(msgText));
+    	
 		
     }
 

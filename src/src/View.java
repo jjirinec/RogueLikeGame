@@ -213,7 +213,7 @@ public class View extends Application implements Observer{
 		center.getChildren().add(0, scorePane);
 	}
 	public void nextMap(){
-		map = new Map(mapRows,mapColums,gridSize,ctr.player);
+		map = new Map(mapRows,mapColums,gridSize,ctr.player,this);
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
 		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();
