@@ -16,11 +16,9 @@ import mapObjects.Obstacle;
 import mapObjects.TargetingCursor;
 
 public class Controler extends Observable implements EventHandler<KeyEvent>{
-	
 	View view;
 	Character player;
 	//TargetingCursor cursor;
-	
 	/*
 	 * Constructor for controler
 	 */
@@ -67,7 +65,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				moveResult = player.readInput('S',view.map);
 				break;
 		}
-		if(!moveResult) {
+		if(moveResult){
+			view.map.tallyAction();
+		}
+		else {
 			setChanged();
 			notifyObservers("Something is in the way!");
 		}
@@ -93,34 +94,36 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	}
 	private void interactAttack()
 	{
-		Coordinate cursorLocation = view.map.getCursor().getLocation();
-		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
-			Entity target = mapLocation.getEntity();
-			view.map.updateDamageDealt(player.attack(target,view.map));
-			if(target.checkDead()) {
-				view.map.getEnemys().remove(target);
-                view.map.removeEntity(target);
-
-            }
-		}
-
-		else if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
-			Obstacle target = mapLocation.getObstacle();
-			player.attack(target,view.map);
-			setChanged();
-			notifyObservers("Player Attacking " + mapLocation.getObstacle());
-		}
-
-		else if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
-			Loot item = mapLocation.getLoot();
-			view.map.addToLootColected(item);
-			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
-			player.grabLoot(item);
+		if(view.map.getPlayer().getCurentActions() < view.map.getPlayer().getAttackCost()){
+			System.out.println("NO ENOUGH POINTS TO ATTACK");
 		}
 		else {
-			setChanged();
-			notifyObservers("Theres nothing there to attack!");
+			Coordinate cursorLocation = view.map.getCursor().getLocation();
+			MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+			if (mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
+				Entity target = mapLocation.getEntity();
+				view.map.updateDamageDealt(player.attack(target, view.map));
+				view.map.tallyAction();
+				if (target.checkDead()) {
+					view.map.getEnemys().remove(target);
+					view.map.removeEntity(target);
+				}
+			} else if (mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
+				Obstacle target = mapLocation.getObstacle();
+				player.attack(target, view.map);
+				view.map.tallyAction();
+				setChanged();
+				notifyObservers("Player Attacking " + mapLocation.getObstacle());
+			} else if (mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
+				Loot item = mapLocation.getLoot();
+				view.map.addToLootColected(item);
+				view.map.tallyAction();
+				view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
+				player.grabLoot(item);
+			} else {
+				setChanged();
+				notifyObservers("Theres nothing there to attack!");
+			}
 		}
 
 	}

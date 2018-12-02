@@ -12,6 +12,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -109,12 +111,12 @@ public class InventoryView {
 				filter.setFocusTraversable(false);
 			}
 		});
-		
+
 		filterView.getChildren().add(filter);
-		filter.setFocusTraversable(false);
-		
+		map.getMap().requestFocus();
 		return filterView;
 	}
+
 	private void filterSwitch(Object filterValue) {
 		String value = (String)filterValue;
 		switch(value) {
@@ -131,7 +133,6 @@ public class InventoryView {
 				filterConsumables();
 				break;
 		}
-		System.out.println("ResetingFocus" + filter.isFocused());
 		filter.setFocusTraversable(false);
 		map.getMap().requestFocus();
 		System.out.println("ResetingFocus" + filter.isFocused());

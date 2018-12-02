@@ -7,7 +7,7 @@ public class InvalidTargetException extends Exception{
 	}
 	public String getMesage()
 	{
-		return "mesage";
+		return "Invalid Target Exception!";
 	}
 	
 }

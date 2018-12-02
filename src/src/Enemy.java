@@ -30,7 +30,7 @@ public class Enemy extends Entity {
 
     Enemy(String name,int imageSize, int chalengeRating,String image,Coordinate loc) {
         super(name, image, false, imageSize);
-        this.lvl = chalengeRating;
+        this.lvl = chalengeRating+1;
         this.lvlUp();
         this.setLocation(loc.getX(),loc.getY());
         this.baseDmg = chalengeRating + 1;
