@@ -174,7 +174,7 @@ public class LevelUpScene {
 				statString = "Strength:";
 				break;
 			case Dex:
-				statString = "Dextatity:";
+				statString = "Dexterity:";
 				break;
 			case Con:
 				statString = "Constitution:";
@@ -186,7 +186,7 @@ public class LevelUpScene {
 				statString = "Defence:";
 				break;
 			case Acc:
-				statString = "Accurace:";
+				statString = "Accuracy:";
 				break;
 			case Spd:
 				statString = "Speed:";

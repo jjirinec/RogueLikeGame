@@ -10,6 +10,9 @@ import mapObjects.MapObject;
 import mapObjects.Obstacle;
 import mapObjects.Wepon;
 
+import static src.Entity.AttackType.MELLE;
+import static src.Entity.AttackType.RANGED;
+
 public abstract class Entity extends MapObject{
     //boolean myTurn;
 	int hp;		//Curretn Hp
@@ -40,12 +43,12 @@ public abstract class Entity extends MapObject{
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
-		this.attackType = AttackType.MELLE;
+		this.attackType = MELLE;
     }
 
 	Entity(String objectName, String imageFile, boolean isPasable, int imageSize){
 		super(objectName,imageFile,isPasable,imageSize);
-		this.attackType = AttackType.MELLE;
+		this.attackType = MELLE;
 	}
 	public void statPointIncrement(int vale) {
 		this.availableStatPoint  += vale;
@@ -55,12 +58,12 @@ public abstract class Entity extends MapObject{
     	 return this.availableStatPoint;
      }
      public void cycleAttackType() {
-    	 if(this.attackType.equals(AttackType.MELLE))
+    	 if(this.attackType.equals(MELLE))
     		 this.attackType = AttackType.RANGED;
     	 else if(this.attackType.equals(AttackType.RANGED))
     		 this.attackType = AttackType.MAGIC;
     	 else if(this.attackType.equals(AttackType.MAGIC))
-    		 this.attackType = AttackType.MELLE;
+    		 this.attackType = MELLE;
     	 this.setChanged();
 		 this.notifyObservers("Attack Type Change");
      }
@@ -249,33 +252,43 @@ public abstract class Entity extends MapObject{
    
 
     public int attack(MapObject target, Map map) {
-    	int dmg = 0;
-    	if(target instanceof Entity){
-    		Entity ent = (Entity)target;
-            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
-            if(dmg < 1)
-            	dmg = 1;
-			ent.damag(dmg); // CHANGE DAMAGE HERE
-            spendActions(attackCost);
-    	}
-    	else if(target instanceof Obstacle) {
-			Obstacle t = (Obstacle)target;
-            dmg = Math.round((float)calcBaseDmg());
-    		t.damage(dmg, map);
-    		spendActions(attackCost);
-    	}
-    	String dmgDeltMsg = this + ": hit " + target.getObjectName() + " for " + dmg + " damage" ;
-    	sendHudMsg(dmgDeltMsg);
-    	return dmg;
-        
+		if(this.attackType == MELLE){
+			return(melleAttack(target, map));
+		}
+		else if(this.attackType == RANGED){
+			return(rangedAttack(target, map));
+		}
+		else{
+			return(magicAttack(target, map));
+		}
     }
+
+	public int melleAttack(MapObject target, Map map) {
+		int dmg = 0;
+		if(target instanceof Entity){
+			Entity ent = (Entity)target;
+			dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
+			if(dmg < 1)
+				dmg = 1;
+			ent.damag(dmg);
+			spendActions(attackCost);
+		}
+		else if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+			dmg = Math.round((float)calcBaseDmg());
+			t.damage(dmg, map);
+			spendActions(attackCost);
+		}
+		String dmgDeltMsg = this + ": hit " + target.getObjectName() + " for " + dmg + " damage" ;
+		sendHudMsg(dmgDeltMsg);
+		return dmg;
+	}
+
     public int rangedAttack(MapObject target, Map map) {
     	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
             dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
-            if(dmg < 1)
-            	dmg = 1;
 			ent.damag(dmg); // CHANGE DAMAGE HERE
             spendActions(attackCost);
     	}
@@ -289,6 +302,7 @@ public abstract class Entity extends MapObject{
     	sendHudMsg(dmgDeltMsg);
     	return dmg;
     }
+
     public int magicAttack(MapObject target, Map map) {
     	int dmg = 0;
     	if(target instanceof Entity){
@@ -309,6 +323,9 @@ public abstract class Entity extends MapObject{
     	sendHudMsg(dmgDeltMsg);
     	return dmg;
     }
+
+
+
     private void sendHudMsg(String msg) {
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
@@ -366,7 +383,7 @@ public abstract class Entity extends MapObject{
     	else if(hp <= (maxHp - maxHp/3))//1/3 hp lost
     		status = "Bloodied";
     	else if(hp < maxHp)
-			status = "Merly a flesh wound";
+			status = "Merely a flesh wound";
     	else
     		status = "Uninjured";
     	
@@ -449,7 +466,7 @@ public abstract class Entity extends MapObject{
             baseDmg = (e.baseDmg + e.baseDmg * str/5.0);
         }
 	    else {
-	    	if(this.attackType.equals(AttackType.MELLE))
+	    	if(this.attackType.equals(MELLE))
 	    		baseDmg = melleBaseDmg();
 	    	else if(this.attackType.equals(AttackType.RANGED))
 	    		baseDmg = rangedBaseDmg();

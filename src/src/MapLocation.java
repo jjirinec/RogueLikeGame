@@ -85,6 +85,11 @@ public class MapLocation {
 			return true;
 		return false;
 	}
+
+	public void delLoot(){
+		loot.remove(0);
+	}
+
 	public boolean isPasable()
 	{
 		boolean result = false;

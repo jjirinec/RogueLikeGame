@@ -218,6 +218,7 @@ public class Map {
 		location[entrance.getY()][entrance.getX()].setEntity(player);
 		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
+		player.inventory.add(new Bow(1,1,gridSize));
 	}
 
 

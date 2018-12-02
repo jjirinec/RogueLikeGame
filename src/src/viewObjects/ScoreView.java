@@ -53,7 +53,7 @@ public class ScoreView {
 		mainView = new BorderPane();
 		mainView.setBackground(background(Color.BLACK,25,0));
 		mainView.setMinSize(prefSize, prefSize);
-		mainView.setTop(header("Room # " + Map.ROOM_NUMBER + " Compleat",35));
+		mainView.setTop(header("Room # " + Map.ROOM_NUMBER + " Complete",35));
 		mainView.setCenter(splitView());
 		mainView.setBottom(continueButton());
 		
@@ -80,7 +80,7 @@ public class ScoreView {
 		expPane.setPadding(insets(5));
 		expPane.setSpacing(10);
 		expPane.setPrefWidth(prefSize/2-5/2);
-		expPane.getChildren().add(header("Experiance", 20));
+		expPane.getChildren().add(header("Experience", 20));
 		expPane.getChildren().add(expTextBlock());
 		return expPane;
 	}
@@ -89,17 +89,17 @@ public class ScoreView {
 		//expBlock.setMinWidth(prefSize/2 - 5/2 - 20);
 		expBlock.setPadding(insets(10));
 		expBlock.setBackground(background(Color.GRAY,20,0));
-		HBox curentLvl = textBlock("Curent Lvl", ""+player.getLevel());
+		HBox curentLvl = textBlock("Current Lvl", ""+player.getLevel());
 		HBox expNeeded = textBlock("Exp need for Lvl " + (player.getLevel() + 1), ""+player.calcNextLvl(player.getLevel()));
 		HBox enemysKilled = textBlock("From Kill Count", ""+expEnemysKilled());
 		addToolTip("Kill Count x (RoomRating + 1) x " + expVriable + "\n" + map.getEnemyKillCount() + " x " + (map.getRoomRating()+1) + " x " + expVriable + " = " + expEnemysKilled(),enemysKilled);
-		HBox lootColected = textBlock("Loot Colected", ""+expLootColected());
-		addToolTip("Total Value of Loot colected / ((RoomRating + 1) x " + expVriable + ")\n" + calcLootValue() + " / ((" + (map.getRoomRating()+1) + " x " + expVriable +") = " + expLootColected(),lootColected);
+		HBox lootColected = textBlock("Loot Collected", ""+expLootColected());
+		addToolTip("Total Value of Loot collected / ((RoomRating + 1) x " + expVriable + ")\n" + calcLootValue() + " / ((" + (map.getRoomRating()+1) + " x " + expVriable +") = " + expLootColected(),lootColected);
 		HBox totalExp = textBlock("Total",""+expTotal());
 		HBox congrats = null;
 		
 		if(player.getExp()+this.expTotal() >= player.calcNextLvl(player.getLevel()))
-			congrats = textBlock("Congradulations", "Now Lvl "+(player.getLevel()+1));
+			congrats = textBlock("Congratulations", "Now Lvl "+(player.getLevel()+1));
 		awardExp();
 		HBox playerTotal = textBlock("Player Exp", ""+player.getExp());
 		
@@ -146,11 +146,11 @@ public class ScoreView {
 		scoreBlock.setPadding(insets(10));
 		scoreBlock.setBackground(background(Color.GRAY,20,0));
 		HBox roomRating = textBlock("Room Rating", ""+map.getRoomRating());
-		HBox totalEnemys = textBlock("Total Enemys", ""+map.getStartEnemyCount());
-		HBox enemysKilled = textBlock("Enemys Killed", ""+map.getEnemyKillCount());
+		HBox totalEnemys = textBlock("Total Enemies", ""+map.getStartEnemyCount());
+		HBox enemysKilled = textBlock("Enemies Killed", ""+map.getEnemyKillCount());
 		HBox totalLoot = textBlock("Total Loot", ""+map.getStartLootCount());
-		HBox lootColected = textBlock("Loot Colected", ""+map.getLootColected().size());
-		HBox dmgDelt = textBlock("Damage Delt", ""+map.getDamageDealt());
+		HBox lootColected = textBlock("Loot Collected", ""+map.getLootColected().size());
+		HBox dmgDelt = textBlock("Damage Dealt", ""+map.getDamageDealt());
 		HBox actionsSpent = textBlock("Actions Used",""+map.getTotalActions());
 		//Add all text blocks to scoreBlock
 		scoreBlock.getChildren().addAll(roomRating,totalEnemys,enemysKilled,totalLoot,lootColected,dmgDelt,actionsSpent);

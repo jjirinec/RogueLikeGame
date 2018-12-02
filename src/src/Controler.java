@@ -10,11 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import mapObjects.Container;
-import mapObjects.Coordinate;
-import mapObjects.Loot;
-import mapObjects.Obstacle;
-import mapObjects.TargetingCursor;
+import mapObjects.*;
 
 public class Controler extends Observable implements EventHandler<KeyEvent>{
 	String endTurnMsg = "   (Press Shift To End Turn Early)";
@@ -109,33 +105,79 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+
 		if(player.hasAttacks()) {
-			if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
-				Entity target = mapLocation.getEntity();
-				view.map.updateDamageDealt(player.attack(target,view.map));
-				if(target.checkDead()) {
-					view.map.getEnemys().remove(target);
-	                view.map.removeEntity(target);
-	
-	            }
+			if (player.getAttackType() == Entity.AttackType.MELLE) {
+				if (mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
+					Entity target = mapLocation.getEntity();
+					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.tallyAction();
+					if (target.checkDead()) {
+						view.map.getEnemys().remove(target);
+						view.map.removeEntity(target);
+					}
+				} else if (mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
+					Obstacle target = mapLocation.getObstacle();
+					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.tallyAction();
+					setChanged();
+					notifyObservers("Player Attacking " + mapLocation.getObstacle());
+				}
+				else
+					sendActionError("Out Of Range!\nPress Tab to switch Attack Styles!");
 			}
-			else if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
-				Obstacle target = mapLocation.getObstacle();
-				player.attack(target,view.map);
-				setChanged();
-				notifyObservers("Player Attacking " + mapLocation.getObstacle());
+			else if(player.getAttackType().equals(Entity.AttackType.RANGED)){
+				System.out.println("test outside");
+				if(player.getEquipedWepon() == null || (player.getEquipedWepon() != null && !(player.getEquipedWepon().getType().equals(Wepon.Type.RANGED)))){
+					System.out.println("test inside");
+					sendActionError("You're not wearing a ranged weapon!");
+				}
+				//else if (!(player.getEquipedWepon().getType().equals(Wepon.Type.RANGED))) {
+				//	System.out.println("test inside");
+				//	sendActionError("You're not wearing a ranged weapon!");}
+				 else {
+					if (mapLocation.getEntity() != null) {
+						Entity target = mapLocation.getEntity();
+						view.map.updateDamageDealt(player.attack(target, view.map));
+						view.map.tallyAction();
+						if (target.checkDead()) {
+							view.map.getEnemys().remove(target);
+							view.map.removeEntity(target);
+						}
+					} else if (mapLocation.getObstacle() != null) {
+						Obstacle target = mapLocation.getObstacle();
+						view.map.updateDamageDealt(player.attack(target, view.map));
+						view.map.tallyAction();
+						setChanged();
+						notifyObservers("Player Attacking " + mapLocation.getObstacle());
+					} else
+						sendActionError("There's nothing there to attack!");
+				}
+			}
+			else{
+				if (mapLocation.getEntity() != null) {
+					Entity target = mapLocation.getEntity();
+					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.tallyAction();
+					if (target.checkDead()) {
+						view.map.getEnemys().remove(target);
+						view.map.removeEntity(target);
+					}
+				} else if (mapLocation.getObstacle() != null) {
+					Obstacle target = mapLocation.getObstacle();
+					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.tallyAction();
+					setChanged();
+					notifyObservers("Player Attacking " + mapLocation.getObstacle());
+				}
+				else
+					sendActionError("There's nothing there to attack!");
 			}
 		}
 		else
 			sendActionError("Not Enough Action Points To Attack!" + this.endTurnMsg);
-		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
-			Loot item = mapLocation.getLoot();
-			view.map.addToLootColected(item);
-			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
-			player.grabLoot(item);
-		}
 	}
-	
+
 	
 	/*
 	 * Maps each key code to the desired task
