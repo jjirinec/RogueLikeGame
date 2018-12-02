@@ -2,17 +2,19 @@ package mapObjects;
 import src.Character;
 public class Wepon extends Loot implements Equipable{
 	private int dmg;
-	private String type;
+	private Type type;
 	private double weponSpeed;
-
-	public Wepon(String name, String imageFile, int value, int dmg, String type, double speed, int imageSize) {
+	
+	
+	public static enum Type {MELLE,RANGED}
+	public Wepon(String name, String imageFile, int value, int dmg, Type type, double speed, int imageSize) {
 		super(name, imageFile, value,imageSize);
 		this.dmg = dmg;
 		this.type = type;
 		this.weponSpeed = speed;
 		// TODO Auto-generated constructor stub
 	}
-	public Wepon(String name, String imageFile, Coordinate location, int value, int dmg, String type,double speed, int imageSize) {
+	public Wepon(String name, String imageFile, Coordinate location, int value, int dmg, Type type,double speed, int imageSize) {
 		super(name, imageFile, location, value, imageSize);
 		this.dmg = dmg;
 		this.type = type;
@@ -27,7 +29,7 @@ public class Wepon extends Loot implements Equipable{
 	{
 		return dmg;
 	}
-	public String getType()
+	public Type getType()
 	{
 		return type;
 	}

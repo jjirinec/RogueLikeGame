@@ -12,6 +12,8 @@ import javafx.scene.layout.StackPane;
 
 public class Map {
 	
+	View view;
+	
 	//RoomNumber and rating
 	private final static int DIFICULTY_INCREAS_FREQUENCY = 3;
 	public static int ROOM_NUMBER = 0;
@@ -52,7 +54,7 @@ public class Map {
 ///		Constructor		///
 ///////////////////////////
 	public Map() {map = new GridPane();}
-	public Map(int hight, int width, int gridSize,Character player)//,int roomRating)
+	public Map(int hight, int width, int gridSize,Character player,View view)//,int roomRating)
 	{
 		this.ROOM_NUMBER++;
 		this.roomRating = ROOM_NUMBER / DIFICULTY_INCREAS_FREQUENCY;
@@ -60,6 +62,7 @@ public class Map {
 		this.mapWidth = width;
 		this.gridSize = gridSize;
 		this.player = player;
+		this.view = view;
 		//this.roomRating = roomRating;
 		enemys = new ArrayList<Enemy>();
 		lootColected = new ArrayList<Loot>();
@@ -166,6 +169,7 @@ public class Map {
 			Coordinate enemyLocation = findEmptyLocation();
 			System.out.println("enemy spawn @ (" + enemyLocation.getX() + "," + enemyLocation.getY() + ")");
 			Enemy enemy = enemyGen.generate(roomRating, enemyLocation);
+			enemy.setObserver(view);
 			enemys.add(enemy);
 			location[enemyLocation.getX()][enemyLocation.getY()].setEntity(enemy);
 			stacks[enemyLocation.getX()][enemyLocation.getY()].getChildren().add(enemy.getImageView());

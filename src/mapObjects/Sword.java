@@ -7,14 +7,15 @@ public class Sword extends Wepon{
 	private static int baseDmg = 3;
 	private static int baseValue = 5;
 	private static double weponSpeed = 1;
+	private static Wepon.Type type = Wepon.Type.MELLE;
 	
 	public Sword(int extraDmg,int bonusValue,int imageSize) {
-		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
+		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),type,weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 	}
 	public Sword(int extraDmg, int bonusValue, Coordinate location,int imageSize) {
-		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
+		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),type,weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 

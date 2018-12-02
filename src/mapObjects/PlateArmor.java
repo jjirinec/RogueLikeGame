@@ -5,7 +5,7 @@ public class PlateArmor extends Armor{
 	private static String name = "Plate Armor";
 	private static String imageFile = "images/armor/LeatharArmor.png";
 	private static int baseDefence = 6;
-	private static String type = "Heavy";
+	private static Armor.Type type = Armor.Type.HEAVY;
 	private static int baseValue = 40;
 	private static int imageSize = 50;
 	

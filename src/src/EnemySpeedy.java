@@ -3,6 +3,7 @@ package src;
 import mapObjects.Coordinate;
 
 public class EnemySpeedy extends Enemy {
+	String discription = "Looks fast and agile.";
     public EnemySpeedy(Coordinate location, int imageSize, int chalengeRating) {
         super("Speedster",imageSize,chalengeRating,"EnemySpeedy.png",location);
         this.lvl = chalengeRating+1;
@@ -22,5 +23,9 @@ public class EnemySpeedy extends Enemy {
         }
         this.availableStatPoint=0;
     }
+    
+    public String description() {
+    	return this + " (" + discription + ")\n\t" + super.description();
     }
+}//End of Class
 

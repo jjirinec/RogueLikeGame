@@ -175,29 +175,15 @@ public class View extends Application implements Observer{
 	private void setUpHud()
 	{
 		hud = new ScrollPane();
-//		BackgroundFill backGroundFill = new BackgroundFill(Color.BLACK, new CornerRadii(25), new Insets(0,0,0,0) );
-//		Background backGround = new Background(backGroundFill);
-//		hud.setBackground(backGround);
 		hud.setFitToHeight(true);
-		//hud.setPrefHeight(screenSize.getHeight() - mapHight);
-		
 		hud.setPrefViewportWidth(mapWidth);
-		hud.setOpacity(.6);
-//		Background backgroud = new Background(new BackgroundFill(Paint.valueOf(Color.AQUA),new CornerRadii(20),new Insets(5.5)));
-//		hud.setBackground(backgroud);
-		hudMsg = new Text("HUD");
-		hudMsg.setFill(Color.GREEN);
+//		hud.setOpacity(.6);
 		hudBox = new VBox();
 		hudBox.setBackground(new Background(new BackgroundFill(Color.BLACK, new CornerRadii(10),new Insets(0,0,0,0))));
-		hudBox.setPadding(new Insets(5,5,5,5));
-		hudBox.getChildren().add(hudMsg);
+		hudBox.setPadding(new Insets(10,10,10,10));
+		//hudBox.getChildren().add(hudMsg);
 		//hud.setContent(hudMsg);
 		hud.setContent(hudBox);
-		//BackgroundFill[] bfill = {new BackgroundFill(Color.BLACK,new CornerRadii(20),new Insets(5))};
-		//Background hudBackground = new Background(bfill);
-		
-		//hudBackground.setFill(Color.BLACK);
-		//hud.setBackground(hudBackground);
 		hud.setPrefHeight(screenSize.getHeight() - mapHight - 100);
 		hudBox.setPrefHeight(screenSize.getHeight() - mapHight - 100);
 		hudBox.setMinWidth(mapWidth);
@@ -213,7 +199,7 @@ public class View extends Application implements Observer{
 		center.getChildren().add(0, scorePane);
 	}
 	public void nextMap(){
-		map = new Map(mapRows,mapColums,gridSize,ctr.player);
+		map = new Map(mapRows,mapColums,gridSize,ctr.player,this);
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
 		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();
@@ -227,6 +213,7 @@ public class View extends Application implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+//		System.out.println("Msg Receved: " + arg1.toString());
 		// TODO Auto-generated method stub
 		if(arg1 instanceof String) {
 			String observedMsg = (String)arg1;
@@ -245,6 +232,11 @@ public class View extends Application implements Observer{
 			else if(observedMsg.equals("EquipmentChange")) {
 				this.playerInventoryView.updateInventory();
 				this.playerInventoryView.updateEquipedView();
+				this.playerInfoView.updateAttackDeffInfo();
+			}
+			else if(observedMsg.equals("Attack Type Change")) {
+				System.out.println("Attack change Msg Receved");
+				this.playerInfoView.updateAttackDeffInfo();
 			}
 			else if(observedMsg.equals("Exit")) {
 				setScoreScene();
@@ -252,14 +244,8 @@ public class View extends Application implements Observer{
 		}
 		else {
 			if(arg1 instanceof Text) {
-			
-				//hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
-				//hud.setContent(new Text(observedMsg));
 				Text msg = (Text)arg1;
-				msg.setFill(Color.GREEN);
 				hudBox.getChildren().add(0,msg);
-				
-		//		hudMsg. +="\nobservedMsg";
 			}
 		}
 	}

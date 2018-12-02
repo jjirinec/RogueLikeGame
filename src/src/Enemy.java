@@ -12,6 +12,7 @@ public class Enemy extends Entity {
 
     public final int STAT_PTS_PER_LVL = 3;
     public int baseDmg;
+    
 
     public Enemy(Coordinate location, int imageSize, int chalengeRating) {
         super("Enemy", "EnemySpeedy.png", location, false, imageSize);
@@ -48,7 +49,7 @@ public class Enemy extends Entity {
         double totalDA = calculateD(pos.getX() - 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() - 1, pos.getY(), Xp, Yp);
         double totalDD = calculateD(pos.getX() + 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() + 1, pos.getY(), Xp, Yp);
         if (totalD_P <= 1) {
-            System.out.println("ENEMY HIT");
+//            System.out.println("ENEMY HIT");
             return 'H';
         } else if (totalDW < totalDS && totalDW < totalDA && totalDW < totalDD) {
             return ('W');
@@ -77,7 +78,7 @@ public class Enemy extends Entity {
         boolean result = false;
         if(isSurrounded(map)){
             spendActions(10);
-            System.out.println("IS SURROUNDED CHUNK");
+//            System.out.println("IS SURROUNDED CHUNK");
             return true;
         }
         if (input == 'W') {
@@ -176,7 +177,10 @@ public class Enemy extends Entity {
 	}
 
 	public String description() {
-		return this.getObjectName() + "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 
-	this.getStr() + " Con-" +this.getCon() + " Acc-" + this.getAccuracy() + " Def-" + this.getDefence()+ " Spd-" +this.getSpeed();
+		return " CR: ("+ this.lvl + ")  Status: (" + this.status + ")" + debugDescription();
+	}
+	private String debugDescription() {
+		return "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 
+				this.getStr() + " Con-" +this.getCon() + " Acc-" + this.getAccuracy() + " Def-" + this.getDefence()+ " Spd-" +this.getSpeed();
 	}
 }

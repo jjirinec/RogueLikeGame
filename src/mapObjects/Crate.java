@@ -67,5 +67,7 @@ public class Crate extends Obstacle implements Container{
 //	{
 //		return super.description() + "\n\tContains: " + "ADD Loot Contents Here";//TODO UpDate Loot Contents
 //	}
-
+	public String description() {
+		return super.toString() + "\t\t\t" +  super.description();
+	}
 }

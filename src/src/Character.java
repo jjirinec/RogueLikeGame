@@ -11,13 +11,14 @@ public class Character extends Entity {
 	static final int statingStats = 5;
 	static final int statPtsPerLvl = 3;
 	
+	
 	private int exp = 0;
 
 
 	
-    public Character(Coordinate location,int maxHP, int speed) {
+    public Character(String name,Coordinate location,int maxHP, int speed) {
 
-        super("Character", "TempChar.png", location, false, 60);
+        super(name, "TempChar.png", location, false, 60);
 //        this.maxHp = maxHP;
         calcMaxHp();
         this.hp = maxHP;
@@ -25,15 +26,16 @@ public class Character extends Entity {
         System.out.println("Starting stats: " +this.availableStatPoint);
        // this.setSpeed(speed);
         inventory = new ArrayList<Loot>();
-        inventory.add(new Dagger(0, 0, this.getImageSize()));
-        inventory.add(new Axe(1, 0, this.getImageSize()));
-        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
-        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+        startLoot(2);
+//        inventory.add(new Dagger(0, 0, this.getImageSize()));
+//        inventory.add(new Axe(1, 0, this.getImageSize()));
+//        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
+//        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
     }
 
 
-    public Character(int imageSize){
-        super("Character","TempChar.png",new Coordinate(0,0),false,imageSize );
+    public Character(String name,int imageSize){
+        super(name,"TempChar.png",new Coordinate(0,0),false,imageSize );
        // this.maxHp = 10;
         calcMaxHp();
         this.hp = maxHp;
@@ -42,10 +44,16 @@ public class Character extends Entity {
        // this.setSpeed(2);
 
         inventory = new ArrayList<Loot>();
-        inventory.add(new Dagger(0, 0, this.getImageSize()));
-        inventory.add(new Axe(1, 0, this.getImageSize()));
-        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
-        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+        startLoot(2);
+//        inventory.add(new Dagger(0, 0, this.getImageSize()));
+//        inventory.add(new Axe(1, 0, this.getImageSize()));
+//        inventory.add(new SpeedPotion(1, 0, this.getImageSize()));
+//        inventory.add(new LeatherArmor(0, 0, this.getImageSize()));
+    }
+    private void startLoot(int numberOfItems) {
+    	LootGenerator lootGen = new LootGenerator(this.getImageSize());
+    	for(int i = 0; i < numberOfItems; i++)
+    		inventory.add(lootGen.generate(0));
     }
     public int getExp() {
     	return this.exp;
@@ -86,15 +94,7 @@ public class Character extends Entity {
         } else if (input == 'D') {
             moveResult = move(1, 0, map);
             //return true;
-        } /*else if (input == 'H') {
-            MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
-            Entity e = ml.getEntity();
-            if (e != null) {
-                attack(e, map);
-
-            }
-        }
-        spendActions(this.getAttackCost());*/
+        } 
         return moveResult;
 }
 
@@ -158,8 +158,12 @@ public class Character extends Entity {
     		this.notifyObservers("EquipmentChange"); 
         }
 
-
-
+        public boolean isMyTurn() {
+        	return this.myTurn;
+        }
+        public void endTurn() {
+        	this.myTurn = false;
+        }
         public void lvlUp() {
         	this.lvl++;
         	System.out.println("Leveled Up\n\tLevel: " + this.lvl + "\n\tStatPoints befor lvl: " + this.availableStatPoint);

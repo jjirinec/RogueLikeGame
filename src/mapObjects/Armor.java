@@ -4,17 +4,18 @@ import src.Character;
 public class Armor extends Loot implements Equipable{
 	
 	private int defence;
-	private String type;
+	private Type type;
 	private double speedPenalty;
 
-	public Armor(String name,int defence,String type, String imageFile, Coordinate location, int value, int imageSize) {
+	public static enum Type {LIGHT,MEDIUM,HEAVY}
+	public Armor(String name,int defence,Type type, String imageFile, Coordinate location, int value, int imageSize) {
 		super(name, imageFile, location, value, imageSize);
 		this.type = type;
 		this.defence = defence;
 		setSpdPenatly();		
 		// TODO Auto-generated constructor stub
 	}
-	public Armor(String name,int defence, String type, String imageFile, int value, int imageSize) {
+	public Armor(String name,int defence, Type type, String imageFile, int value, int imageSize) {
 		super(name, imageFile, value, imageSize);
 		this.type = type;
 		this.defence = defence;
@@ -24,11 +25,11 @@ public class Armor extends Loot implements Equipable{
 	
 	private void setSpdPenatly()
 	{
-		if(type.equals("Light"))
+		if(type.equals(Armor.Type.LIGHT))
 			this.speedPenalty = .25;
-		else if(type.equals("Medium"))
+		else if(type.equals(Armor.Type.MEDIUM))
 			this.speedPenalty = .5;
-		else if(type.equals("Heavy"))
+		else if(type.equals(Armor.Type.HEAVY))
 			this.speedPenalty = .75;
 	}
 	public double getSpdPenalty() {
@@ -38,6 +39,9 @@ public class Armor extends Loot implements Equipable{
 	public int getDefence()
 	{
 		return this.defence;
+	}
+	public Armor.Type getType(){
+		return type;
 	}
 	public double getSpeedPenalty()
 	{

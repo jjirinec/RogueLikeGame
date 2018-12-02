@@ -17,9 +17,11 @@ public abstract class Entity extends MapObject{
     private double curentActions;		//Actions curentrly available
     private double moveCost = 1;		//Action cost to move (effected by armor speed penalty)
     private double attackCost = 1;		//Action cost to attack (effected by weapon speed)
+    protected String status = "Uninjured";
     
     protected int lvl = 1;		//Default to one
-    int availableStatPoint;		
+    int availableStatPoint;	
+    protected boolean myTurn = false;
     //Stats 
     private int str = 1;
     private int dex = 1;
@@ -29,24 +31,41 @@ public abstract class Entity extends MapObject{
     private int accuracy = 1;
     private int speed = 1;
     
+    private AttackType attackType;
     //Equiped
 	Wepon equipedWepon = null;
 	Armor equipedArmor = null;
 
+	public static enum AttackType{MELLE,RANGED,MAGIC}
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
+		this.attackType = AttackType.MELLE;
     }
 
 	Entity(String objectName, String imageFile, boolean isPasable, int imageSize){
 		super(objectName,imageFile,isPasable,imageSize);
+		this.attackType = AttackType.MELLE;
 	}
 	public void statPointIncrement(int vale) {
 		this.availableStatPoint  += vale;
-		System.out.println("Aval stat points" + this.availableStatPoint);
+//		System.out.println("Aval stat points" + this.availableStatPoint);
 	}
      public int getAvailableStatPts() {
     	 return this.availableStatPoint;
+     }
+     public void cycleAttackType() {
+    	 if(this.attackType.equals(AttackType.MELLE))
+    		 this.attackType = AttackType.RANGED;
+    	 else if(this.attackType.equals(AttackType.RANGED))
+    		 this.attackType = AttackType.MAGIC;
+    	 else if(this.attackType.equals(AttackType.MAGIC))
+    		 this.attackType = AttackType.MELLE;
+    	 this.setChanged();
+		 this.notifyObservers("Attack Type Change");
+     }
+     public AttackType getAttackType() {
+    	 return attackType;
      }
      public int getHp() {
     	 return hp;
@@ -98,8 +117,35 @@ public abstract class Entity extends MapObject{
 			mgk--;
 		notify("StatUpdate");
 	}
-	public int getDefence() {
+	public int getDefence() {//This retruns the stat value of Defence
 		return defence;
+	}
+	public double getTotalDefence() {//This includes Armor and Dextarity
+		Armor.Type armorType = null;
+		int armorDefenceiveValue = 0;
+		if(this.equipedArmor != null) {
+			armorDefenceiveValue = equipedArmor.getDefence();
+			armorType = equipedArmor.getType();
+		}
+		double dexBonus = this.dex / 10.0;
+		double maxDexBonus = maxDexBonus(armorType);
+		if(maxDexBonus > 0 && dexBonus > maxDexBonus)
+			dexBonus = maxDexBonus;
+		double totalDefence = defence + armorDefenceiveValue + dexBonus;
+		System.out.println("TotalDevence: " + totalDefence);
+		return totalDefence;
+	}
+	private double maxDexBonus(Armor.Type armorType) {
+		double bonus = 0;
+		if(armorType == null)
+			bonus = -1;//Flag for no maxDexBonus
+		else if(armorType.equals(Armor.Type.LIGHT))
+			bonus = 1;
+		else if(armorType.equals(Armor.Type.MEDIUM))
+			bonus = .75;
+		else if(armorType.equals(Armor.Type.HEAVY))
+			bonus = .25;
+		return bonus;
 	}
 	public void incrementDefence(int val) {
 		if(val > 0)
@@ -166,7 +212,7 @@ public abstract class Entity extends MapObject{
     }
 
    synchronized boolean move(int deltaX, int deltaY,Map map){
-    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
+//    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
@@ -188,10 +234,10 @@ public abstract class Entity extends MapObject{
 	                return true;
 	            }
 	            else{
-					System.out.println("INVALID LOCATION");
+//					System.out.println("INVALID LOCATION");
 				}
         }
-        System.out.println("Move location off map\n");
+//        System.out.println("Move location off map\n");
         return false;
     }
 
@@ -206,9 +252,11 @@ public abstract class Entity extends MapObject{
     	int dmg = 0;
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
-            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getDefence())));
-				ent.damag(dmg); // CHANGE DAMAGE HERE
-                spendActions(attackCost);
+            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
     	}
     	else if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
@@ -216,18 +264,60 @@ public abstract class Entity extends MapObject{
     		t.damage(dmg, map);
     		spendActions(attackCost);
     	}
-    	sendMesage(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
-
+    	String dmgDeltMsg = this + ": hit " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
     	return dmg;
         
     }
-    private void sendMesage(String msg) {
-    	setChanged();
+    public int rangedAttack(MapObject target, Map map) {
+    	int dmg = 0;
+    	if(target instanceof Entity){
+    		Entity ent = (Entity)target;
+            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
+    	}
+    	else if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+            dmg = Math.round((float)calcBaseDmg());
+    		t.damage(dmg, map);
+    		spendActions(attackCost);
+    	}
+    	String dmgDeltMsg = this + ": Shot " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
+    	return dmg;
+    }
+    public int magicAttack(MapObject target, Map map) {
+    	int dmg = 0;
+    	if(target instanceof Entity){
+    		Entity ent = (Entity)target;
+            dmg = Math.round((float)(calcBaseDmg()));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
+    	}
+    	else if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+            dmg = Math.round((float)calcBaseDmg());
+    		t.damage(dmg, map);
+    		spendActions(attackCost);
+    	}
+    	String dmgDeltMsg = this + ": Blasted " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
+    	return dmg;
+    }
+    private void sendHudMsg(String msg) {
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
-    	if(this instanceof Enemy)
+    	if(this instanceof Enemy) 
     		msgText.setFill(Color.RED);
-		notifyObservers(msgText);
+    	javafx.application.Platform.runLater( () ->setChanged());
+    	javafx.application.Platform.runLater( () ->notifyObservers(msgText));
+
+		
     }
 
 	public void calcMaxHp() {
@@ -245,14 +335,12 @@ public abstract class Entity extends MapObject{
         }
 
 		if(this instanceof Character) {
-			this.setChanged();
-			this.notifyObservers("Character health increased by" + healthPoints);
+			sendHudMsg(this +" health increased by" + healthPoints);
 			this.setChanged();
     		this.notifyObservers("Hp Change");
 		}
 		if(this instanceof Enemy){
-			this.setChanged();
-			this.notifyObservers("ENEMY Healed FOR " + healthPoints);
+			this.checkForStatusUpdate();
 		}
      }
 
@@ -263,17 +351,26 @@ public abstract class Entity extends MapObject{
     	    hp=0;
         }
     	if(this instanceof Character) {
-    		this.setChanged();
-    		this.notifyObservers("Character health decreased by" + dmg);
+//    		this.setChanged();
+//    		this.notifyObservers("Character health decreased by" + dmg);
     		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
     	if(this instanceof Enemy){
-    		this.setChanged();
-    		this.notifyObservers("ENEMY HIT FOR " + dmg);
+    		checkForStatusUpdate();
 		}
     }
-
+    private void checkForStatusUpdate() {
+    	if(hp <= ((maxHp - 2*maxHp/3)))// 2/3 hp lost
+    		status = "Mangled";
+    	else if(hp <= (maxHp - maxHp/3))//1/3 hp lost
+    		status = "Bloodied";
+    	else if(hp < maxHp)
+			status = "Merly a flesh wound";
+    	else
+    		status = "Uninjured";
+    	
+    }
     public boolean checkDead(){
         if(this.hp <= 0){
         	return true;
@@ -284,12 +381,16 @@ public abstract class Entity extends MapObject{
     }
 
     public void newTurn(){//myTurn set to true and reset curentActions
-    	
+    	myTurn  = true;
     	curentActions += (1 + speed/5.0);
     	if(this instanceof Character) {
-    		System.out.println("Plaer NewTurn");
+//    		System.out.println("Plaer NewTurn");
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");
+    		Text yourTurnMsg = new Text("Its Your Turn");
+    		yourTurnMsg.setFill(Color.ORANGE);
+    		this.setChanged();
+    		this.notifyObservers(yourTurnMsg);
     	}
     }
     public boolean canAct() {
@@ -305,24 +406,25 @@ public abstract class Entity extends MapObject{
     		
     }
     public boolean hasAttacks() {
+    	System.out.println("CurrentActions: " + curentActions + " AttackCost: " + attackCost);
     	if(curentActions >= attackCost)
     		return true;
     	return false;
     }
     public void spendActions(double actionsCost) {
-    		System.out.println(actionsCost + " Actions spent \nStarting with " + curentActions);
             curentActions -= actionsCost;
-            System.out.println("Ending with " + curentActions);
+            curentActions = removeExtraDecimal(curentActions);
             if (this instanceof Character) {
                 this.setChanged();
                 this.notifyObservers("ActionUpdate");
             }
-            if (!canAct()) {//TODO Remove this latter ????
-                this.setChanged();
-                this.notifyObservers(this.getObjectName() + " turn over.\n");
-            }
         }
-
+    private double removeExtraDecimal(double num) {
+    	num *= 100;
+    	num = Math.round(num);
+    	num /= 100.0;
+    	return num;
+    }
     
     public void giveActions(double actionPoints) {
     	this.curentActions += actionPoints;
@@ -341,21 +443,38 @@ public abstract class Entity extends MapObject{
     }
 
     public double calcBaseDmg(){
+    	double baseDmg = 0;
 	    if(this instanceof Enemy){
 	        Enemy e = (Enemy)this;
-            return(e.baseDmg + e.baseDmg * str/5.0);
+            baseDmg = (e.baseDmg + e.baseDmg * str/5.0);
         }
-        if(equipedWepon != null) {
-            return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
-        }
-        else{
-
-            return(1 + 1 * str/5.0);
-
-        }
+	    else {
+	    	if(this.attackType.equals(AttackType.MELLE))
+	    		baseDmg = melleBaseDmg();
+	    	else if(this.attackType.equals(AttackType.RANGED))
+	    		baseDmg = rangedBaseDmg();
+	    	else if(this.attackType.equals(AttackType.MAGIC))
+	    		baseDmg = magicBaseDmg();
+	    }
+	    return baseDmg;
     }
-
-    public double calcHitChance(int def) {
+    private double melleBaseDmg() {
+    	double baseDmg = 1 + str/5.0;
+    	if(equipedWepon != null) 
+            baseDmg = (equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
+        return baseDmg;
+    }
+    private double rangedBaseDmg() {
+    	double baseDmg = 0;
+    	if(equipedWepon != null && equipedWepon.getType().equals(Wepon.Type.RANGED))
+    		baseDmg = equipedWepon.getDmg() + equipedWepon.getDmg() * dex/5.0;
+    	return baseDmg;
+    }
+    private double magicBaseDmg() {
+    	return 1 + mgk/3;
+    }
+    
+    public double calcHitChance(double def) {
 	    double chance = (4.0*this.accuracy)/(3.0*def);
 	    if (chance>1)
 	        chance = 1;

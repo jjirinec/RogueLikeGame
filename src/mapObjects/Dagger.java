@@ -8,16 +8,17 @@ public class Dagger extends Wepon{
 	private static int baseDmg = 2;
 	private static int baseValue = 5;
 	private static double weponSpeed = .75;
+	private static Wepon.Type type = Wepon.Type.MELLE;
 	
 	public Dagger(int extraDmg,int bonusValue,int imageSize) {
-		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
+		super(baseName, imageFile, baseValue + bonusValue, (baseDmg + extraDmg),type,weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 		if(imageSize > this.imageSize)
 			this.setImageSize(this.imageSize);
 	}
 	public Dagger(int extraDmg, int bonusValue, Coordinate location,int imageSizen) {
-		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),"mele",weponSpeed,imageSize);
+		super(baseName, imageFile, location, baseValue + bonusValue, (baseDmg + extraDmg),type,weponSpeed,imageSize);
 		if(extraDmg > 0)
 			super.setName("+"+extraDmg+" "+ baseName);
 		if(imageSize > this.imageSize)

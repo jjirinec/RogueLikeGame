@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import mapObjects.Container;
 import mapObjects.Coordinate;
 import mapObjects.Loot;
@@ -16,6 +17,7 @@ import mapObjects.Obstacle;
 import mapObjects.TargetingCursor;
 
 public class Controler extends Observable implements EventHandler<KeyEvent>{
+	String endTurnMsg = "   (Press Shift To End Turn Early)";
 	View view;
 	Character player;
 	//TargetingCursor cursor;
@@ -34,7 +36,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 */
 	private void initializePlayer()
 	{
-		player = new Character(view.gridSize);
+		player = new Character("Player",view.gridSize);
 		player.setObserver(view);
 		System.out.println("Player Initialized");
 	}
@@ -42,36 +44,47 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		
 		boolean moveResult = false;
-		switch(eCode)
-		{
-			case A:
-				if(player.hasExited(view.map.getExit(), 'A'))
-						System.out.println("Exit");
-				moveResult = player.readInput('A',view.map);
-				break;
-			case D:
-				if(player.hasExited(view.map.getExit(), 'D'))
-						System.out.println("Exit");
-				moveResult = player.readInput('D',view.map);				
-				break;
-			case W:
-				if(player.hasExited(view.map.getExit(), 'W'))
-						System.out.println("Exit");
-				moveResult = player.readInput('W',view.map);
-				break;
-			case S:
-				if(player.hasExited(view.map.getExit(), 'S'))
-						System.out.println("Exit");
-				moveResult = player.readInput('S',view.map);
-				break;
+		String moveError = "Not Enough Action Points To Move!";
+		if(player.hasMovement()) {
+			moveError = "Something is in the way!";
+			switch(eCode)
+			{
+				case A:
+					if(player.hasExited(view.map.getExit(), 'A'))
+							System.out.println("Exit");
+					moveResult = player.readInput('A',view.map);
+					break;
+				case D:
+					if(player.hasExited(view.map.getExit(), 'D'))
+							System.out.println("Exit");
+					moveResult = player.readInput('D',view.map);				
+					break;
+				case W:
+					if(player.hasExited(view.map.getExit(), 'W'))
+							System.out.println("Exit");
+					moveResult = player.readInput('W',view.map);
+					break;
+				case S:
+					if(player.hasExited(view.map.getExit(), 'S'))
+							System.out.println("Exit");
+					moveResult = player.readInput('S',view.map);
+					break;
+			}
 		}
-		if(moveResult){
+		//System.out.println("Move Result: " + moveResult + "-->" +  moveError);
+		if(!moveResult) {
+			sendActionError(moveError + this.endTurnMsg);
+		}
+		else{
 			view.map.tallyAction();
 		}
-		else {
-			setChanged();
-			notifyObservers("Something is in the way!");
-		}
+		
+	}
+	private void sendActionError(String msg) {
+		Text moveErrorMsg = new Text(msg);
+		moveErrorMsg.setFill(Color.ANTIQUEWHITE);
+		setChanged();
+		notifyObservers(moveErrorMsg);
 	}
 	public void startPlay()
 	{
@@ -94,38 +107,33 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	}
 	private void interactAttack()
 	{
-		if(view.map.getPlayer().getCurentActions() < view.map.getPlayer().getAttackCost()){
-			System.out.println("NO ENOUGH POINTS TO ATTACK");
-		}
-		else {
-			Coordinate cursorLocation = view.map.getCursor().getLocation();
-			MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-			if (mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
+		Coordinate cursorLocation = view.map.getCursor().getLocation();
+		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
+		if(player.hasAttacks()) {
+			if(mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 				Entity target = mapLocation.getEntity();
-				view.map.updateDamageDealt(player.attack(target, view.map));
-				view.map.tallyAction();
-				if (target.checkDead()) {
+				view.map.updateDamageDealt(player.attack(target,view.map));
+				if(target.checkDead()) {
 					view.map.getEnemys().remove(target);
-					view.map.removeEntity(target);
-				}
-			} else if (mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
+	                view.map.removeEntity(target);
+	
+	            }
+			}
+			else if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 				Obstacle target = mapLocation.getObstacle();
-				player.attack(target, view.map);
-				view.map.tallyAction();
+				player.attack(target,view.map);
 				setChanged();
 				notifyObservers("Player Attacking " + mapLocation.getObstacle());
-			} else if (mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
-				Loot item = mapLocation.getLoot();
-				view.map.addToLootColected(item);
-				view.map.tallyAction();
-				view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
-				player.grabLoot(item);
-			} else {
-				setChanged();
-				notifyObservers("Theres nothing there to attack!");
 			}
 		}
-
+		else
+			sendActionError("Not Enough Action Points To Attack!" + this.endTurnMsg);
+		if(mapLocation.hasLoot() && player.isAdjacent(cursorLocation)) {
+			Loot item = mapLocation.getLoot();
+			view.map.addToLootColected(item);
+			view.map.getStackPane()[cursorLocation.getX()][cursorLocation.getY()].getChildren().remove(item.getImageView());
+			player.grabLoot(item);
+		}
 	}
 	
 	
@@ -160,20 +168,22 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				interactAttack();
 				break;
 			case TAB:
-				this.setChanged();
-				this.notifyObservers("Cycling Attack Type");
+				player.cycleAttackType();
 				System.out.println("Cycle Attack Type");
 				break;
 			case G:
-				String info = getCurorInfo();
+				Text info = new Text(getCurorInfo());
+				info.setFill(Color.BLUEVIOLET);
 				this.setChanged();
-				this.notifyObservers("\nLocationInfo: " + info);
-				System.out.println("InterAct/Attack");
+				this.notifyObservers(info);
+//				System.out.println("InterAct/Attack");
 				break;
 			case E:
 				interact();
 				break;
-			
+			case SHIFT:
+				endTurn();
+				break;
 			case X://Testing Obstacle breaking  TODO Remove
 
 				player.damag(2);
@@ -189,15 +199,28 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		String info;
 		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		info = mapLocation.toString();
+//		info = mapLocation.toString();
+		info = "";
+		if(mapLocation.lookAtLoot() != null) {
+			Loot loot = mapLocation.lookAtLoot();
+			info = loot.toString();
+		}
+		if(mapLocation.getObstacle() != null) {
+			Obstacle obs = mapLocation.getObstacle();
+			info = obs.description();
+		}
 		if(mapLocation.getEntity() != null) {
 			Entity entity = mapLocation.getEntity();
 			if(entity instanceof Enemy) {
 				Enemy enemy = (Enemy)entity;
 				info = enemy.description();
 			}
-			
+			else if(entity instanceof Character) {
+				info = "Thats You, Silly!!!";
+			}
 		}
+		
+		
 		return info;
 	}
 
@@ -216,24 +239,40 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	 */
 	@Override
 	public void handle(KeyEvent event) {
-		if(player.canAct())
+		if(player.canAct() && player.isMyTurn())
 		{
 			KeyCode eCode = event.getCode();
 			keyCodeSwitch(eCode);
 			if(!player.canAct()){//Player Turn over
-				System.out.println("End of Players turn");
-//				enemyTurns();
-				Task<Enemy> task = new Task<Enemy>() {
-					@Override
-					protected Enemy call() throws Exception {
-						enemyTurns();
-						return null;
-					}
-				};
-				Thread enemyTurnsThread = new Thread(task);
-				enemyTurnsThread.start();
+				javafx.application.Platform.runLater( () ->endOfTurnMsg());
+				startEnemyTurnThread();
+				
 			}
 		}
+	}
+	
+	private void endTurn() {
+		player.endTurn();
+		startEnemyTurnThread();
+		endOfTurnMsg();
+	}
+	private void endOfTurnMsg() {
+		Text waitMsg = new Text("Waiting on Enemys");
+		waitMsg.setFill(Color.AQUA);
+		this.setChanged();
+		this.notifyObservers(waitMsg);
+	}
+	private void startEnemyTurnThread() {
+		
+		Task<Enemy> task = new Task<Enemy>() {
+			@Override
+			protected Enemy call() throws Exception {
+				enemyTurns();
+				return null;
+			}
+		};
+		Thread enemyTurnsThread = new Thread(task);
+		enemyTurnsThread.start();
 	}
 	/*
 	 * Loops through all enemy's on map and executes its turn
@@ -242,7 +281,6 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	public void enemyTurns() {
 
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
-			System.out.println("Enemy " + (eIndex +1) + " turn");
 			Enemy enemy = view.map.getEnemys().get(eIndex);
 			Task<Integer> task = new Task<Integer>() {		//The task is the enemy turn
 				@Override
@@ -251,17 +289,17 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					return null;
 				}
 			};
-			Thread enemyThread = new Thread(task);		//Each enemy turn executes on a separate thread
+			
+			Thread enemyThread = new Thread(task);	//Each enemy turn executes on a separate thread
+			
 			enemyThread.start();
 			try {
 				enemyThread.join();						//Join on enemy turn before next enemy taks turn
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Turn over!!!");
 		}
 		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn 
-		System.out.println("All enemy turns Done:");
 		
 
 	}
