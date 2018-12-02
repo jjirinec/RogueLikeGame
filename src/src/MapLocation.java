@@ -67,7 +67,11 @@ public class MapLocation {
 		}
 		return null;
 	}
-	
+	public Loot lookAtLoot() {
+		if(loot.size() > 0)
+			return loot.get(0);
+		return null;
+	}
 	public Loot getLoot() {
 		if(loot.size() > 0) {
 			Loot item = loot.get(loot.size()-1);

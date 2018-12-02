@@ -227,6 +227,7 @@ public class View extends Application implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		System.out.println("Msg Receved: " + arg1.toString());
 		// TODO Auto-generated method stub
 		if(arg1 instanceof String) {
 			String observedMsg = (String)arg1;
@@ -252,11 +253,11 @@ public class View extends Application implements Observer{
 		}
 		else {
 			if(arg1 instanceof Text) {
-			
+				System.out.println("HudMsg Receved " + arg1.toString());
 				//hudMsg.setText(observedMsg += "\n" +hudMsg.getText());
 				//hud.setContent(new Text(observedMsg));
 				Text msg = (Text)arg1;
-				msg.setFill(Color.GREEN);
+				//msg.setFill(Color.GREEN);
 				hudBox.getChildren().add(0,msg);
 				
 		//		hudMsg. +="\nobservedMsg";

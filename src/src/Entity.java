@@ -43,7 +43,7 @@ public abstract class Entity extends MapObject{
 	}
 	public void statPointIncrement(int vale) {
 		this.availableStatPoint  += vale;
-		System.out.println("Aval stat points" + this.availableStatPoint);
+//		System.out.println("Aval stat points" + this.availableStatPoint);
 	}
      public int getAvailableStatPts() {
     	 return this.availableStatPoint;
@@ -166,7 +166,7 @@ public abstract class Entity extends MapObject{
     }
 
    synchronized boolean move(int deltaX, int deltaY,Map map){
-    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
+//    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
@@ -188,10 +188,10 @@ public abstract class Entity extends MapObject{
 	                return true;
 	            }
 	            else{
-					System.out.println("INVALID LOCATION");
+//					System.out.println("INVALID LOCATION");
 				}
         }
-        System.out.println("Move location off map\n");
+//        System.out.println("Move location off map\n");
         return false;
     }
 
@@ -216,18 +216,31 @@ public abstract class Entity extends MapObject{
     		t.damage(dmg, map);
     		spendActions(attackCost);
     	}
-    	sendMesage(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
+    	String dmgDeltMsg = this + " hit " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
+    	//setChanged();
+		//this.notifyObservers(dmgDeltMsg);
 
     	return dmg;
         
     }
-    private void sendMesage(String msg) {
-    	setChanged();
+    private void sendHudMsg(String msg) {
+    	System.out.println("Attack Made: " + msg);
+    	
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
-    	if(this instanceof Enemy)
+    	if(this instanceof Enemy) {
     		msgText.setFill(Color.RED);
+    		javafx.application.Platform.runLater( () ->setChanged());
+    		javafx.application.Platform.runLater( () ->notifyObservers(msgText));
+    		setChanged();
+    		this.notifyObservers(msg);
+    	}
+    	else {
+    	setChanged();
 		notifyObservers(msgText);
+    	}
+		
     }
 
 	public void calcMaxHp() {
@@ -245,14 +258,16 @@ public abstract class Entity extends MapObject{
         }
 
 		if(this instanceof Character) {
-			this.setChanged();
-			this.notifyObservers("Character health increased by" + healthPoints);
+			sendHudMsg("Character health increased by" + healthPoints);
+//			this.setChanged();
+//			this.notifyObservers("Character health increased by" + healthPoints);
 			this.setChanged();
     		this.notifyObservers("Hp Change");
 		}
 		if(this instanceof Enemy){
-			this.setChanged();
-			this.notifyObservers("ENEMY Healed FOR " + healthPoints);
+			sendHudMsg("ENEMY Healed FOR " + healthPoints);
+//			this.setChanged();
+//			this.notifyObservers("ENEMY Healed FOR " + healthPoints);
 		}
      }
 
@@ -263,8 +278,8 @@ public abstract class Entity extends MapObject{
     	    hp=0;
         }
     	if(this instanceof Character) {
-    		this.setChanged();
-    		this.notifyObservers("Character health decreased by" + dmg);
+//    		this.setChanged();
+//    		this.notifyObservers("Character health decreased by" + dmg);
     		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
@@ -287,7 +302,7 @@ public abstract class Entity extends MapObject{
     	
     	curentActions += (1 + speed/5.0);
     	if(this instanceof Character) {
-    		System.out.println("Plaer NewTurn");
+//    		System.out.println("Plaer NewTurn");
     		this.setChanged();
     		this.notifyObservers("ActionUpdate");
     	}
@@ -310,9 +325,9 @@ public abstract class Entity extends MapObject{
     	return false;
     }
     public void spendActions(double actionsCost) {
-    		System.out.println(actionsCost + " Actions spent \nStarting with " + curentActions);
+//    		System.out.println(actionsCost + " Actions spent \nStarting with " + curentActions);
             curentActions -= actionsCost;
-            System.out.println("Ending with " + curentActions);
+//            System.out.println("Ending with " + curentActions);
             if (this instanceof Character) {
                 this.setChanged();
                 this.notifyObservers("ActionUpdate");

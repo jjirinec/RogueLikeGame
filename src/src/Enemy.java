@@ -48,7 +48,7 @@ public class Enemy extends Entity {
         double totalDA = calculateD(pos.getX() - 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() - 1, pos.getY(), Xp, Yp);
         double totalDD = calculateD(pos.getX() + 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() + 1, pos.getY(), Xp, Yp);
         if (totalD_P <= 1) {
-            System.out.println("ENEMY HIT");
+//            System.out.println("ENEMY HIT");
             return 'H';
         } else if (totalDW < totalDS && totalDW < totalDA && totalDW < totalDD) {
             return ('W');
@@ -77,7 +77,7 @@ public class Enemy extends Entity {
         boolean result = false;
         if(isSurrounded(map)){
             spendActions(10);
-            System.out.println("IS SURROUNDED CHUNK");
+//            System.out.println("IS SURROUNDED CHUNK");
             return true;
         }
         if (input == 'W') {

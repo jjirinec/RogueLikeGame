@@ -9,6 +9,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import mapObjects.Container;
 import mapObjects.Coordinate;
 import mapObjects.Loot;
@@ -162,10 +163,11 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				System.out.println("Cycle Attack Type");
 				break;
 			case G:
-				String info = getCurorInfo();
+				Text info = new Text(getCurorInfo());
+				info.setFill(Color.BLUEVIOLET);
 				this.setChanged();
-				this.notifyObservers("\nLocationInfo: " + info);
-				System.out.println("InterAct/Attack");
+				this.notifyObservers(info);
+//				System.out.println("InterAct/Attack");
 				break;
 			case E:
 				interact();
@@ -186,15 +188,24 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 		String info;
 		Coordinate cursorLocation = new Coordinate(view.map.getCursor().getLocation());
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		info = mapLocation.toString();
+//		info = mapLocation.toString();
+		info = "";
+		if(mapLocation.lookAtLoot() != null) {
+			Loot loot = mapLocation.lookAtLoot();
+			info = loot.toString();
+		}
+		if(mapLocation.getObstacle() != null) {
+			Obstacle obs = mapLocation.getObstacle();
+			info = obs.description();
+		}
 		if(mapLocation.getEntity() != null) {
 			Entity entity = mapLocation.getEntity();
 			if(entity instanceof Enemy) {
 				Enemy enemy = (Enemy)entity;
 				info = enemy.description();
-			}
-			
+			}	
 		}
+		
 		return info;
 	}
 
@@ -218,7 +229,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			KeyCode eCode = event.getCode();
 			keyCodeSwitch(eCode);
 			if(!player.canAct()){//Player Turn over
-				System.out.println("End of Players turn");
+//				System.out.println("End of Players turn");
 //				enemyTurns();
 				Task<Enemy> task = new Task<Enemy>() {
 					@Override
@@ -239,7 +250,6 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	public void enemyTurns() {
 
 		for(int eIndex = 0; eIndex < view.map.getEnemys().size(); eIndex++) {//Loops through each enemy on the map
-			System.out.println("Enemy " + (eIndex +1) + " turn");
 			Enemy enemy = view.map.getEnemys().get(eIndex);
 			Task<Integer> task = new Task<Integer>() {		//The task is the enemy turn
 				@Override
@@ -255,10 +265,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Turn over!!!");
 		}
 		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn 
-		System.out.println("All enemy turns Done:");
 		
 
 	}
