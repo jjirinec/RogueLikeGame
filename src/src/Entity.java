@@ -166,15 +166,15 @@ public abstract class Entity extends MapObject{
     }
 
    synchronized boolean move(int deltaX, int deltaY,Map map){
-    	System.out.println(this.getObjectName() + " is moving!!!!!");
+    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
         int targetX = x + deltaX;
         int targetY = y + deltaY;
+	   	MapLocation[][] mapTiles = map.getMapLocation();
         if(targetX > -1 && targetX < map.getMapLocation()[0].length && targetY > -1 && targetY < map.getMapLocation().length) {
 	        StackPane[][] panes = map.getStackPane();
-	        MapLocation[][] mapTiles = map.getMapLocation();
 	        MapLocation location = mapTiles[x][y];
 	        StackPane currentLocationPane = panes[x][y];
 	        MapLocation destination = mapTiles[x + deltaX][y + deltaY];
@@ -183,19 +183,15 @@ public abstract class Entity extends MapObject{
 	            	location.removeEntity();
 	                this.updateGridImgage(currentLocationPane, destinationPane);	
 	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location      
-	                destination.setEntity(this);												//Add entity to location
-	                this.spendActions(this.moveCost);
+	                destination.setEntity(this);//Add entity to location
+					this.spendActions(this.moveCost);
 	                return true;
 	            }
-	            else {
-	            	System.out.println(destination.isPasable());
-	            	System.out.println(destination.getObstacle());
-	            	System.out.println(destination.getEntity());
-	                return false;
-	            }
-	        
+	            else{
+					System.out.println("INVALID LOCATION");
+				}
         }
-        System.out.println("Move location off map");
+        System.out.println("Move location off map\n");
         return false;
     }
 
@@ -221,6 +217,7 @@ public abstract class Entity extends MapObject{
     		spendActions(attackCost);
     	}
     	sendMesage(this + " hit " + target.getObjectName() + " for " + dmg + " damage" );
+
     	return dmg;
         
     }
@@ -296,7 +293,7 @@ public abstract class Entity extends MapObject{
     	}
     }
     public boolean canAct() {
-    	if(hasMovement() || hasAttacks())
+    	if((hasMovement() || hasAttacks() && getCurentActions() > 0))
     		return true;
     	return false;
     }
@@ -322,7 +319,7 @@ public abstract class Entity extends MapObject{
             }
             if (!canAct()) {//TODO Remove this latter ????
                 this.setChanged();
-                this.notifyObservers(this.getObjectName() + " turn over. (this msg comming rom Entity spendActions())");
+                this.notifyObservers(this.getObjectName() + " turn over.\n");
             }
         }
 
@@ -338,7 +335,7 @@ public abstract class Entity extends MapObject{
     	int y = this.getLocation().getY();
     	int xDiff = x - location.getX();
     	int yDiff = y - location.getY();
-    	if(xDiff == 1 || xDiff == -1 || yDiff == 1 || yDiff == -1)
+    	if((xDiff == 1 || xDiff == -1 || xDiff == 0) && (yDiff == 0 || yDiff == 1 || yDiff == -1))
     		return true;
     	return false;
     }
