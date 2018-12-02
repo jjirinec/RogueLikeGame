@@ -1,10 +1,20 @@
 package src.viewObjects;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Tooltip;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import src.Character;
 
 public class PlayerInfoView {
@@ -12,6 +22,7 @@ public class PlayerInfoView {
 	private HealthGlobe healthGlobe;
 	private StackPane healthGlobeStack;
 	private StatBlock statBlock;
+	private VBox attackDeffBlock;
 	private ActionBlock actionBlock;
 	private Character player;
 	private int playerCurentHp;
@@ -31,9 +42,13 @@ public class PlayerInfoView {
 		healthGlobeStack = healthGlobe.getHealthGlob();
 		statBlock = new StatBlock(player);
 		actionBlock = new ActionBlock(player);
+		attackDeffBlock = new VBox();
+		this.updateAttackDeffInfo();
 		viewGrid.add(healthGlobeStack, 3, 2);
+		viewGrid.add(attackDeffBlock, 5, 2);
 		viewGrid.add(statBlock.getStackBlock(),3,6);
 		viewGrid.add(actionBlock.getActionBlock(), 3, 7);
+		
 		
 		playerInfoView.getChildren().add(viewGrid);
 		
@@ -46,8 +61,8 @@ public class PlayerInfoView {
 	}
 	public void updatStatActionBlocks() {
 		GridPane grid = (GridPane) playerInfoView.getChildren().get(0);
-		grid.getChildren().remove(1);
-		grid.getChildren().remove(1);
+		grid.getChildren().remove(2);
+		grid.getChildren().remove(2);
 		grid.add(statBlock.getStackBlock(), 3, 4);
 		grid.add(actionBlock.getActionBlock(), 3, 7);
 	}
@@ -68,6 +83,27 @@ public class PlayerInfoView {
 		grid.setPadding(new Insets(0,10,0,10));
 		
 		return grid;
+	}
+	
+	public VBox updateAttackDeffInfo() {
+		
+		HBox attackType = getText("Attack Type:\t" + player.getAttackType());
+		HBox baseDmg = getText("Base Damage:\t" + player.calcBaseDmg());
+		HBox totalDeff = getText("Total Defence:\t" + player.getTotalDefence());
+		attackDeffBlock.setBackground(new Background(new BackgroundFill(Color.GREY,new CornerRadii(25),new Insets(0,0,0,0))));
+		if(!attackDeffBlock.getChildren().isEmpty())
+			attackDeffBlock.getChildren().remove(0, 3);
+		attackDeffBlock.getChildren().addAll(attackType,baseDmg,totalDeff);
+		attackDeffBlock.setPadding(new Insets(10));
+		attackDeffBlock.setMaxHeight(65);
+		return attackDeffBlock;
+	}
+	private HBox getText(String textMsg) {
+		Text text = new Text(textMsg);
+		text.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 15));
+		HBox textBox = new HBox(text);
+		textBox.setAlignment(Pos.CENTER_LEFT);
+		return textBox;
 	}
 
 }

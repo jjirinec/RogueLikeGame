@@ -54,7 +54,6 @@ public class Character extends Entity {
     	LootGenerator lootGen = new LootGenerator(this.getImageSize());
     	for(int i = 0; i < numberOfItems; i++)
     		inventory.add(lootGen.generate(0));
-    	
     }
     public int getExp() {
     	return this.exp;
@@ -95,15 +94,7 @@ public class Character extends Entity {
         } else if (input == 'D') {
             moveResult = move(1, 0, map);
             //return true;
-        } /*else if (input == 'H') {
-            MapLocation ml = map.getMapLocation()[map.getCursor().getLocation().getX()][map.getCursor().getLocation().getY()];
-            Entity e = ml.getEntity();
-            if (e != null) {
-                attack(e, map);
-
-            }
-        }
-        spendActions(this.getAttackCost());*/
+        } 
         return moveResult;
 }
 

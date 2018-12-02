@@ -117,6 +117,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	
 	            }
 			}
+			
 	
 			else if(mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 				Obstacle target = mapLocation.getObstacle();
@@ -169,8 +170,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				interactAttack();
 				break;
 			case TAB:
-				this.setChanged();
-				this.notifyObservers("Cycling Attack Type");
+				player.cycleAttackType();
 				System.out.println("Cycle Attack Type");
 				break;
 			case G:

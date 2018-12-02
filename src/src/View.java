@@ -232,6 +232,11 @@ public class View extends Application implements Observer{
 			else if(observedMsg.equals("EquipmentChange")) {
 				this.playerInventoryView.updateInventory();
 				this.playerInventoryView.updateEquipedView();
+				this.playerInfoView.updateAttackDeffInfo();
+			}
+			else if(observedMsg.equals("Attack Type Change")) {
+				System.out.println("Attack change Msg Receved");
+				this.playerInfoView.updateAttackDeffInfo();
 			}
 			else if(observedMsg.equals("Exit")) {
 				setScoreScene();

@@ -31,17 +31,21 @@ public abstract class Entity extends MapObject{
     private int accuracy = 1;
     private int speed = 1;
     
+    private AttackType attackType;
     //Equiped
 	Wepon equipedWepon = null;
 	Armor equipedArmor = null;
 
+	public static enum AttackType{MELLE,RANGED,MAGIC}
 
      Entity(String objectName, String imageFile, Coordinate location, boolean isPasable, int imageSize){
         super(objectName,imageFile,location,isPasable,imageSize);
+		this.attackType = AttackType.MELLE;
     }
 
 	Entity(String objectName, String imageFile, boolean isPasable, int imageSize){
 		super(objectName,imageFile,isPasable,imageSize);
+		this.attackType = AttackType.MELLE;
 	}
 	public void statPointIncrement(int vale) {
 		this.availableStatPoint  += vale;
@@ -49,6 +53,19 @@ public abstract class Entity extends MapObject{
 	}
      public int getAvailableStatPts() {
     	 return this.availableStatPoint;
+     }
+     public void cycleAttackType() {
+    	 if(this.attackType.equals(AttackType.MELLE))
+    		 this.attackType = AttackType.RANGED;
+    	 else if(this.attackType.equals(AttackType.RANGED))
+    		 this.attackType = AttackType.MAGIC;
+    	 else if(this.attackType.equals(AttackType.MAGIC))
+    		 this.attackType = AttackType.MELLE;
+    	 this.setChanged();
+		 this.notifyObservers("Attack Type Change");
+     }
+     public AttackType getAttackType() {
+    	 return attackType;
      }
      public int getHp() {
     	 return hp;
@@ -252,6 +269,46 @@ public abstract class Entity extends MapObject{
     	return dmg;
         
     }
+    public int rangedAttack(MapObject target, Map map) {
+    	int dmg = 0;
+    	if(target instanceof Entity){
+    		Entity ent = (Entity)target;
+            dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
+    	}
+    	else if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+            dmg = Math.round((float)calcBaseDmg());
+    		t.damage(dmg, map);
+    		spendActions(attackCost);
+    	}
+    	String dmgDeltMsg = this + ": Shot " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
+    	return dmg;
+    }
+    public int magicAttack(MapObject target, Map map) {
+    	int dmg = 0;
+    	if(target instanceof Entity){
+    		Entity ent = (Entity)target;
+            dmg = Math.round((float)(calcBaseDmg()));
+            if(dmg < 1)
+            	dmg = 1;
+			ent.damag(dmg); // CHANGE DAMAGE HERE
+            spendActions(attackCost);
+    	}
+    	else if(target instanceof Obstacle) {
+			Obstacle t = (Obstacle)target;
+            dmg = Math.round((float)calcBaseDmg());
+    		t.damage(dmg, map);
+    		spendActions(attackCost);
+    	}
+    	String dmgDeltMsg = this + ": Blasted " + target.getObjectName() + " for " + dmg + " damage" ;
+    	sendHudMsg(dmgDeltMsg);
+    	return dmg;
+    }
     private void sendHudMsg(String msg) {
     	Text msgText = new Text(msg);
     	msgText.setFill(Color.GREEN);
@@ -386,18 +443,35 @@ public abstract class Entity extends MapObject{
     }
 
     public double calcBaseDmg(){
+    	double baseDmg = 0;
 	    if(this instanceof Enemy){
 	        Enemy e = (Enemy)this;
-            return(e.baseDmg + e.baseDmg * str/5.0);
+            baseDmg = (e.baseDmg + e.baseDmg * str/5.0);
         }
-        if(equipedWepon != null) {
-            return(equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
-        }
-        else{
-
-            return(1 + 1 * str/5.0);
-
-        }
+	    else {
+	    	if(this.attackType.equals(AttackType.MELLE))
+	    		baseDmg = melleBaseDmg();
+	    	else if(this.attackType.equals(AttackType.RANGED))
+	    		baseDmg = rangedBaseDmg();
+	    	else if(this.attackType.equals(AttackType.MAGIC))
+	    		baseDmg = magicBaseDmg();
+	    }
+	    return baseDmg;
+    }
+    private double melleBaseDmg() {
+    	double baseDmg = 1 + str/5.0;
+    	if(equipedWepon != null) 
+            baseDmg = (equipedWepon.getDmg() + equipedWepon.getDmg() * str/5.0);
+        return baseDmg;
+    }
+    private double rangedBaseDmg() {
+    	double baseDmg = 0;
+    	if(equipedWepon != null && equipedWepon.getType().equals(Wepon.Type.RANGED))
+    		baseDmg = equipedWepon.getDmg() + equipedWepon.getDmg() * dex/5.0;
+    	return baseDmg;
+    }
+    private double magicBaseDmg() {
+    	return 1 + mgk/3;
     }
     
     public double calcHitChance(double def) {
