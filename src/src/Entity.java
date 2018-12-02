@@ -17,6 +17,7 @@ public abstract class Entity extends MapObject{
     private double curentActions;		//Actions curentrly available
     private double moveCost = 1;		//Action cost to move (effected by armor speed penalty)
     private double attackCost = 1;		//Action cost to attack (effected by weapon speed)
+    protected String status = "Uninjured";
     
     protected int lvl = 1;		//Default to one
     int availableStatPoint;		
@@ -216,7 +217,7 @@ public abstract class Entity extends MapObject{
     		t.damage(dmg, map);
     		spendActions(attackCost);
     	}
-    	String dmgDeltMsg = this + " hit " + target.getObjectName() + " for " + dmg + " damage" ;
+    	String dmgDeltMsg = this + ": hit " + target.getObjectName() + " for " + dmg + " damage" ;
     	sendHudMsg(dmgDeltMsg);
     	setChanged();
 		this.notifyObservers("This is just a string" + dmgDeltMsg);
@@ -253,16 +254,12 @@ public abstract class Entity extends MapObject{
         }
 
 		if(this instanceof Character) {
-			sendHudMsg("Character health increased by" + healthPoints);
-//			this.setChanged();
-//			this.notifyObservers("Character health increased by" + healthPoints);
+			sendHudMsg(this +" health increased by" + healthPoints);
 			this.setChanged();
     		this.notifyObservers("Hp Change");
 		}
 		if(this instanceof Enemy){
-			sendHudMsg("ENEMY Healed FOR " + healthPoints);
-//			this.setChanged();
-//			this.notifyObservers("ENEMY Healed FOR " + healthPoints);
+			this.checkForStatusUpdate();
 		}
      }
 
@@ -279,11 +276,20 @@ public abstract class Entity extends MapObject{
     		this.notifyObservers("Hp Change");
     	}
     	if(this instanceof Enemy){
-    		this.setChanged();
-    		this.notifyObservers("ENEMY HIT FOR " + dmg);
+    		checkForStatusUpdate();
 		}
     }
-
+    private void checkForStatusUpdate() {
+    	if(hp <= ((maxHp - 2*maxHp/3)))// 2/3 hp lost
+    		status = "Mangled";
+    	else if(hp <= (maxHp - maxHp/3))//1/3 hp lost
+    		status = "Bloodied";
+    	else if(hp < maxHp)
+			status = "Merly a flesh wound";
+    	else
+    		status = "Uninjured";
+    	
+    }
     public boolean checkDead(){
         if(this.hp <= 0){
         	return true;

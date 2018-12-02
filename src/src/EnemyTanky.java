@@ -3,8 +3,9 @@ package src;
 import mapObjects.Coordinate;
 
 public class EnemyTanky extends Enemy {
+	String description = "Looks like it can take a beeting";
     public EnemyTanky(Coordinate location, int imageSize, int chalengeRating) {
-        super("The Big One",imageSize,chalengeRating,"EnemyTanky.png",location);
+        super("Big Bady",imageSize,chalengeRating,"EnemyTanky.png",location);
         this.lvl = chalengeRating+1;
         this.lvlUp();
         this.hp = maxHp;
@@ -21,5 +22,8 @@ public class EnemyTanky extends Enemy {
             }
         }
         this.availableStatPoint=0;
+    }
+    public String description() {
+    	return this + " (" + description + ")\n\t" + super.description();
     }
 }

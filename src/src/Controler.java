@@ -203,8 +203,12 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			if(entity instanceof Enemy) {
 				Enemy enemy = (Enemy)entity;
 				info = enemy.description();
-			}	
+			}
+			else if(entity instanceof Character) {
+				info = "Thats You, Silly!!!";
+			}
 		}
+		
 		
 		return info;
 	}

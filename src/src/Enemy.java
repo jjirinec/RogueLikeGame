@@ -12,6 +12,7 @@ public class Enemy extends Entity {
 
     public final int STAT_PTS_PER_LVL = 3;
     public int baseDmg;
+    
 
     public Enemy(Coordinate location, int imageSize, int chalengeRating) {
         super("Enemy", "EnemySpeedy.png", location, false, imageSize);
@@ -176,7 +177,10 @@ public class Enemy extends Entity {
 	}
 
 	public String description() {
-		return this.getObjectName() + "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 
-	this.getStr() + " Con-" +this.getCon() + " Acc-" + this.getAccuracy() + " Def-" + this.getDefence()+ " Spd-" +this.getSpeed();
+		return " CR: ("+ this.lvl + ")  Status: (" + this.status + ")" + debugDescription();
+	}
+	private String debugDescription() {
+		return "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 
+				this.getStr() + " Con-" +this.getCon() + " Acc-" + this.getAccuracy() + " Def-" + this.getDefence()+ " Spd-" +this.getSpeed();
 	}
 }

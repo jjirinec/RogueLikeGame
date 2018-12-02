@@ -3,6 +3,7 @@ package src;
 import mapObjects.Coordinate;
 
 public class EnemyStrong extends Enemy {
+	String description = "Looks like it can dish out some Damage";
     public EnemyStrong(Coordinate location, int imageSize, int chalengeRating) {
         super("Mr. Big Arms",imageSize,chalengeRating,"EnemyStrong.png",location);
         this.lvl = chalengeRating+1;
@@ -21,5 +22,9 @@ public class EnemyStrong extends Enemy {
             }
         }
         this.availableStatPoint=0;
+    }
+    
+    public String description() {
+    	return this + " (" + description + ")\n\t" + super.description();
     }
 }

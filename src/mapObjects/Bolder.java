@@ -29,7 +29,7 @@ public class Bolder extends Obstacle{
 	
 	public String description()
 	{
-		return super.description() + "\n\tCondition: " + condition + "(" + this.hp + ")";
+		return super.toString() + "-- This Rock Looks " + condition + "\t\t"  + super.description();
 	}
 	
 	
