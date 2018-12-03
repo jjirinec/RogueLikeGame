@@ -86,6 +86,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	{
 		player.newTurn();
 	}
+
 	private void interact() {
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];

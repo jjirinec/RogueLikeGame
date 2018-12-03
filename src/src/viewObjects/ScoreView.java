@@ -140,7 +140,7 @@ public class ScoreView {
 		}
 		return lootValue;
 	}
-	private VBox scoreTextBlock() {
+	public VBox scoreTextBlock() {
 		VBox scoreBlock = new VBox();
 		//scoreBlock.setMinWidth(prefSize/2 - 5/2 - 20);
 		scoreBlock.setPadding(insets(10));

@@ -320,6 +320,10 @@ public abstract class Entity extends MapObject{
 				if(mo instanceof Entity){
 					((Entity) mo).damag(dmg/2);
 					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+                    if (((Entity)mo).checkDead()) {
+                        map.getEnemys().remove(mo);
+                        map.removeEntity((Entity)mo);
+                    }
 				}
 				else if(mo instanceof Obstacle){
 					((Obstacle) mo).damage(dmg/2,map);
@@ -338,6 +342,10 @@ public abstract class Entity extends MapObject{
 				if(mo instanceof Entity){
 					((Entity) mo).damag(dmg/2);
 					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+                    if (((Entity)mo).checkDead()) {
+                        map.getEnemys().remove(mo);
+                        map.removeEntity((Entity)mo);
+                    }
 				}
 				else if(mo instanceof Obstacle){
 					((Obstacle) mo).damage(dmg/2,map);
@@ -352,11 +360,15 @@ public abstract class Entity extends MapObject{
 			Obstacle t = (Obstacle)target;
             dmg = Math.round((float)calcBaseDmg());
     		t.damage(dmg, map);
-			ArrayList<MapObject> splash = map.getSurrounding(target.getLocation());
+    		ArrayList<MapObject> splash = map.getSurrounding(target.getLocation());
 			for(MapObject mo : splash){
 				if(mo instanceof Entity){
 					((Entity) mo).damag(dmg/2);
 					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+                    if (((Entity)mo).checkDead()) {
+                        map.getEnemys().remove(mo);
+                        map.removeEntity((Entity)mo);
+                    }
 				}
 				else if(mo instanceof Obstacle){
 					((Obstacle) mo).damage(dmg/2,map);
