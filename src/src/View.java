@@ -2,6 +2,7 @@ package src;
 
 import mapObjects.*;
 import mapObjects.Container;
+import src.viewObjects.AnimationLayer;
 import src.viewObjects.ContainerView;
 import src.viewObjects.HealthGlobe;
 import src.viewObjects.InventoryView;
@@ -48,11 +49,14 @@ public class View extends Application implements Observer{
 	int mapWidth = mapColums * gridSize;
 	int mapHight = mapRows * gridSize;
 	
+	AnimationLayer animationLayer;
+	
 	Controler ctr;
 	StackPane forANDback;
 	BorderPane layout;
 	VBox rightSideView;
 	Map map;
+	StackPane mapStack;
 	LevelUpScene levelUpView;
 	///Character Info Variables
 	HealthGlobe healthGlobe;
@@ -71,6 +75,7 @@ public class View extends Application implements Observer{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
+		
 		mainStage = new Stage();
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		
@@ -79,8 +84,8 @@ public class View extends Application implements Observer{
 		forANDback = new StackPane();
 		map = new Map();
 		//map = new Map(mapRows,mapColums,gridSize,ctr.player);
-		
-		
+		mapStack = new StackPane();
+		animationLayer = new AnimationLayer(gridSize*mapColums,gridSize,mapStack);
 		
 		///ForFront///
 		layout = setUpForFront();
@@ -200,11 +205,12 @@ public class View extends Application implements Observer{
 	}
 	public void nextMap(){
 		map = new Map(mapRows,mapColums,gridSize,ctr.player,this);
+		mapStack.getChildren().add(0, map.getMap());
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
 		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();
 		center.getChildren().remove(0);
-		center.getChildren().add(0, map.getMap());
+		center.getChildren().add(0, mapStack);
 	}
 	public void setNewStage()
 	{

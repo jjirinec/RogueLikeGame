@@ -232,6 +232,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					break;
 			case Z://Testing health Globe  TODO Remove
 				player.heal(1);
+				view.animationLayer.animateArrow(player.getLocation(), view.map.getCursor().getLocation());
 					
 		}//End Switch
 	}
