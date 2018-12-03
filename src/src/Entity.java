@@ -10,6 +10,8 @@ import mapObjects.MapObject;
 import mapObjects.Obstacle;
 import mapObjects.Wepon;
 
+import java.util.ArrayList;
+
 import static src.Entity.AttackType.MELLE;
 import static src.Entity.AttackType.RANGED;
 
@@ -215,7 +217,6 @@ public abstract class Entity extends MapObject{
     }
 
    synchronized boolean move(int deltaX, int deltaY,Map map){
-//    	System.out.println(this.getObjectName() + " is moving!!!!!\n");
         Coordinate xy = super.getLocation();
         int x = xy.getX();
         int y = xy.getY();
@@ -223,24 +224,20 @@ public abstract class Entity extends MapObject{
         int targetY = y + deltaY;
 	   	MapLocation[][] mapTiles = map.getMapLocation();
         if(targetX > -1 && targetX < map.getMapLocation()[0].length && targetY > -1 && targetY < map.getMapLocation().length) {
-	        StackPane[][] panes = map.getStackPane();
-	        MapLocation location = mapTiles[x][y];
-	        StackPane currentLocationPane = panes[x][y];
-	        MapLocation destination = mapTiles[x + deltaX][y + deltaY];
-	        StackPane destinationPane = panes[x + deltaX][y + deltaY];
-	            if (destination.isPasable()){
-	            	location.removeEntity();
-	                this.updateGridImgage(currentLocationPane, destinationPane);	
-	                this.setLocation(x+deltaX,y+deltaY);										//Update entety location      
-	                destination.setEntity(this);//Add entity to location
-					this.spendActions(this.moveCost);
-	                return true;
-	            }
-	            else{
-//					System.out.println("INVALID LOCATION");
-				}
-        }
-//        System.out.println("Move location off map\n");
+			StackPane[][] panes = map.getStackPane();
+			MapLocation location = mapTiles[x][y];
+			StackPane currentLocationPane = panes[x][y];
+			MapLocation destination = mapTiles[x + deltaX][y + deltaY];
+			StackPane destinationPane = panes[x + deltaX][y + deltaY];
+			if (destination.isPasable()) {
+				location.removeEntity();
+				this.updateGridImgage(currentLocationPane, destinationPane);
+				this.setLocation(x + deltaX, y + deltaY);
+				destination.setEntity(this);
+				this.spendActions(this.moveCost);
+				return true;
+			}
+		}
         return false;
     }
 
@@ -259,7 +256,7 @@ public abstract class Entity extends MapObject{
 			return(rangedAttack(target, map));
 		}
 		else{
-			return(magicAttack(target, map));
+			return(magicAttack(target.getLocation(), map));
 		}
     }
 
@@ -289,7 +286,14 @@ public abstract class Entity extends MapObject{
     	if(target instanceof Entity){
     		Entity ent = (Entity)target;
             dmg = Math.round((float)(calcBaseDmg() * calcHitChance(ent.getTotalDefence())));
-			ent.damag(dmg); // CHANGE DAMAGE HERE
+            float distanceCalc = (float)(4.0/calculateD(this.getLocation().getX(),this.getLocation().getY(),target.getLocation().getX(),target.getLocation().getY()));
+            if(distanceCalc > 1){
+            	distanceCalc = 1;
+			}
+            dmg = Math.round(dmg * distanceCalc);
+			if(dmg < 1)
+				dmg = 1;
+			ent.damag(dmg);
             spendActions(attackCost);
     	}
     	else if(target instanceof Obstacle) {
@@ -303,27 +307,70 @@ public abstract class Entity extends MapObject{
     	return dmg;
     }
 
-    public int magicAttack(MapObject target, Map map) {
+    public int magicAttack(Coordinate loc, Map map) {
     	int dmg = 0;
-    	if(target instanceof Entity){
-    		Entity ent = (Entity)target;
+    	MapObject target = map.getMapLocation()[loc.getX()][loc.getY()].getObstacle();
+    	MapObject targetE = map.getMapLocation()[loc.getX()][loc.getY()].getEntity();
+    	if(target == null && targetE == null){
+			dmg = Math.round((float)(calcBaseDmg()));
+			if(dmg < 1)
+				dmg = 1;
+			ArrayList<MapObject> splash = map.getSurrounding(loc);
+			for(MapObject mo : splash){
+				if(mo instanceof Entity){
+					((Entity) mo).damag(dmg/2);
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+				}
+				else if(mo instanceof Obstacle){
+					((Obstacle) mo).damage(dmg/2,map);
+				}
+			}
+			spendActions(attackCost);
+		}
+    	else if(targetE instanceof Entity){
+    		Entity ent = (Entity)targetE;
             dmg = Math.round((float)(calcBaseDmg()));
             if(dmg < 1)
             	dmg = 1;
 			ent.damag(dmg); // CHANGE DAMAGE HERE
+			ArrayList<MapObject> splash = map.getSurrounding(targetE.getLocation());
+			for(MapObject mo : splash){
+				if(mo instanceof Entity){
+					((Entity) mo).damag(dmg/2);
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+				}
+				else if(mo instanceof Obstacle){
+					((Obstacle) mo).damage(dmg/2,map);
+				}
+			}
             spendActions(attackCost);
+			String dmgDeltMsg = this + ": Blasted " + targetE.getObjectName() + " for " + dmg + " damage" ;
+			sendHudMsg(dmgDeltMsg);
+			return dmg;
     	}
     	else if(target instanceof Obstacle) {
 			Obstacle t = (Obstacle)target;
             dmg = Math.round((float)calcBaseDmg());
     		t.damage(dmg, map);
+			ArrayList<MapObject> splash = map.getSurrounding(target.getLocation());
+			for(MapObject mo : splash){
+				if(mo instanceof Entity){
+					((Entity) mo).damag(dmg/2);
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
+				}
+				else if(mo instanceof Obstacle){
+					((Obstacle) mo).damage(dmg/2,map);
+				}
+			}
     		spendActions(attackCost);
+			String dmgDeltMsg = this + ": Blasted " + target.getObjectName() + " for " + dmg + " damage" ;
+			sendHudMsg(dmgDeltMsg);
+			return dmg;
     	}
-    	String dmgDeltMsg = this + ": Blasted " + target.getObjectName() + " for " + dmg + " damage" ;
-    	sendHudMsg(dmgDeltMsg);
-    	return dmg;
+		//String dmgDeltMsg = this + ": Blasted " + target.getObjectName() + " for " + dmg + " damage" ;
+		//sendHudMsg(dmgDeltMsg);
+		return dmg;
     }
-
 
 
     private void sendHudMsg(String msg) {
@@ -370,6 +417,11 @@ public abstract class Entity extends MapObject{
     	if(this instanceof Character) {
 //    		this.setChanged();
 //    		this.notifyObservers("Character health decreased by" + dmg);
+			if(this.checkDead()){
+				setChanged();
+				System.out.println("PLAYER IS DEAD FROM ENEMY");
+				notifyObservers("Dead");
+			}
     		this.setChanged();
     		this.notifyObservers("Hp Change");
     	}
@@ -411,7 +463,7 @@ public abstract class Entity extends MapObject{
     	}
     }
     public boolean canAct() {
-    	if((hasMovement() || hasAttacks() && getCurentActions() > 0))
+    	if(getCurentActions() > 0 &&(hasMovement() || hasAttacks()))
     		return true;
     	return false;
     }
@@ -497,5 +549,9 @@ public abstract class Entity extends MapObject{
 	        chance = 1;
 	    return chance;
         }
+
+	double calculateD(int x1, int y1, int x2, int y2) {
+		return Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2));
+	}
     }
     

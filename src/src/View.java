@@ -1,5 +1,7 @@
 package src;
 
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+import javafx.scene.control.TextField;
 import mapObjects.*;
 import mapObjects.Container;
 import src.viewObjects.ContainerView;
@@ -206,6 +208,16 @@ public class View extends Application implements Observer{
 		center.getChildren().remove(0);
 		center.getChildren().add(0, map.getMap());
 	}
+
+	public void endScreen(){
+		BorderPane endScreen = new BorderPane();
+		endScreen.setCenter(new VBox(new TextField("INFINITIUM"),new TextField(String.valueOf(map.getDamageDealt())),new TextField(String.valueOf(map.getTotalActions()))));
+		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
+		VBox center = (VBox)layout.getCenter();
+		center.getChildren().remove(0,2);
+		center.getChildren().add(0, endScreen);
+	}
+
 	public void setNewStage()
 	{
 		
@@ -213,10 +225,13 @@ public class View extends Application implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-//		System.out.println("Msg Receved: " + arg1.toString());
+		System.out.println("Msg Receved: " + arg1.toString());
 		// TODO Auto-generated method stub
 		if(arg1 instanceof String) {
 			String observedMsg = (String)arg1;
+			if(observedMsg.equals("Dead")){
+				endScreen();
+			}
 			if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
 				//this.updatePlayerInfo();
 				this.playerInfoView.updatStatActionBlocks();
