@@ -13,16 +13,25 @@ public class AnimationLayer {
 	
 	private Pane animationLayer;
 	private AnimationTimer animateArrowTimer;
+	private AnimationTimer animateFireTimer;
 	StackPane mapStack;
 	int mapSize;
 	int gridSize;
 	String arrowFile = "images/Projectil/Arrow.png";
+	String fireBallFile = "images/Projectil/FireBall.png";
 	Coordinate start;
 	Coordinate end;
 	
 	int projectileSpeed = 10;
+	double explodeRate = .3;
 	
 	ImageView arrow;
+	ImageView fireBall;
+	ImageView image;
+	//StackPane image;
+	
+	boolean atDestination;
+	boolean fullExplotion;
 	int diffX;
 	int diffY;
 	double xMove;
@@ -37,16 +46,22 @@ public class AnimationLayer {
 		this.mapStack = mapStack;
 		animationLayer = new Pane();
 		animationLayer.setPrefSize(mapSize, mapSize);
+		//animationLayer.setMinSize(mapSize, mapSize);
+		initilizeAnimationTimers();
 		
+	}
+	private void initilizeAnimationTimers() {
 		animateArrowTimer = new AnimationTimer() {
-
 			@Override
 			public void handle(long now) {
-				// TODO Auto-generated method stub
 				animateArrow();
-				
 			}
-			
+		};
+		animateFireTimer = new AnimationTimer() {
+			@Override
+			public void handle(long now) {
+				animateFire();
+			}
 		};
 	}
 	
@@ -54,47 +69,98 @@ public class AnimationLayer {
 		return animationLayer;
 	}
 	public void startArrowAnimation(Coordinate start, Coordinate end) {
-		this.start = start;
-		this.end = end;
-		diffX = Math.abs(distanceX(start, end)) * this.gridSize;
-		diffY = Math.abs(distanceY(start,end)) * this.gridSize;
-		xMoved = 0;
-		yMoved = 0;
-		arrow = placeArrow(start,end);
+		calcAnimationVariables(start, end);
+		//Add Image to view
+		image = this.setUpImage(start, end, arrowFile, 1);
+//		image =  new StackPane();
+//		image.getChildren().add(imageView);
+//		image.setPrefSize(gridSize, gridSize);
 		
-		angle = calculateAngle(start, end);
-		double radians = Math.toRadians(angle);
-		xMove = projectileSpeed * Math.cos(radians);
-		yMove = projectileSpeed * Math.sin(radians);
-		System.out.println(xMove + " , " + yMove);
 		this.animateArrowTimer.start();
 	}
 	public void animateArrow() {
-		System.out.println("Animation");
 		xMoved += Math.abs(xMove);
 		yMoved += Math.abs(yMove);
-		System.out.println("xMove " + xMoved +  "   yMoved " + yMoved);
-		arrow.setTranslateX(arrow.getTranslateX() + (xMove));
-		arrow.setTranslateY(arrow.getTranslateY() + yMove);
-		System.out.println("Angle " + angle);
+		image.setTranslateX(image.getTranslateX() + (xMove));
+		image.setTranslateY(image.getTranslateY() + yMove);
 		if(angle != 0 && angle != 90 && angle != 180 && angle != 270) {
 			if(xMoved >= diffX || yMoved >= diffY) {
-				this.animateArrowTimer.stop();
-				System.out.println("Stoped by one");
-				this.mapStack.getChildren().remove(animationLayer);
+				animationEnd(this.animateArrowTimer);
 			}
 		}
 		else if(((angle == 90 || angle == 270) && yMoved >= diffY) || ((angle == 0 || angle == 180) && xMoved >= diffX)) {
-			this.animateArrowTimer.stop();
-			System.out.println("Stoped by 2");
-			this.mapStack.getChildren().remove(animationLayer);
+			animationEnd(this.animateArrowTimer);
+		}	
+	}
+	private boolean moveProjectile() {
+		boolean atDestination = false;
+		xMoved += Math.abs(xMove);
+		yMoved += Math.abs(yMove);
+		image.setTranslateX(image.getTranslateX() + (xMove));
+		image.setTranslateY(image.getTranslateY() + yMove);
+		if(angle != 0 && angle != 90 && angle != 180 && angle != 270) {
+			if(xMoved >= diffX || yMoved >= diffY) {
+				atDestination = true;
+			}
 		}
-		
-		
-		
+		else if(((angle == 90 || angle == 270) && yMoved >= diffY) || ((angle == 0 || angle == 180) && xMoved >= diffX)) {
+			atDestination = true;
+		}
+		System.out.println("AtDestination: " + atDestination);
+		return atDestination;
 		
 	}
 	
+	public void startFireAnimation(Coordinate start, Coordinate end) {
+		calcAnimationVariables(start, end);
+		//Add Image to view
+		fullExplotion = false;
+		image = this.setUpImage(start, end, this.fireBallFile, .3);
+//		image =  new StackPane();
+//		image.getChildren().add(imageView);
+//		image.setPrefSize(gridSize, gridSize);
+//		animationLayer.getChildren().add(image);
+		this.animateFireTimer.start();
+	}
+	private void animateFire() {
+		
+		if(atDestination == false)
+			atDestination = this.moveProjectile();
+		else
+			if(fullExplotion == false) {
+				fullExplotion = fireExpand();
+			}
+			else
+				this.animationEnd(animateFireTimer);
+		
+	}
+	private boolean fireExpand() {
+		image.setScaleX(image.getScaleX() + explodeRate);
+		image.setScaleY(image.getScaleY() + explodeRate);
+		if(image.getScaleX() >= 3)
+			return true;
+		return false;
+	}
+	private void animationEnd(AnimationTimer animation) {
+		animation.stop();
+		this.mapStack.getChildren().remove(animationLayer);
+		animationLayer.getChildren().remove(image);
+	}
+	private void calcAnimationVariables(Coordinate start, Coordinate end) {
+		atDestination = false;
+		//Calculate distance in X and Y  to target
+		diffX = Math.abs(distanceX(start, end)) * this.gridSize;
+		diffY = Math.abs(distanceY(start,end)) * this.gridSize;
+		//Reset x and y moved to 0
+		xMoved = 0;
+		yMoved = 0;
+		//Calculating prijectile angle
+		angle = calculateAngle(start, end);
+		double radians = Math.toRadians(angle);
+		//Calculating X and Y move speeds
+		xMove = projectileSpeed * Math.cos(radians);
+		yMove = projectileSpeed * Math.sin(radians);
+	}
 	private ImageView placeArrow(Coordinate startLocation, Coordinate targetLocation) {
 		ImageView arrowImage = new ImageView(new Image(arrowFile));
 		arrowImage.setTranslateX(startLocation.getX()*gridSize);
@@ -102,14 +168,28 @@ public class AnimationLayer {
 		arrowImage.setRotate(calculateAngle(startLocation,targetLocation));
 		arrowImage.setFitHeight(gridSize);
 		arrowImage.setFitWidth(gridSize);
-		if(animationLayer.getChildren().size() > 0) {
-			animationLayer.getChildren().remove(0);
-		}
+//		if(animationLayer.getChildren().size() > 0) {
+//			animationLayer.getChildren().remove(0);
+//		}
 		animationLayer.getChildren().add(arrowImage);
-		if(mapStack.getChildren().size() > 1)
-			mapStack.getChildren().remove(1);
+//		if(mapStack.getChildren().size() > 1)
+//			mapStack.getChildren().remove(1);
 		mapStack.getChildren().add(1, animationLayer);
 		return arrowImage;
+	}
+	private ImageView setUpImage(Coordinate startLocation, Coordinate targetLocation,String imageFile,double scale) {
+		ImageView image = new ImageView(new Image(imageFile));
+		image.setTranslateX(startLocation.getX()*gridSize);
+		image.setTranslateY(startLocation.getY()*gridSize);
+		image.setRotate(calculateAngle(startLocation,targetLocation));
+		image.setFitHeight(gridSize);
+		image.setFitWidth(gridSize);
+		image.setScaleX(scale);
+		image.setScaleY(scale);
+		animationLayer.getChildren().add(image);
+
+		mapStack.getChildren().add(1, animationLayer);
+		return image;
 	}
 	
 	private double calculateAngle(Coordinate start, Coordinate end) {

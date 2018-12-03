@@ -141,6 +141,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 						Entity target = mapLocation.getEntity();
 						view.map.updateDamageDealt(player.attack(target, view.map));
 						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
+						
 						view.map.tallyAction();
 						if (target.checkDead()) {
 							view.map.getEnemys().remove(target);
@@ -239,6 +240,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					break;
 			case Z://Testing health Globe  TODO Remove
 				player.heal(1);
+				view.animationLayer.startFireAnimation(player.getLocation(),view.map.getCursor().getLocation());
 				
 					
 		}//End Switch
