@@ -139,6 +139,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					if (mapLocation.getEntity() != null) {
 						Entity target = mapLocation.getEntity();
 						view.map.updateDamageDealt(player.attack(target, view.map));
+						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
 						view.map.tallyAction();
 						if (target.checkDead()) {
 							view.map.getEnemys().remove(target);
@@ -147,6 +148,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					} else if (mapLocation.getObstacle() != null) {
 						Obstacle target = mapLocation.getObstacle();
 						view.map.updateDamageDealt(player.attack(target, view.map));
+						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
 						view.map.tallyAction();
 						setChanged();
 						notifyObservers("Player Attacking " + mapLocation.getObstacle());
@@ -236,7 +238,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					break;
 			case Z://Testing health Globe  TODO Remove
 				player.heal(1);
-				view.animationLayer.animateArrow(player.getLocation(), view.map.getCursor().getLocation());
+				
 					
 		}//End Switch
 	}
