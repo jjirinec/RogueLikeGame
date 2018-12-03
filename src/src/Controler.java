@@ -155,7 +155,11 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				}
 			}
 			else{
-				if (mapLocation.getEntity() != null) {
+				if(mapLocation.getEntity() == null && mapLocation.getObstacle() == null){
+					view.map.updateDamageDealt(player.magicAttack(cursorLocation,view.map));
+					view.map.tallyAction();
+				}
+				else if (mapLocation.getEntity() != null) {
 					Entity target = mapLocation.getEntity();
 					view.map.updateDamageDealt(player.attack(target, view.map));
 					view.map.tallyAction();
@@ -332,7 +336,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					return null;
 				}
 			};
-			
+
 			Thread enemyThread = new Thread(task);	//Each enemy turn executes on a separate thread
 			
 			enemyThread.start();
@@ -342,7 +346,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				e.printStackTrace();
 			}
 		}
-		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn 
+
+		javafx.application.Platform.runLater( () ->player.newTurn());		//When enemy's are done reset player turn
 		
 
 	}

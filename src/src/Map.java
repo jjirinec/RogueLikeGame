@@ -326,4 +326,69 @@ public class Map {
 	    this.totalActions++;
     }
     public int getTotalActions(){return totalActions;}
-}
+
+
+    public ArrayList<MapObject> getSurrounding(Coordinate l){
+		int x = l.getX();
+		int y = l.getY();
+		ArrayList<MapObject> mos = new ArrayList<>();
+		try {
+			mos.add(getMapLocation()[x+1][y].getEntity());
+			mos.add(getMapLocation()[x+1][y].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+		mos.add(getMapLocation()[x-1][y].getEntity());
+		mos.add(getMapLocation()[x-1][y].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+		mos.add(getMapLocation()[x][y+1].getEntity());
+		mos.add(getMapLocation()[x][y+1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+		mos.add(getMapLocation()[x][y-1].getEntity());
+		mos.add(getMapLocation()[x][y-1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+			mos.add(getMapLocation()[x+1][y+1].getEntity());
+			mos.add(getMapLocation()[x+1][y+1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+		ioe.getMessage();
+		}
+		try{
+			mos.add(getMapLocation()[x+1][y-1].getEntity());
+			mos.add(getMapLocation()[x+1][y-1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+			mos.add(getMapLocation()[x-1][y-1].getEntity());
+			mos.add(getMapLocation()[x-1][y-1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		try{
+			mos.add(getMapLocation()[x-1][y+1].getEntity());
+			mos.add(getMapLocation()[x-1][y+1].getObstacle());
+		}
+		catch(ArrayIndexOutOfBoundsException ioe){
+			ioe.getMessage();
+		}
+		return mos;
+	}
+	}
+
