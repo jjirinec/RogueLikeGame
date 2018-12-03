@@ -207,9 +207,11 @@ public class View extends Application implements Observer{
 	}
 	public void nextMap(){
 		map = new Map(mapRows,mapColums,gridSize,ctr.player,this);
-		mapStack.getChildren().add(0, map.getMap());
+		if(mapStack.getChildren().size() == 1) {
+			mapStack.getChildren().remove(0);
+		}
+		mapStack.getChildren().add(0,map.getMap());
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
-		//layout.getChildren().remove(3);
 		VBox center = (VBox)layout.getCenter();
 		center.getChildren().remove(0);
 		center.getChildren().add(0, mapStack);
@@ -220,7 +222,13 @@ public class View extends Application implements Observer{
 		endScreen.setCenter(new VBox(new TextField("INFINITIUM"),new TextField(String.valueOf(map.getDamageDealt())),new TextField(String.valueOf(map.getTotalActions()))));
 		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
 		VBox center = (VBox)layout.getCenter();
-		center.getChildren().remove(0,2);
+		//center.getChildren().remove(0,2);
+		//center.getChildren().add(0, endScreen);
+
+		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
+		VBox stats = scoreView.scoreTextBlock();
+		endScreen.setBottom(stats);
+		center.getChildren().remove(0);
 		center.getChildren().add(0, endScreen);
 	}
 
@@ -238,7 +246,7 @@ public class View extends Application implements Observer{
 			if(observedMsg.equals("Dead")){
 				endScreen();
 			}
-			if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
+			else if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {
 				//this.updatePlayerInfo();
 				this.playerInfoView.updatStatActionBlocks();
 			}
