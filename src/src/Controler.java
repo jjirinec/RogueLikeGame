@@ -238,13 +238,13 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			case SHIFT:
 				endTurn();
 				break;
-			case X://Testing Obstacle breaking  TODO Remove
-
-				player.damag(2);
-					break;
-			case Z://Testing health Globe  TODO Remove
-				player.heal(1);
-				view.animationLayer.startMeleeAnimation(player.getLocation(),view.map.getCursor().getLocation());
+//			case X://Testing Obstacle breaking  TODO Remove
+//
+//				player.damag(2);
+//					break;
+//			case Z://Testing health Globe  TODO Remove
+//				player.heal(1);
+//				view.animationLayer.startMeleeAnimation(player.getLocation(),view.map.getCursor().getLocation());
 				
 					
 		}//End Switch
