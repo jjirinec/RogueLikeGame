@@ -49,7 +49,7 @@ public class Enemy extends Entity {
         double totalDA = calculateD(pos.getX() - 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() - 1, pos.getY(), Xp, Yp);
         double totalDD = calculateD(pos.getX() + 1, pos.getY(), Xd, Yd) + calculateD(pos.getX() + 1, pos.getY(), Xp, Yp);
         if (totalD_P <= 1) {
-//            System.out.println("ENEMY HIT");
+            System.out.println("ENEMY HIT");
             return 'H';
         } else if (totalDW < totalDS && totalDW < totalDA && totalDW < totalDD) {
             return ('W');
@@ -100,6 +100,7 @@ public class Enemy extends Entity {
                 result = randomMove(view);
             }
         } else if (input == 'H') {
+        	System.out.println("Enemy Attacking");
             result = true;
             attack(map.getPlayer(),view);
             }

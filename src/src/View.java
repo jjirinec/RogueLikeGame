@@ -71,17 +71,21 @@ public class View extends Application implements Observer{
 	Text hudMsg;
 	ScrollPane hud;
 	Stage mainStage;
+	Pane mainView;
+	Scene root;
 	
 	public static void main(String[]args){	launch(args);	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// TODO Auto-generated method stub
-		
+		ctr = new Controler(this);
 		mainStage = new Stage();
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-		
-		Scene root = splashScene();//startNewGame();
+		mainView = new Pane();
+		splashScene();
+		root = new Scene(mainView);//splashScene();//startNewGame();
+		root.setOnKeyPressed(ctr);
 		mainStage.setScene(root);
 		mainStage.show();
 		mainStage.sizeToScene();
@@ -105,36 +109,38 @@ public class View extends Application implements Observer{
 		background.setFitHeight(this.screenSize.getHeight());
 		background.setFitWidth(this.screenSize.getWidth());
 		splash.getChildren().addAll(background,startGameButton);
-		
-		Scene scene = new Scene(splash);
-		return scene;
+		mainView.getChildren().add(splash);
+		//Scene scene = new Scene(splash);
+		return null;
 	}
 	
 	public void startNewGame() {
+		
 		ctr = new Controler(this);
+		root.setOnKeyPressed(ctr);
 		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
 		forANDback = new StackPane();
 		map = new Map();
 		mapStack = new StackPane();
-		animationLayer = new AnimationLayer(gridSize*mapColums,gridSize,mapStack);
 		
+		animationLayer = new AnimationLayer(gridSize*mapColums,gridSize,mapStack);
 		///ForFront///
 		layout = setUpForFront();
 		
 		///Background///
-//		Rectangle bgImage = new Rectangle(screenSize.getWidth(),screenSize.getHeight());
-//		bgImage.setFill(Color.DARKCYAN);
 		Pane background = new Pane();
 		ImageView backGround = new ImageView(new Image("images/Character/background.jpg"));
 		background.getChildren().add(backGround);
 		forANDback.getChildren().addAll(background,layout);
-		forANDback.setMaxSize(500, 500);
+		//forANDback.setMaxSize(500, 500);
+		forANDback.setPrefSize(this.screenSize.getWidth(), this.screenSize.getHeight());
 		
+		mainView.getChildren().remove(0);
+		mainView.getChildren().add(forANDback);
+		//Scene root = new Scene(forANDback);
 		
-		Scene root = new Scene(forANDback);
-		root.setOnKeyPressed(ctr);
-		this.mainStage.setScene(root);
-		mainStage.setFullScreen(true);
+		//this.mainStage.setScene(root);
+		//mainStage.setFullScreen(true);
 	}
 	public Controler getControler() {
 		return ctr;
@@ -267,9 +273,11 @@ public class View extends Application implements Observer{
 		endMain.setCenter(centerView);
 		endMain.setBottom(bottomBox);
 		endScene.getChildren().addAll(backgroundImage,endMain);
-		Scene root = new Scene(endScene);
-		this.mainStage.setScene(root);
-		this.mainStage.setFullScreen(true);
+		mainView.getChildren().remove(0);
+		mainView.getChildren().add(endScene);
+//		Scene root = new Scene(endScene);
+//		this.mainStage.setScene(root);
+//		this.mainStage.setFullScreen(true);
 	}
 	private Button newGameButton() {
 		Button newGame = new Button("New Game");

@@ -9,6 +9,7 @@ import mapObjects.Coordinate;
 import mapObjects.MapObject;
 import mapObjects.Obstacle;
 import mapObjects.Wepon;
+import src.viewObjects.AnimationLayer;
 
 import java.util.ArrayList;
 
@@ -249,15 +250,23 @@ public abstract class Entity extends MapObject{
    
 
     public int attack(MapObject target, View view) {
+    	System.out.println(this.attackType);
+    	AnimationLayer animation = new AnimationLayer(view.gridSize*view.mapColums,view.gridSize,view.mapStack);
 		if(this.attackType == MELLE){
-			return(melleAttack(target, view.map));
+			
+			System.out.println("After anmimation");
+			int result = (melleAttack(target, view.map));
+			javafx.application.Platform.runLater( () ->animation.startMeleeAnimation(this.getLocation(), target.getLocation()));
+			return result;
 		}
 		else if(this.attackType == RANGED){
-			view.animationLayer.startArrowAnimation(this.getLocation(), target.getLocation());
+			animation.startArrowAnimation(this.getLocation(), target.getLocation());
+			//view.animationLayer.startArrowAnimation(this.getLocation(), target.getLocation());
 			return(rangedAttack(target, view.map));
 		}
 		else{
-			view.animationLayer.startFireAnimation(this.getLocation(), target.getLocation());
+			animation.startFireAnimation(this.getLocation(), target.getLocation());
+			//view.animationLayer.startFireAnimation(this.getLocation(), target.getLocation());
 			return(magicAttack(target.getLocation(), view.map));
 			
 		}
@@ -271,6 +280,7 @@ public abstract class Entity extends MapObject{
 			if(dmg < 1)
 				dmg = 1;
 			ent.damag(dmg);
+			System.out.println("Attacking Player");
 			spendActions(attackCost);
 		}
 		else if(target instanceof Obstacle) {
@@ -490,7 +500,7 @@ public abstract class Entity extends MapObject{
     		
     }
     public boolean hasAttacks() {
-    	System.out.println("CurrentActions: " + curentActions + " AttackCost: " + attackCost);
+    	//System.out.println("CurrentActions: " + curentActions + " AttackCost: " + attackCost);
     	if(curentActions >= attackCost)
     		return true;
     	return false;

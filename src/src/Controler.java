@@ -90,7 +90,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 	private void interact() {
 		Coordinate cursorLocation = view.map.getCursor().getLocation();
 		MapLocation mapLocation = view.map.getMapLocation()[cursorLocation.getX()][cursorLocation.getY()];
-		if(mapLocation.getObstacle() != null) {
+		if(mapLocation.getObstacle() != null && !mapLocation.getObstacle().isPasable()) {
 			Obstacle obstacle = mapLocation.getObstacle();
 			if(obstacle instanceof Container) {
 				Container container = (Container) obstacle;
@@ -100,6 +100,10 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					view.containerView(container,player,view.map);
 				}
 			}
+		}
+		else if(mapLocation.hasLoot()) {
+			Loot item = mapLocation.getLoot();
+			player.grabLoot(item);
 		}
 	}
 	private void interactAttack()
@@ -239,7 +243,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					break;
 			case Z://Testing health Globe  TODO Remove
 				player.heal(1);
-				view.animationLayer.startFireAnimation(player.getLocation(),view.map.getCursor().getLocation());
+				view.animationLayer.startMeleeAnimation(player.getLocation(),view.map.getCursor().getLocation());
 				
 					
 		}//End Switch

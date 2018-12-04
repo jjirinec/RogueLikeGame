@@ -14,6 +14,7 @@ public class AnimationLayer {
 	private Pane animationLayer;
 	private AnimationTimer animateArrowTimer;
 	private AnimationTimer animateFireTimer;
+	private AnimationTimer animateMeleeTimer;
 	
 	StackPane mapStack;
 	int mapSize;
@@ -21,6 +22,7 @@ public class AnimationLayer {
 	String arrowFile = "images/Projectil/Arrow.png";
 	String fireBallFile = "images/Projectil/FireBall.png";
 	String smokeFile = "images/Projectil/Smoke.png";
+	String meleeFile = "images/wepons/dagger.png";
 	Coordinate start;
 	Coordinate end;
 	
@@ -42,6 +44,10 @@ public class AnimationLayer {
 	double xMoved;
 	double yMoved;
 	double angle;
+	double meleeMoved;
+	double meleeRotated;
+	boolean rL;
+	int swipes;
 	
 	public AnimationLayer(int mapSize,int tileSize,StackPane mapStack) {
 		this.mapSize = mapSize;
@@ -66,8 +72,71 @@ public class AnimationLayer {
 				animateFire();
 			}
 		};
+		animateMeleeTimer = new AnimationTimer() {
+			@Override
+			public void handle(long arg0) {
+				animateMelee();
+				
+			}
+			
+		};
 	}
-	
+	public void startMeleeAnimation(Coordinate start, Coordinate end) {
+		calcAnimationVariables(start, end);
+		this.meleeMoved = 0;
+		this.meleeRotated = 0;
+		this.swipes = 0;
+		this.rL = true;
+		imageView = this.setUpImage(start, end, meleeFile, 1.5);
+		imageView = positionImage(imageView);
+		this.prepAnimationLayer(imageView);
+		this.animateMeleeTimer.start();
+	}
+	private ImageView positionImage(ImageView image) {
+		int centerOffset = 25;
+		imageView.setRotate(imageView.getRotate() + 90 + 40);
+		
+		//System.out.println("Xmove "  + xMove + "    Ymove "+ yMove);
+		xMove = Math.round(xMove);
+		yMove = Math.round(yMove);
+		if(this.xMove > 0)
+			image.setTranslateX(image.getTranslateX() + centerOffset);
+		else if(this.xMove < 0) {
+			centerOffset *= -1;
+			image.setTranslateX(image.getTranslateX() + centerOffset);
+		}
+		else if(this.yMove > 0)
+			image.setTranslateY(image.getTranslateY() + centerOffset);
+		else if(this.yMove < 0) {
+			centerOffset *= -1;
+			image.setTranslateY(image.getTranslateY() + centerOffset);
+		}
+		
+		return image;
+	}
+	private void animateMelee(){
+		int rotatSpeed = 8;
+		if(rL) {
+			image.getChildren().get(0).setRotate(image.getChildren().get(0).getRotate() - rotatSpeed);
+			this.meleeRotated += rotatSpeed;
+			if(meleeRotated > 80) {
+				rL = false;
+				swipes++;
+			}
+		}
+		else{
+			image.getChildren().get(0).setRotate(image.getChildren().get(0).getRotate() + rotatSpeed);
+			this.meleeRotated -= rotatSpeed;
+			if(meleeRotated < 0) {
+				rL = true;
+				swipes++;
+			}
+		}
+
+		
+		if(swipes == 3)//mdone && rdone)
+			this.animationEnd(animateMeleeTimer);
+	}
 	public Pane getAnimationLayer() {
 		return animationLayer;
 	}
@@ -101,7 +170,7 @@ public class AnimationLayer {
 		else if(((angle == 90 || angle == 270) && yMoved >= diffY) || ((angle == 0 || angle == 180) && xMoved >= diffX)) {
 			atDestination = true;
 		}
-		System.out.println("AtDestination: " + atDestination);
+		//System.out.println("AtDestination: " + atDestination);
 		return atDestination;
 		
 	}
@@ -145,6 +214,7 @@ public class AnimationLayer {
 		return false;
 	}
 	private void prepAnimationLayer(ImageView imageView) {
+		System.out.println("PrepAnimation" + mapStack.toString());
 		image =  new StackPane();
 		image.getChildren().add(imageView);
 		image.setPrefSize(gridSize, gridSize);
@@ -208,20 +278,20 @@ public class AnimationLayer {
 		int diffX  = distanceX(start,end);
 		
 		double hyp = hypotinuse(diffX, diffY);
-		System.out.println("xDiff: " + diffX + "  yDiff: " + diffY + "   Hypotinuse: " + hyp);
+		//System.out.println("xDiff: " + diffX + "  yDiff: " + diffY + "   Hypotinuse: " + hyp);
 		double radians;
 		if(diffY >= 0) {
-			System.out.println("Case 1");
+			//System.out.println("Case 1");
 			radians =  Math.acos(diffX/hyp);
 		}
 		else {
-			System.out.println("Case 2");
+			//System.out.println("Case 2");
 			radians = Math.acos(-diffX/hyp) +Math.PI;
 		}
-		System.out.println("Radians: " +radians);
+		//System.out.println("Radians: " +radians);
 		double degrees = radiansToDegrees(radians);
 		//degrees += getAditionalDegrees(diffX, diffY);
-		System.out.println(degrees);
+		//System.out.println(degrees);
 		return  degrees;
 		
 		
