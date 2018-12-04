@@ -201,7 +201,7 @@ public class Map {
 					this.startLootCount++;
 		//			System.out.println(location[row][colum].topLoot().description());							//TODO Remove
 				}
-				if (oNumber <= 15 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
+				if (oNumber <= 10 && location[row][colum].getTile().isMovable && !entrance.equals(new Coordinate(colum, row))) {
 					Obstacle obs = objGen.generate(roomRating, new Coordinate(row, colum));
 					location[row][colum].setObstacle(obs);
 					stacks[row][colum].getChildren().add(location[row][colum].getObstacle().getImageView());
@@ -218,7 +218,6 @@ public class Map {
 		location[entrance.getY()][entrance.getX()].setEntity(player);
 		cursor = new TargetingCursor(gridSize,new Coordinate(player.getLocation()));
 		stacks[entrance.getY()][entrance.getX()].getChildren().add(cursor.getImageView());
-		player.inventory.add(new Bow(1,1,gridSize));
 	}
 
 
