@@ -164,6 +164,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			else{
 				if(mapLocation.getEntity() == null && mapLocation.getObstacle() == null){
 					view.map.updateDamageDealt(player.magicAttack(cursorLocation,view.map));
+					view.animationLayer.startFireAnimation(player.getLocation(), cursorLocation);
 					view.map.tallyAction();
 				}
 				else if (mapLocation.getEntity() != null) {

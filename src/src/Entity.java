@@ -138,7 +138,6 @@ public abstract class Entity extends MapObject{
 		if(maxDexBonus > 0 && dexBonus > maxDexBonus)
 			dexBonus = maxDexBonus;
 		double totalDefence = defence + armorDefenceiveValue + dexBonus;
-		System.out.println("TotalDevence: " + totalDefence);
 		return totalDefence;
 	}
 	private double maxDexBonus(Armor.Type armorType) {
@@ -250,23 +249,18 @@ public abstract class Entity extends MapObject{
    
 
     public int attack(MapObject target, View view) {
-    	System.out.println(this.attackType);
     	AnimationLayer animation = new AnimationLayer(view.gridSize*view.mapColums,view.gridSize,view.mapStack);
 		if(this.attackType == MELLE){
-			
-			System.out.println("After anmimation");
 			int result = (melleAttack(target, view.map));
 			javafx.application.Platform.runLater( () ->animation.startMeleeAnimation(this.getLocation(), target.getLocation()));
 			return result;
 		}
 		else if(this.attackType == RANGED){
 			animation.startArrowAnimation(this.getLocation(), target.getLocation());
-			//view.animationLayer.startArrowAnimation(this.getLocation(), target.getLocation());
 			return(rangedAttack(target, view.map));
 		}
 		else{
 			animation.startFireAnimation(this.getLocation(), target.getLocation());
-			//view.animationLayer.startFireAnimation(this.getLocation(), target.getLocation());
 			return(magicAttack(target.getLocation(), view.map));
 			
 		}
@@ -280,7 +274,6 @@ public abstract class Entity extends MapObject{
 			if(dmg < 1)
 				dmg = 1;
 			ent.damag(dmg);
-			System.out.println("Attacking Player");
 			spendActions(attackCost);
 		}
 		else if(target instanceof Obstacle) {
@@ -339,6 +332,8 @@ public abstract class Entity extends MapObject{
                     }
 				}
 				else if(mo instanceof Obstacle){
+					System.out.println("Splash ob");
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
 					((Obstacle) mo).damage(dmg/2,map);
 				}
 			}
@@ -361,6 +356,8 @@ public abstract class Entity extends MapObject{
                     }
 				}
 				else if(mo instanceof Obstacle){
+					System.out.println("Splash ob");
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
 					((Obstacle) mo).damage(dmg/2,map);
 				}
 			}
@@ -384,6 +381,7 @@ public abstract class Entity extends MapObject{
                     }
 				}
 				else if(mo instanceof Obstacle){
+					sendHudMsg(this + ": Blasted " + mo.getObjectName() + " for " + dmg/2 + " splash damage");
 					((Obstacle) mo).damage(dmg/2,map);
 				}
 			}
