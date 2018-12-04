@@ -111,7 +111,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			if (player.getAttackType() == Entity.AttackType.MELLE) {
 				if (mapLocation.getEntity() != null && player.isAdjacent(cursorLocation)) {
 					Entity target = mapLocation.getEntity();
-					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.updateDamageDealt(player.attack(target, view));
 					view.map.tallyAction();
 					if (target.checkDead()) {
 						view.map.getEnemys().remove(target);
@@ -119,7 +119,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					}
 				} else if (mapLocation.getObstacle() != null && player.isAdjacent(cursorLocation)) {
 					Obstacle target = mapLocation.getObstacle();
-					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.updateDamageDealt(player.attack(target, view));
 					view.map.tallyAction();
 					setChanged();
 					notifyObservers("Player Attacking " + mapLocation.getObstacle());
@@ -139,9 +139,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				 else {
 					if (mapLocation.getEntity() != null) {
 						Entity target = mapLocation.getEntity();
-						view.map.updateDamageDealt(player.attack(target, view.map));
-						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
-						
+						view.map.updateDamageDealt(player.attack(target,view));
+//						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
 						view.map.tallyAction();
 						if (target.checkDead()) {
 							view.map.getEnemys().remove(target);
@@ -149,8 +148,8 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 						}
 					} else if (mapLocation.getObstacle() != null) {
 						Obstacle target = mapLocation.getObstacle();
-						view.map.updateDamageDealt(player.attack(target, view.map));
-						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
+						view.map.updateDamageDealt(player.attack(target,view));
+//						view.animationLayer.startArrowAnimation(player.getLocation(), view.map.getCursor().getLocation());
 						view.map.tallyAction();
 						setChanged();
 						notifyObservers("Player Attacking " + mapLocation.getObstacle());
@@ -165,7 +164,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 				}
 				else if (mapLocation.getEntity() != null) {
 					Entity target = mapLocation.getEntity();
-					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.updateDamageDealt(player.attack(target, view));
 					view.map.tallyAction();
 					if (target.checkDead()) {
 						view.map.getEnemys().remove(target);
@@ -173,7 +172,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 					}
 				} else if (mapLocation.getObstacle() != null) {
 					Obstacle target = mapLocation.getObstacle();
-					view.map.updateDamageDealt(player.attack(target, view.map));
+					view.map.updateDamageDealt(player.attack(target, view));
 					view.map.tallyAction();
 					setChanged();
 					notifyObservers("Player Attacking " + mapLocation.getObstacle());
@@ -337,7 +336,7 @@ public class Controler extends Observable implements EventHandler<KeyEvent>{
 			Task<Integer> task = new Task<Integer>() {		//The task is the enemy turn
 				@Override
 				protected Integer call() throws Exception {
-					enemy.turn(player,view.map,view.map.getExit());
+					enemy.turn(player,view,view.map.getExit());
 					return null;
 				}
 			};

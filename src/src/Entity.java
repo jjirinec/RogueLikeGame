@@ -248,15 +248,18 @@ public abstract class Entity extends MapObject{
    }
    
 
-    public int attack(MapObject target, Map map) {
+    public int attack(MapObject target, View view) {
 		if(this.attackType == MELLE){
-			return(melleAttack(target, map));
+			return(melleAttack(target, view.map));
 		}
 		else if(this.attackType == RANGED){
-			return(rangedAttack(target, map));
+			view.animationLayer.startArrowAnimation(this.getLocation(), target.getLocation());
+			return(rangedAttack(target, view.map));
 		}
 		else{
-			return(magicAttack(target.getLocation(), map));
+			view.animationLayer.startFireAnimation(this.getLocation(), target.getLocation());
+			return(magicAttack(target.getLocation(), view.map));
+			
 		}
     }
 

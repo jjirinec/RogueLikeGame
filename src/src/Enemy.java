@@ -70,8 +70,9 @@ public class Enemy extends Entity {
      * @param input W,S,A,D to move, other to return false
      * @return truth if moves, false if doesnt move
      */
-    boolean readInput(char input, Map map) {
+    boolean readInput(char input, View view) {
     	//System.out.println("readInput");
+    	Map map = view.map;
         boolean result = false;
         if(isSurrounded(map)){
             spendActions(10);
@@ -81,36 +82,36 @@ public class Enemy extends Entity {
         if (input == 'W') {
             result = move(0, -1, map);
             if(!result) {
-                result = randomMove(map);
+                result = randomMove(view);
             }
         } else if (input == 'S') {
             result = move(0, 1, map);
             if(!result) {
-                result = randomMove(map);
+                result = randomMove(view);
             }
         } else if (input == 'A') {
             result = move(-1, 0, map);
             if(!result) {
-                result = randomMove(map);
+                result = randomMove(view);
             }
         } else if (input == 'D') {
             result = move(1, 0, map);
             if(!result) {
-                result = randomMove(map);
+                result = randomMove(view);
             }
         } else if (input == 'H') {
             result = true;
-            attack(map.getPlayer(),map);
+            attack(map.getPlayer(),view);
             }
         return result;
     }
 
 
-    public synchronized void turn(Character player, Map map, Coordinate doorLoc) {
+    public synchronized void turn(Character player, View view, Coordinate doorLoc) {
         this.newTurn();
-		while (this.canAct() && !isSurrounded(map) && this.getCurentActions() > 0) {
+		while (this.canAct() && !isSurrounded(view.map) && this.getCurentActions() > 0) {
     		timeStop(500);
-    		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY(),map), map);
+    		readInput(smartDirectionEnemy(player.getLocation().getX(), player.getLocation().getY(), doorLoc.getX(), doorLoc.getY(),view.map), view);
 		}
     }///End turn
 
@@ -128,14 +129,14 @@ public class Enemy extends Entity {
 
 
 
-    public boolean randomMove(Map map) {
+    public boolean randomMove(View view) {
         char[] direction = {'W', 'S', 'A', 'D'};
         Random rand = new Random();
         boolean temp = false;
         int counter = 0;
         while (!temp && counter < 100) {
             int randomDirection = rand.nextInt(4);
-            temp = readInput(direction[randomDirection], map);
+            temp = readInput(direction[randomDirection], view);
             counter++;
         }
         return temp;

@@ -83,19 +83,7 @@ public class AnimationLayer {
 		if(atDestination == false)
 			atDestination = moveProjectile(0,true);
 		else
-			this.animationEnd(animateArrowTimer);
-//		xMoved += Math.abs(xMove);
-//		yMoved += Math.abs(yMove);
-//		image.setTranslateX(image.getTranslateX() + (xMove));
-//		image.setTranslateY(image.getTranslateY() + yMove);
-//		if(angle != 0 && angle != 90 && angle != 180 && angle != 270) {
-//			if(xMoved >= diffX || yMoved >= diffY) {
-//				animationEnd(this.animateArrowTimer);
-//			}
-//		}
-//		else if(((angle == 90 || angle == 270) && yMoved >= diffY) || ((angle == 0 || angle == 180) && xMoved >= diffX)) {
-//			animationEnd(this.animateArrowTimer);
-//		}	
+			this.animationEnd(animateArrowTimer);	
 	}
 	private boolean moveProjectile(int projectileIndex,boolean incrementMoved) {
 		boolean atDestination = false;
@@ -128,6 +116,7 @@ public class AnimationLayer {
 		ImageView smoke = setUpImage(start,end,this.smokeFile,0);
 		image.getChildren().add(smoke);
 		this.animateFireTimer.start();
+		
 	}
 	private void animateFire() {
 		
@@ -140,7 +129,7 @@ public class AnimationLayer {
 				if(fullExplotion == false) {
 					fullExplotion = fireExpand(0,explodeRate,.05);
 				}
-				smokeExpanded = fireExpand(1,explodeRate-.1,.05);
+				smokeExpanded = fireExpand(1,explodeRate-.1,.05f);
 			}
 			else
 				this.animationEnd(animateFireTimer);

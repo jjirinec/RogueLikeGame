@@ -81,34 +81,7 @@ public class View extends Application implements Observer{
 		mainStage = new Stage();
 		screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
 		
-		ctr = new Controler(this);
-		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
-		forANDback = new StackPane();
-		map = new Map();
-		//map = new Map(mapRows,mapColums,gridSize,ctr.player);
-		mapStack = new StackPane();
-		animationLayer = new AnimationLayer(gridSize*mapColums,gridSize,mapStack);
-		
-		///ForFront///
-		layout = setUpForFront();
-		
-		///Background///
-		Rectangle bgImage = new Rectangle(screenSize.getWidth(),screenSize.getHeight());
-		bgImage.setFill(Color.DARKCYAN);
-		Pane background = new Pane();
-		ImageView backGround = new ImageView(new Image("images/Character/background.jpg"));
-		
-		//background.setPrefSize(screenSize.getWidth(),screenSize.getHeight());
-		//background.autosize();
-		background.getChildren().add(backGround);
-//		layout.setLeft(background);
-		
-		forANDback.getChildren().addAll(background,layout);
-		forANDback.setMaxSize(500, 500);
-		Scene root = new Scene(forANDback);
-		
-		
-		root.setOnKeyPressed(ctr);
+		Scene root = splashScene();//startNewGame();
 		mainStage.setScene(root);
 		mainStage.show();
 		mainStage.sizeToScene();
@@ -116,6 +89,53 @@ public class View extends Application implements Observer{
 		
 		//ctr.startPlay();
 
+	}
+	public Scene splashScene() {
+		StackPane splash = new StackPane();
+		Button startGameButton = new Button();
+		startGameButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				startNewGame();				
+			}});
+		startGameButton.setText("New Game");
+		startGameButton.setAlignment(Pos.BASELINE_RIGHT);
+		ImageView background = new ImageView(new Image("images/Splash/InfinitoriumSplash.png"));
+		background.setFitHeight(this.screenSize.getHeight());
+		background.setFitWidth(this.screenSize.getWidth());
+		splash.getChildren().addAll(background,startGameButton);
+		
+		Scene scene = new Scene(splash);
+		return scene;
+	}
+	
+	public void startNewGame() {
+		ctr = new Controler(this);
+		levelUpView = new LevelUpScene(ctr.player,gridSize*mapColums, gridSize*mapRows,this);
+		forANDback = new StackPane();
+		map = new Map();
+		mapStack = new StackPane();
+		animationLayer = new AnimationLayer(gridSize*mapColums,gridSize,mapStack);
+		
+		///ForFront///
+		layout = setUpForFront();
+		
+		///Background///
+//		Rectangle bgImage = new Rectangle(screenSize.getWidth(),screenSize.getHeight());
+//		bgImage.setFill(Color.DARKCYAN);
+		Pane background = new Pane();
+		ImageView backGround = new ImageView(new Image("images/Character/background.jpg"));
+		background.getChildren().add(backGround);
+		forANDback.getChildren().addAll(background,layout);
+		forANDback.setMaxSize(500, 500);
+		
+		
+		Scene root = new Scene(forANDback);
+		
+		
+		root.setOnKeyPressed(ctr);
+		this.mainStage.setScene(root);
+		mainStage.setFullScreen(true);
 	}
 	public Controler getControler() {
 		return ctr;
@@ -239,7 +259,7 @@ public class View extends Application implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("Msg Receved: " + arg1.toString());
+//		System.out.println("Msg Receved: " + arg1.toString());
 		// TODO Auto-generated method stub
 		if(arg1 instanceof String) {
 			String observedMsg = (String)arg1;
@@ -264,7 +284,7 @@ public class View extends Application implements Observer{
 				this.playerInfoView.updateAttackDeffInfo();
 			}
 			else if(observedMsg.equals("Attack Type Change")) {
-				System.out.println("Attack change Msg Receved");
+//				System.out.println("Attack change Msg Receved");
 				this.playerInfoView.updateAttackDeffInfo();
 			}
 			else if(observedMsg.equals("Exit")) {
