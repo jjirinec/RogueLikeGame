@@ -25,13 +25,13 @@ public class LevelUpScene {
 	int buttonSize = 25;
 	
 	//ToolTipText
-	String strTip = "Str";
-	String dexTip = "dex";
-	String conTip = "Con";
-	String mgkTip = "Magic";
-	String defTip = "Defence";
-	String accTip = "Accuracy";
-	String spdTip = "Speed";
+	String strTip = "Increases Dmg delt in melee attacks";
+	String dexTip = "Increases Dmg delt with range attacks\nAlso slighly increases defence when wearing light or not armor";
+	String conTip = "Increases Max Hitpoints";
+	String mgkTip = "Increases Dmg delt with magic\nWarning: magic is AOE";
+	String defTip = "Decreases the amount of Dmg you take";
+	String accTip = "Increases your ablility to bypass enemy defence";
+	String spdTip = "Increases the number of action points receved per round";
 	
 	int availablePts;
 	int totalPts;

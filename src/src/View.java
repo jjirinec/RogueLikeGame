@@ -86,6 +86,7 @@ public class View extends Application implements Observer{
 		mainStage.show();
 		mainStage.sizeToScene();
 		mainStage.setFullScreen(true);
+		//this.endScreen();
 		
 		//ctr.startPlay();
 
@@ -131,8 +132,6 @@ public class View extends Application implements Observer{
 		
 		
 		Scene root = new Scene(forANDback);
-		
-		
 		root.setOnKeyPressed(ctr);
 		this.mainStage.setScene(root);
 		mainStage.setFullScreen(true);
@@ -238,23 +237,64 @@ public class View extends Application implements Observer{
 	}
 
 	public void endScreen(){
-		BorderPane endScreen = new BorderPane();
-		endScreen.setCenter(new VBox(new TextField("INFINITIUM"),new TextField(String.valueOf(map.getDamageDealt())),new TextField(String.valueOf(map.getTotalActions()))));
-		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
-		VBox center = (VBox)layout.getCenter();
-		//center.getChildren().remove(0,2);
-		//center.getChildren().add(0, endScreen);
-
-		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
-		VBox stats = scoreView.scoreTextBlock();
-		endScreen.setBottom(stats);
-		center.getChildren().remove(0);
-		center.getChildren().add(0, endScreen);
+		System.out.println("EndGameTrigerd");
+		Background background = new Background(new BackgroundFill(Color.GRAY,new CornerRadii(75), new Insets(0)));
+		StackPane endScene = new StackPane();
+		ImageView backgroundImage = new ImageView("images/Splash/InfinitoriumSplash.png");
+		backgroundImage.setFitHeight(this.screenSize.getHeight());
+		backgroundImage.setFitWidth(this.screenSize.getWidth());
+		
+		BorderPane endMain = new BorderPane();
+		VBox centerView = new VBox();
+		centerView.setPadding(new Insets(100));
+		Text headerText = new Text("GAME OVER");
+		headerText.setFont(Font.font("Viner Hand ITC", FontWeight.BOLD, 200));
+		headerText.setFill(Color.RED);
+		HBox header = new HBox(headerText);
+		header.setAlignment(Pos.CENTER);
+		header.setPrefWidth(150);
+		//header.setBackground(background);
+		//header.setPadding(new Insets(5));
+		header.setOpacity(.7);
+		
+		HBox bottomBox = new HBox();
+		bottomBox.setPadding(new Insets(0,150,20,0));
+		Button newGameButton = newGameButton();
+		bottomBox.getChildren().add(newGameButton);
+		bottomBox.setAlignment(Pos.CENTER_RIGHT);
+		
+		centerView.getChildren().addAll(header);
+		endMain.setCenter(centerView);
+		endMain.setBottom(bottomBox);
+		endScene.getChildren().addAll(backgroundImage,endMain);
+		Scene root = new Scene(endScene);
+		this.mainStage.setScene(root);
+		this.mainStage.setFullScreen(true);
 	}
-
+	private Button newGameButton() {
+		Button newGame = new Button("New Game");
+		newGame.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent arg0) {
+				startNewGame();
+			}
+		});
+		return newGame;
+	}
 	public void setNewStage()
 	{
-		
+//		endScreen.setBackground(value);
+//		endScreen.setCenter(new VBox(new TextField("INFINITIUM"),new TextField(String.valueOf(map.getDamageDealt())),new TextField(String.valueOf(map.getTotalActions()))));
+//		BorderPane layout = (BorderPane)this.forANDback.getChildren().get(1);
+//		VBox center = (VBox)layout.getCenter();
+//		//center.getChildren().remove(0,2);
+//		//center.getChildren().add(0, endScreen);
+//
+//		ScoreView scoreView = new ScoreView(ctr.player, map, this, this.gridSize*this.mapRows);
+//		VBox stats = scoreView.scoreTextBlock();
+//		endScreen.setBottom(stats);
+//		center.getChildren().remove(0);
+//		center.getChildren().add(0, endScreen);
 	}
 
 	@Override
@@ -264,6 +304,7 @@ public class View extends Application implements Observer{
 		if(arg1 instanceof String) {
 			String observedMsg = (String)arg1;
 			if(observedMsg.equals("Dead")){
+				System.out.println("Msg Dead");
 				endScreen();
 			}
 			else if(observedMsg.equals("ActionUpdate") || observedMsg.equals("StatUpdate")) {

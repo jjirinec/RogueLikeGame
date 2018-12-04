@@ -63,10 +63,14 @@ public class StatBlock {
 		Text defenceValue = statText("" + player.getDefence());
 		stats.add(defence, 0, 4);
 		stats.add(defenceValue, 1, 4);
+		Text accuracy = statText("Accuracy:");
+		Text accuracyValue = statText("" + player.getAccuracy());
+		stats.add(accuracy, 0, 5);
+		stats.add(accuracyValue, 1, 5);
 		Text speed = statText("Speed:");
 		Text speedValue = statText("" + player.getSpeed());
-		stats.add(speed, 0, 5);
-		stats.add(speedValue, 1, 5);
+		stats.add(speed, 0, 6);
+		stats.add(speedValue, 1, 6);
 		//stats.setGridLinesVisible(true);
 		
 //		Border border = new Border(new BorderStroke(Color.BLACK,BorderStrokeStyle.SOLID,CornerRadii.EMPTY,BorderWidths.FULL));

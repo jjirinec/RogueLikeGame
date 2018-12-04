@@ -90,6 +90,7 @@ public class PlayerInfoView {
 		HBox attackType = getText("Attack Type:\t" + player.getAttackType());
 		HBox baseDmg = getText("Base Damage:\t" + player.calcBaseDmg());
 		HBox totalDeff = getText("Total Defence:\t" + player.getTotalDefence());
+		attackDeffToolTips(attackType,baseDmg,totalDeff);
 		attackDeffBlock.setBackground(new Background(new BackgroundFill(Color.GREY,new CornerRadii(25),new Insets(0,0,0,0))));
 		if(!attackDeffBlock.getChildren().isEmpty())
 			attackDeffBlock.getChildren().remove(0, 3);
@@ -97,6 +98,14 @@ public class PlayerInfoView {
 		attackDeffBlock.setPadding(new Insets(10));
 		attackDeffBlock.setMaxHeight(65);
 		return attackDeffBlock;
+	}
+	private void attackDeffToolTips(HBox attackType,HBox baseDmg,HBox totalDeff) {
+		Tooltip att = new Tooltip("Tab: to cycle Attack Type");
+		Tooltip.install(attackType, att);
+		Tooltip dmg = new Tooltip("Base Dmg is based on relevent weapon and stat\nActual dmg uses this value as well as Accuracy to Defence ratio");
+		Tooltip.install(baseDmg, dmg);
+		Tooltip deff = new Tooltip("Total Defence is based on armor dex and deffence");
+		Tooltip.install(totalDeff, deff);
 	}
 	private HBox getText(String textMsg) {
 		Text text = new Text(textMsg);

@@ -169,7 +169,7 @@ public class Enemy extends Entity {
 	}
 
 	public String description() {
-		return " CR: ("+ this.lvl + ")  Status: (" + this.status + ")" + debugDescription();
+		return " CR: ("+ this.lvl + ")  Status: (" + this.status + ")";// + debugDescription();
 	}
 	private String debugDescription() {
 		return "\n\tHp: " + this.hp + "\n\tDmg: " + this.calcBaseDmg() + "\n\tStats: Str-" + 

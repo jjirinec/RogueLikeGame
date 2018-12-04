@@ -109,6 +109,7 @@ public class InventoryView {
 			public void handle(ActionEvent e) {
 				filterSwitch(filter.getValue());
 				filter.setFocusTraversable(false);
+				map.getMap().setFocusTraversable(true);
 			}
 		});
 
